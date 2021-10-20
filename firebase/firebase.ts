@@ -1,8 +1,8 @@
 import firebase from "firebase/app";
-import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import "firebase/auth";
-import "firebase/firestore";
+//import "firebase/compat/firestore";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,8 +18,10 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-export default firebase;
+// If a firebase instance doesn't exist, initialize firebase
+export default function initFirebase() {
+  if (!firebase.apps.length) {
+    const app = firebase.initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  }
+}
