@@ -1,7 +1,7 @@
-import firebase from "firebase/app";
+import { getApps, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import "firebase/auth";
-//import "firebase/compat/firestore";
+import { GithubAuthProvider } from "firebase/auth";
+import "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -19,9 +19,10 @@ const firebaseConfig = {
 };
 
 // If a firebase instance doesn't exist, initialize firebase
-export default function initFirebase() {
-  if (!firebase.apps.length) {
-    const app = firebase.initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+export default function firebase() {
+  if (!getApps.length) {
+    const app = initializeApp(firebaseConfig);
+    // const db = getFirestore(app);
+    // const analytics = getAnalytics(app);
   }
 }

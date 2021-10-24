@@ -1,7 +1,8 @@
 // auth.tsx
 import React from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import initFirebase from "../firebase/firebase";
+import firebase from "../firebase/firebase";
+import { GithubAuthProvider } from "firebase/auth";
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -9,17 +10,24 @@ const uiConfig = {
   signInSuccessUrl: "/",
   // GitHub as the only included Auth Provider.
   // You could add and configure more here!
-  signInOptions: [initFirebase.auth.GithubAuthProvider.PROVIDER_ID],
+  signInOptions: [GithubAuthProvider.PROVIDER_ID],
 };
 
-function SignInScreen() {
+export default function SignInScreen() {
+  console.log(firebase);
   return (
-    <div>
+    <div
+      style = {{ // 2 brackets are necessary but not sure why!
+        maxWidth: "320px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <h1>PolygonHR Login</h1>
       <p>Please sign-in:</p>
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={initFirebase.auth()} />
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.getAuth()} />
     </div>
   );
 }
-
-export default SignInScreen;
