@@ -3,9 +3,11 @@ import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <AuthProvider>
-      <Component {...pageProps} />
-    </AuthProvider>
+    <div className="container mx-auto my-10">
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
+    </div>
   );
 };
 
