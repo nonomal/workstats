@@ -1,14 +1,15 @@
-import { AuthProvider } from '../auth';
-import '../styles/globals.css';
+import { AuthProvider } from "../auth";
+import Layout from "../components/Layout";
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <div className="container mx-auto my-10">
+    <Layout>
       <AuthProvider>
         <Component {...pageProps} />
       </AuthProvider>
-    </div>
+    </Layout>
   );
-};
+}
 
 export default MyApp;
