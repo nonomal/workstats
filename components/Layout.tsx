@@ -1,13 +1,11 @@
 import React from "react";
-import Footer from "./Footer";
 import Sidebar from "./Sidebar";
 
 const Layout = ({ children }) => {
   return (
-    <div className="content">
+    <div className="flex">
       <Sidebar />
-      {children}
-      {/* <Footer /> */}
+      <main>{children}</main>
     </div>
   );
 };

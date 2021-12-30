@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Sidebar = () => {
   return (
-    <div className="sidebar bg-gray-800 text-blue-100 w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0">
+    <div className="sidebar bg-gray-800 text-blue-100 w-56 space-y-6 py-7 px-2 flex-none">
       <a href="#" className="text-white flex items-center space-x-2 px-4">
         <span className="text-2xl font-extrabold">PolygonHR</span>
       </a>
