@@ -12,13 +12,18 @@ import {
 import { Radar } from "react-chartjs-2";
 
 const RadarChart = () => {
-  const max = 80;
-  const min = 30;
-  const randomNumber1 = Math.floor(Math.random() * (max - min + 1)) + min;
-  const randomNumber2 = Math.floor(Math.random() * (max - min + 1)) + min;
-  const randomNumber3 = Math.floor(Math.random() * (max - min + 1)) + min;
-  const randomNumber4 = Math.floor(Math.random() * (max - min + 1)) + min;
-  const randomNumber5 = Math.floor(Math.random() * (max - min + 1)) + min;
+  // const max = 80;
+  // const min = 30;
+  // const randomNumber1 = Math.floor(Math.random() * (max - min + 1)) + min;
+  // const randomNumber2 = Math.floor(Math.random() * (max - min + 1)) + min;
+  // const randomNumber3 = Math.floor(Math.random() * (max - min + 1)) + min;
+  // const randomNumber4 = Math.floor(Math.random() * (max - min + 1)) + min;
+  // const randomNumber5 = Math.floor(Math.random() * (max - min + 1)) + min;
+  const randomNumber1 = 25;
+  const randomNumber2 = 35;
+  const randomNumber3 = 45;
+  const randomNumber4 = 75;
+  const randomNumber5 = 85;
 
   const data = {
     labels: [

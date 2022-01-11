@@ -13,6 +13,7 @@ import Login from "../components/Login";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import RadarChart from "../components/RadarChart";
+import ProfileList from "../components/ProfileList";
 
 export default function Home() {
   const { currentUser } = useAuth();
@@ -50,20 +51,7 @@ export default function Home() {
               alt="Profile image"
             />
           </div>
-          <div className="grid grid-rows-6 grid-flow-col gap-4 m-4">
-            <div>Name / Age :</div>
-            <div>Dept. / Rank :</div>
-            <div>Supervisor :</div>
-            <div>Assessor :</div>
-            <div>Assigned PJ :</div>
-            <div>Role :</div>
-            <div>Hiroshi Nishio / 34</div>
-            <div>Product Dev / Senior Manager</div>
-            <div>James Bond</div>
-            <div>Money Penny</div>
-            <div>xxx App Development, xxx Marketing KPI</div>
-            <div>Developer, Reviewer</div>
-          </div>
+          <ProfileList />
         </div>
         <RadarChart />
       </main>
