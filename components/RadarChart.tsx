@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Chart,
   Filler,
@@ -10,15 +10,22 @@ import {
   Tooltip,
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
+import GetGithubData from "../services/githubService";
 
 const RadarChart = () => {
-  const max = 80;
-  const min = 30;
-  const randomNumber1 = Math.floor(Math.random() * (max - min + 1)) + min;
-  const randomNumber2 = Math.floor(Math.random() * (max - min + 1)) + min;
-  const randomNumber3 = Math.floor(Math.random() * (max - min + 1)) + min;
-  const randomNumber4 = Math.floor(Math.random() * (max - min + 1)) + min;
-  const randomNumber5 = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  // const max = 80;
+  // const min = 30;
+  // const randomNumber1 = Math.floor(Math.random() * (max - min + 1)) + min;
+  // const randomNumber2 = Math.floor(Math.random() * (max - min + 1)) + min;
+  // const randomNumber3 = Math.floor(Math.random() * (max - min + 1)) + min;
+  // const randomNumber4 = Math.floor(Math.random() * (max - min + 1)) + min;
+  // const randomNumber5 = Math.floor(Math.random() * (max - min + 1)) + min;
+  const randomNumber1 = 25; // {githubData.count};
+  const randomNumber2 = 35;
+  const randomNumber3 = 45;
+  const randomNumber4 = 75;
+  const randomNumber5 = 85;
 
   const data = {
     labels: [
