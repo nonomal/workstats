@@ -11,7 +11,7 @@ import { useAuth } from "../auth";
 import Loading from "../components/Loading";
 import Login from "../components/Login";
 import Sidebar from "../components/Sidebar";
-import Footer from "../components/Footer";
+import Footer from "../components/common/Footer";
 import RadarChart from "../components/RadarChart";
 import ProfileList from "../components/ProfileList";
 

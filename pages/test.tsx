@@ -1,12 +1,5 @@
+// This is the source code I used for my experiments, and I'm keeping it for reference for a while.
 import { useEffect, useState } from "react";
-import Image from "next/image";
-// import React from 'react';
-// import GetGithubData from '../components/GetGithubData';
-
-// export default function test() {
-
-//     return GetGithubData();
-// };
 
 const GetGithubData = () => {
   const [githubData, setGithubData] = useState({});
@@ -33,10 +26,6 @@ const GetGithubData = () => {
       )}
     </div>
   );
-
-  // let data = githubData...;
-
-  // return <Radar data={data} options={options} />;
 };
 
-export default GetGithubData;
+// export default GetGithubData;
