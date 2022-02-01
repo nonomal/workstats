@@ -11,19 +11,26 @@ import {
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 import GetGithubData from "../services/githubService";
+import useAsanaData from "../services/asanaClientService";
 
 const RadarChart = () => {
+  // TODO: It is better to change GetGithubData to useSWR instead of useEffect so that it is easier to understand when to describe.
+  const [githubData, setGithubData] = useState({
+    author: {},
+    total: 0,
+    weeks: [],
+  });
+  useEffect(() => {
+    // GetGithubData() returns a promise, so resolve it by connecting it with "then".
+    GetGithubData().then((githubData) => setGithubData(githubData));
+  }, []);
 
-  // const max = 80;
-  // const min = 30;
-  // const randomNumber1 = Math.floor(Math.random() * (max - min + 1)) + min;
-  // const randomNumber2 = Math.floor(Math.random() * (max - min + 1)) + min;
-  // const randomNumber3 = Math.floor(Math.random() * (max - min + 1)) + min;
-  // const randomNumber4 = Math.floor(Math.random() * (max - min + 1)) + min;
-  // const randomNumber5 = Math.floor(Math.random() * (max - min + 1)) + min;
-  const randomNumber1 = 25; // {githubData.count};
+  const githubCommitCount = githubData["total"] ? githubData["total"] : 0;
   const randomNumber2 = 35;
-  const randomNumber3 = 45;
+  // Even though I'm using useSWR, if there is no cache, it will be Undefined and cause an error, so I'm doing this.
+  const asanaData = useAsanaData();
+  const asanaCompletedTaskCount = asanaData ? asanaData : 0;
+
   const randomNumber4 = 75;
   const randomNumber5 = 85;
 
@@ -39,9 +46,9 @@ const RadarChart = () => {
       {
         label: "Hiroshi Nishio's Stats",
         data: [
-          randomNumber1,
+          githubCommitCount,
           randomNumber2,
-          randomNumber3,
+          asanaCompletedTaskCount,
           randomNumber4,
           randomNumber5,
         ],
