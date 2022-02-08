@@ -41,7 +41,10 @@ const useAsanaData = () => {
     return filteredResponse.length;
   };
 
-  const { data, error } = useSWR(asanaUrl, fetcher);
+  const { data, error } = useSWR(asanaUrl, fetcher, {
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+  });
 
   if (error) {
     return console.log(`Failed to load: ${error}`);
