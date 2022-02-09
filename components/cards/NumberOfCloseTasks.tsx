@@ -1,4 +1,7 @@
+import useAsanaData from "../../services/asanaClientService";
+
 const NumberOfCloseTasks = () => {
+  const asanaData = useAsanaData();
   return (
     <div className="bg-white shadow rounded p-4">
       <div className="flex space-x-4 items-center">
@@ -30,7 +33,7 @@ const NumberOfCloseTasks = () => {
         </div>
         <div>
           <div className="text-gray-400"># of close tasks</div>
-          <div className=" text-2xl font-bold text-gray-900">123 times</div>
+          <div className=" text-2xl font-bold text-gray-900">{asanaData} times</div>
         </div>
       </div>
     </div>
