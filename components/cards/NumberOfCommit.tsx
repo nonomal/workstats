@@ -1,4 +1,20 @@
+import { useEffect, useState } from "react";
+import GetGithubData from "../../services/githubService";
+
 const NumberOfCommit = () => {
+  // TODO: It is better to change GetGithubData to useSWR instead of useEffect so that it is easier to understand when to describe.
+  const [githubData, setGithubData] = useState({
+    author: {},
+    total: 0,
+    weeks: [],
+  });
+  useEffect(() => {
+    // GetGithubData() returns a promise, so resolve it by connecting it with "then".
+    GetGithubData().then((githubData) => setGithubData(githubData));
+  }, []);
+
+  const githubCommitCount = githubData["total"] ? githubData["total"] : 0;
+
   return (
     <div className="bg-white shadow rounded p-4">
       <div className="flex space-x-4 items-center">
@@ -23,7 +39,9 @@ const NumberOfCommit = () => {
         </div>
         <div>
           <div className="text-gray-400"># of commit</div>
-          <div className=" text-2xl font-bold text-gray-900">123 times</div>
+          <div className=" text-2xl font-bold text-gray-900">
+            {githubCommitCount} times
+          </div>
         </div>
       </div>
     </div>
