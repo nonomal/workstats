@@ -32,22 +32,22 @@ const ProfileList = () => {
   }, []);
 
   return (
-    <div className="grid grid-rows-6 grid-flow-col gap-4 m-4">
+    <div className="grid grid-cols-2 gap-3 m-4">
       <div>Name / Age :</div>
-      <div>Department / Rank :</div>
-      <div>Supervisor :</div>
-      <div>Assessor :</div>
-      <div>Assigned PJ :</div>
-      <div>Role :</div>
       <div>
         {profile.firstName} {profile.lastName} / 34
       </div>
-      <div>
-        {profile.department} / {profile.rank}
-      </div>
+      <div>Department :</div>
+      <div>{profile.department}</div>
+      <div>Rank :</div>
+      <div>{profile.rank}</div>
+      <div>Supervisor :</div>
       <div>{profile.supervisor}</div>
+      <div>Assessor :</div>
       <div>{profile.assessor}</div>
+      <div>Assigned PJ :</div>
       <div>{profile.assignedPj}</div>
+      <div>Role :</div>
       <div>{profile.role}</div>
     </div>
   );
