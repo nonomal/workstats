@@ -16,7 +16,7 @@ const NumberOfCommit = () => {
   const githubCommitCount = githubData["total"] ? githubData["total"] : 0;
 
   return (
-    <div className="bg-white shadow rounded p-4">
+    <div className="bg-white shadow rounded p-4 hover:bg-slate-200">
       <div className="flex space-x-4 items-center">
         <div>
           <div className="bg-fuchsia-50 rounded-full w-12 h-12 text-fuchsia-400 flex justify-center items-center">
