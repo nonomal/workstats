@@ -1,6 +1,5 @@
 // Next.js and React related
 import Head from "next/head";
-import Image from "next/image";
 import { useState } from "react";
 
 // Config
@@ -8,11 +7,6 @@ import { auth } from "../config/firebase";
 import { useAuth } from "../auth";
 
 // Components
-import Loading from "../components/Loading";
-import Login from "../components/Login";
-import Sidebar from "../components/Sidebar";
-import Footer from "../components/common/Footer";
-import RadarChart from "../components/RadarChart";
 import ProfileList from "../components/ProfileList";
 import CardList from "../components/cards/CardList";
 import Avatar from "../components/Avatar";
