@@ -3,7 +3,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 
 const ProfileList = () => {
-  // const [state variable, fn to change the state] = useState(initial value of the state)
   const [profile, setProfile] = useState({
     firstName: "",
     lastName: "",
