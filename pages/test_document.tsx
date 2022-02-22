@@ -6,6 +6,8 @@ import Document, {
   NextScript,
   DocumentContext,
 } from "next/document";
+{/* eslint-disable-next-line @next/next/no-script-in-document */}
+import Script from "next/script";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -31,11 +33,20 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
           {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-          <script src="https://unpkg.com/flowbite@1.3.3/dist/flowbite.js" />
+          <Script
+            src="https://unpkg.com/flowbite@1.3.3/dist/flowbite.js"
+            strategy="beforeInteractive"
+          />
           {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-          <script src="https://unpkg.com/@themesberg/flowbite@1.3.0/dist/flowbite.bundle.js" />
+          <Script
+            src="https://unpkg.com/@themesberg/flowbite@1.3.0/dist/flowbite.bundle.js"
+            strategy="beforeInteractive"
+          />
           {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-          <script src="https://unpkg.com/@themesberg/flowbite@1.3.0/dist/datepicker.bundle.js" />
+          <Script
+            src="https://unpkg.com/@themesberg/flowbite@1.3.0/dist/datepicker.bundle.js"
+            strategy="beforeInteractive"
+          />
         </body>
       </Html>
     );

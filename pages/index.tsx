@@ -1,6 +1,6 @@
 // Next.js and React related
 import Head from "next/head";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 // import { useState } from "react";
 
 // Config
@@ -33,6 +33,7 @@ export default function Home() {
 
   // useEffect(() => {
   //   import("flowbite");
+  //   import('@themesberg/flowbite');
   // }, []);
 
   return (
