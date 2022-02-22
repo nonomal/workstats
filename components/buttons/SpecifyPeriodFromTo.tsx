@@ -2,12 +2,13 @@
 // import Datepicker from '@themesberg/tailwind-datepicker/Datepicker';
 // import DateRangePicker from "@themesberg/tailwind-datepicker/DateRangePicker";
 
-// import { useEffect } from "react";
+import { useEffect } from "react";
 
 const SpecifyPeriodFromTo = () => {
 
   // useEffect(() => {
   //   import("flowbite");
+  //   import('@themesberg/flowbite');
   // }, []);
 
   return (
@@ -32,7 +33,7 @@ const SpecifyPeriodFromTo = () => {
           datepicker
           type="text"
           className="bg-white text-gray-700 border border-gray-300 rounded-lg block w-44 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 px-2 py-1 pl-10"
-          placeholder="Select date start"
+          placeholder="mm/dd/yyyy"
         />
       </div>
       <span className="text-slate-800 px-2">~ To: </span>
@@ -55,7 +56,7 @@ const SpecifyPeriodFromTo = () => {
           datepicker
           type="text"
           className="bg-white text-gray-700 border border-gray-300 rounded-lg block w-44 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 px-2 py-1 pl-10"
-          placeholder="Select date end"
+          placeholder="mm/dd/yyyy"
         />
       </div>
     </div>
