@@ -1,6 +1,6 @@
 const NumberOfNewSent = () => {
   return (
-    <div className="bg-white shadow rounded p-4 hover:bg-slate-200">
+    <div className="bg-white shadow rounded-lg p-4 hover:bg-slate-200">
       <div className="flex space-x-4 items-center">
         <div>
           <div className="bg-sky-50 rounded-full w-12 h-12 text-sky-400 flex justify-center items-center">
