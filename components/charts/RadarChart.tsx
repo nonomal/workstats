@@ -10,8 +10,8 @@ import {
   Tooltip,
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
-import GetGithubData from "../services/githubService";
-import useAsanaData from "../services/asanaClientService";
+import GetGithubData from "../../services/githubService";
+import useAsanaData from "../../services/asanaClientService";
 
 const RadarChart = () => {
   // TODO: It is better to change GetGithubData to useSWR instead of useEffect so that it is easier to understand when to describe.
