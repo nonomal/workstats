@@ -1,6 +1,6 @@
 // firebase related
 import { signInWithPopup } from "@firebase/auth";
-import { auth, googleProvider } from '../config/firebase';
+import { auth, googleProvider } from '../../config/firebase';
 
 // styles
 import { Button, Grid } from "@mui/material";
