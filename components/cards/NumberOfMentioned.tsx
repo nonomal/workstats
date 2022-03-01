@@ -1,4 +1,18 @@
+import getAUserDoc from "../../services/getAUserDocFromFirebase";
+import useSlackSearch from "../../services/slackService"
+
 const NumberOfMentioned = () => {
+
+  // The docID should be changed to get it when clicking on the list of transition sources, or if not, get it from the firebase login user.
+  const docID = "REArvdg1hv5I6pkJ40nC";
+  const query = getAUserDoc(docID).then(res => res.slackUserID);
+  console.log(query);
+
+  // For test only
+  // const query = "U02DK80DN9H"
+  // const slackSearchResult = useSlackSearch(query);
+  // console.log(slackSearchResult);
+
     return (
       <div className="bg-white shadow rounded-lg p-4 hover:bg-slate-200">
         <div className="flex space-x-4 items-center">

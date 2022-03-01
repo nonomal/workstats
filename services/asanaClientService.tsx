@@ -51,7 +51,7 @@ const useAsanaData = () => {
   } else if (!data) {
     return console.log("Loading...");
   } else {
-    console.log(data);
+    // console.log(data);
     return data;
   }
 };

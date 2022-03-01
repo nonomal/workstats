@@ -1,11 +1,13 @@
 import useSWR from "swr";
 
-const useSlackSearch = (query: string) => {
-  const token = process.env.NEXT_PUBLIC_SLACK_API_TOKEN;
+const useSlackSearch = (searchQuery: string) => {
+  const token = `Bearer ${process.env.NEXT_PUBLIC_SLACK_API_USER_TOKEN}`;
   const myHeaders = new Headers();
-  myHeaders.append("Accept", "application/json");
-  myHeaders.append("Authorization", "Bearer " + token);
-  const slackURL = `https://slack.com/api/search.messages?query=${query}`;
+  myHeaders.append("Authorization", token);
+  myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+  // This URL itself will be changed to a temporary argument later.
+  const slackURL = `https://slack.com/api/search.messages?query=${searchQuery}`;
 
   const fetcher = async (url: string) => {
     const response = await fetch(url, {
