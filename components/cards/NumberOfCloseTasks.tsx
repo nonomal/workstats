@@ -1,4 +1,4 @@
-import useAsanaData from "../../services/asanaClientService";
+import useAsanaData from "../../services/asanaServices.client";
 
 const NumberOfCloseTasks = () => {
   const asanaData = useAsanaData();

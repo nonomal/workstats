@@ -8,7 +8,7 @@ import NumberOfNewSent from "./NumberOfNewSent";
 import NumberOfMeetings from "./NumberOfMtgs";
 import TotalTimeOfMeetings from "./TotalTimeOfMtgs";
 
-const CardList = () => {
+const CardList = ({ data }) => {
   return (
     <div className="container max-w-6xl px-5 my-5">
       <h2 className="text-xl mt-4 mb-2">Coding - GitHub</h2>
@@ -23,7 +23,7 @@ const CardList = () => {
       </div>
       <h2 className="text-xl mt-4 mb-2">Communication - Slack & Gmail</h2>
       <div className="grid gap-6 grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
-        <NumberOfMentioned />
+        <NumberOfMentioned data={data} />
         <NumberOfReplies />
         <NumberOfNewSent />
         <NumberOfMeetings />

@@ -13,8 +13,10 @@ import CardList from "../components/cards/CardList";
 import Avatar from "../components/Avatar";
 import ButtonList from "../components/buttons/ButtonList";
 import SpecifyPeriodFromTo from "../components/buttons/SpecifyPeriodFromTo";
+import { slackSearchFromServer } from "../services/slackServices.server";
+import getAUserDoc from "../services/getAUserDocFromFirebase";
 
-export default function Home() {
+export default function Home({ data }) {
   // const { currentUser } = useAuth();
   // const [open, setOpen] = useState(false);
   // const [alertType, setAlertType] = useState("success");
@@ -36,6 +38,9 @@ export default function Home() {
   //   import('@themesberg/flowbite');
   // }, []);
 
+  // console.log(`Propped data is: ${JSON.stringify(data)}`);
+  // console.log(`Propped data is: ${data.messages.total}`);
+
   return (
     <div>
       <Head>
@@ -55,7 +60,7 @@ export default function Home() {
         <div>
           <ButtonList />
           <SpecifyPeriodFromTo />
-          <CardList />
+          <CardList data={data} />
         </div>
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         {/* <script src="https://unpkg.com/@themesberg/flowbite@1.3.3/dist/flowbite.bundle.js" /> */}
@@ -64,4 +69,20 @@ export default function Home() {
       </main>
     </div>
   );
+}
+
+// This gets called on every request.
+// The official document is here: https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props
+export async function getServerSideProps() {
+
+  // The docID should be changed to get it when clicking on the list of transition sources, or if not, get it from the firebase login user.
+  const docID = "REArvdg1hv5I6pkJ40nC";
+  const userDoc = await getAUserDoc(docID);
+  const searchQuery = await userDoc.slackUserID;
+  
+  // Call slackSearch here
+  const data = await slackSearchFromServer(searchQuery);
+
+  // Pass data to the page via props
+  return { props: { data } };
 }
