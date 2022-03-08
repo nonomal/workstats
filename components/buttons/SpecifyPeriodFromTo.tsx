@@ -30,7 +30,7 @@ const SpecifyPeriodFromTo = () => {
           </svg>
         </div>
         <input
-          datepicker
+          // datepicker
           type="text"
           className="bg-white text-gray-700 border border-gray-300 rounded-lg block w-44 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 px-2 py-1 pl-10"
           placeholder="mm/dd/yyyy"
@@ -53,7 +53,7 @@ const SpecifyPeriodFromTo = () => {
           </svg>
         </div>
         <input
-          datepicker
+          // datepicker
           type="text"
           className="bg-white text-gray-700 border border-gray-300 rounded-lg block w-44 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 px-2 py-1 pl-10"
           placeholder="mm/dd/yyyy"

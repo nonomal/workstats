@@ -1,5 +1,21 @@
 # polygonHR
 
+## Table of contents
+
+- [polygonHR](#polygonhr)
+  - [Table of contents](#table-of-contents)
+  - [Description](#description)
+  - [Landing Page](#landing-page)
+  - [Getting started to contribute](#getting-started-to-contribute)
+  - [Directory structure](#directory-structure)
+    - [components/](#components)
+    - [pages/](#pages)
+    - [services/](#services)
+    - [models/](#models)
+    - [libs/](#libs)
+    - [utils/](#utils)
+  - [Style Guide](#style-guide)
+
 ## Description
 
 polygonHR is a dashboard tool to visualize the production and activity of your team and members. Specifically, you can get the following numbers from the tool.
@@ -15,7 +31,20 @@ polygonHR is a dashboard tool to visualize the production and activity of your t
 
 Landing page for this site is here. If you don't mind, please let me know your contact so that I could inform you when this site is ready. This page is written by English and Japanese as well.
 
-<https://www.suchica.com>
+[Landing Page](https://www.suchica.com)
+
+## Getting started to contribute
+
+How to create your local host like this below.
+
+- Install Node.js (LTS) from [the official node web site](https://nodejs.org/en/download/) by clicking the link or just searching like `install node for mac`
+- Open Terminal (for mac)
+- Change the current working directory to the location where you want the cloned directory (like home directory `~`)
+- `git clone https://github.com/Suchica/polygonHR.git` to clone polygonHR repository
+- `code .` to open the repository in VSCode or you can use your favorite editor
+- `npm install` to install necessary packages
+- ask admin to give you `secrets.json` and `.env.local`
+- `npm run dev` to open this web site on local host
 
 ## Directory structure
 
@@ -50,3 +79,11 @@ The code specific to the library we are using and not related to data acquisitio
 ### utils/
 
 We plan to place useful functions that can be used globally (ex. string processing, etc.).
+
+## Style Guide
+
+Basically follow the style guide below:
+
+- [Airbnb JavaScript Style Guide](https://airbnb.io/javascript/)
+- [Airbnb React/JSX Style Guide](https://airbnb.io/javascript/react/)
+- [W3 JavaScript Style Guide](https://www.w3schools.com/js/js_conventions.asp)

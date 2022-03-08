@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import GetGithubData from "../../services/githubService";
+import { GetGithubData } from "../../services/githubServices.client";
 
-const NumberOfCommit = () => {
+const NumberOfCommits = () => {
   // TODO: It is better to change GetGithubData to useSWR instead of useEffect so that it is easier to understand when to describe.
   const [githubData, setGithubData] = useState({
     author: {},
@@ -13,7 +13,8 @@ const NumberOfCommit = () => {
     GetGithubData().then((githubData) => setGithubData(githubData));
   }, []);
 
-  const githubCommitCount = githubData["total"] ? githubData["total"] : 0;
+  // const githubCommitCount = githubData["total"] ? githubData["total"] : 0;
+  const githubCommitCount = githubData?.total ? githubData.total : 0;
 
   return (
     <div className="bg-white shadow rounded-lg p-4 hover:bg-slate-200">
@@ -38,7 +39,7 @@ const NumberOfCommit = () => {
           </div>
         </div>
         <div>
-          <div className="text-gray-400"># of commit</div>
+          <div className="text-gray-400"># of commits</div>
           <div className=" text-2xl font-bold text-gray-900">
             {githubCommitCount} times
           </div>
@@ -48,4 +49,4 @@ const NumberOfCommit = () => {
   );
 };
 
-export default NumberOfCommit;
+export default NumberOfCommits;

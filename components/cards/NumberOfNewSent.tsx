@@ -1,4 +1,4 @@
-const NumberOfNewSent = () => {
+const NumberOfNewSent = ({ data }) => {
   return (
     <div className="bg-white shadow rounded-lg p-4 hover:bg-slate-200">
       <div className="flex space-x-4 items-center">
@@ -24,7 +24,7 @@ const NumberOfNewSent = () => {
         </div>
         <div>
           <div className="text-gray-400"># of new sent</div>
-          <div className=" text-2xl font-bold text-gray-900">123 times</div>
+          <div className=" text-2xl font-bold text-gray-900">{data} times</div>
         </div>
       </div>
     </div>

@@ -1,5 +1,7 @@
-const NumberOfReviews = () => {
-  // const data = useNumberOfPullRequests();
+import { useNumberOfPullRequests } from "../../services/githubServices.client";
+
+const NumberOfPullRequests = () => {
+  const data = useNumberOfPullRequests();
   // console.log(`data is: ${data}`);
   return (
     <div className="bg-white shadow rounded-lg p-4 hover:bg-slate-200">
@@ -31,12 +33,12 @@ const NumberOfReviews = () => {
           </div>
         </div>
         <div>
-          <div className="text-gray-400"># of reviews</div>
-          <div className=" text-2xl font-bold text-gray-900">123 times</div>
+          <div className="text-gray-400"># of pulls</div>
+          <div className=" text-2xl font-bold text-gray-900">{data} times</div>
         </div>
       </div>
     </div>
   );
 };
 
-export default NumberOfReviews;
+export default NumberOfPullRequests;

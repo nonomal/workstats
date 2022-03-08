@@ -10,7 +10,7 @@ import {
   Tooltip,
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
-import GetGithubData from "../../services/githubService";
+import GetGithubData from "../../services/githubServices.client";
 import useAsanaData from "../../services/asanaClientService";
 
 const RadarChart = () => {

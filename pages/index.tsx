@@ -1,6 +1,7 @@
 // Next.js and React related
 import Head from "next/head";
 import { useEffect } from "react";
+import { GetServerSideProps } from "next";
 // import { useState } from "react";
 
 // Config
@@ -13,10 +14,16 @@ import CardList from "../components/cards/CardList";
 import Avatar from "../components/Avatar";
 import ButtonList from "../components/buttons/ButtonList";
 import SpecifyPeriodFromTo from "../components/buttons/SpecifyPeriodFromTo";
-import { slackSearchFromServer } from "../services/slackServices.server";
+
+// Services
+import {
+  slackConversationHistory,
+  slackConversationList,
+  slackSearchFromServer,
+} from "../services/slackServices.server";
 import getAUserDoc from "../services/getAUserDocFromFirebase";
 
-export default function Home({ data }) {
+export default function Home({ numberOfMentioned, numberOfNewSent }) {
   // const { currentUser } = useAuth();
   // const [open, setOpen] = useState(false);
   // const [alertType, setAlertType] = useState("success");
@@ -60,7 +67,10 @@ export default function Home({ data }) {
         <div>
           <ButtonList />
           <SpecifyPeriodFromTo />
-          <CardList data={data} />
+          <CardList
+            numberOfMentioned={numberOfMentioned}
+            numberOfNewSent={numberOfNewSent}
+          />
         </div>
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         {/* <script src="https://unpkg.com/@themesberg/flowbite@1.3.3/dist/flowbite.bundle.js" /> */}
@@ -73,16 +83,23 @@ export default function Home({ data }) {
 
 // This gets called on every request.
 // The official document is here: https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props
-export async function getServerSideProps() {
-
+export const getServerSideProps: GetServerSideProps = async () => {
   // The docID should be changed to get it when clicking on the list of transition sources, or if not, get it from the firebase login user.
   const docID = "REArvdg1hv5I6pkJ40nC";
   const userDoc = await getAUserDoc(docID);
   const searchQuery = await userDoc.slackUserID;
-  
+
+  // Tabulate numberOfNewSent with "for in" loop
+  const channelList = await slackConversationList();
+  let numberOfNewSent: number = 0;
+  for (let x in channelList) {
+    let channel = channelList[x];
+    numberOfNewSent += await slackConversationHistory(channel, searchQuery);
+  }
+
   // Call slackSearch here
-  const data = await slackSearchFromServer(searchQuery);
+  const numberOfMentioned = await slackSearchFromServer(searchQuery);
 
   // Pass data to the page via props
-  return { props: { data } };
+  return { props: { numberOfMentioned, numberOfNewSent } };
 }
