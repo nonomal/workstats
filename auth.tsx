@@ -4,6 +4,7 @@ import Login from "./components/common/Login";
 import Loading from "./components/common/Loading";
 import nookies from "nookies";
 
+// Create a react context instance
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
@@ -43,4 +44,5 @@ export const AuthProvider = ({ children }) => {
   }
 };
 
+// Pass a context instance to react hooks called useContext. This allows external components to execute it.
 export const useAuth = () => useContext(AuthContext);
