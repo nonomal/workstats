@@ -1,12 +1,16 @@
 # polygonHR
 
+Currently under development. Please contact us if you are interested.
+
 ## Table of contents
 
 - [polygonHR](#polygonhr)
   - [Table of contents](#table-of-contents)
   - [Description](#description)
   - [Landing Page](#landing-page)
-  - [Getting started to contribute](#getting-started-to-contribute)
+  - [Let's get started](#lets-get-started)
+    - [For first time visitors](#for-first-time-visitors)
+    - [Procedures for development](#procedures-for-development)
   - [Directory structure](#directory-structure)
     - [components/](#components)
     - [pages/](#pages)
@@ -15,6 +19,7 @@
     - [libs/](#libs)
     - [utils/](#utils)
   - [Style Guide](#style-guide)
+  - [End-to-End Test / Integration Test](#end-to-end-test--integration-test)
 
 ## Description
 
@@ -33,9 +38,11 @@ Landing page for this site is here. If you don't mind, please let me know your c
 
 [Landing Page](https://www.suchica.com)
 
-## Getting started to contribute
+## Let's get started
 
-How to create your local host like this below.
+### For first time visitors
+
+The procedure for creating a local repository and checking the site on the local host is as follows.
 
 - Install Node.js (LTS) from [the official node web site](https://nodejs.org/en/download/) by clicking the link or just searching like `install node for mac`
 - Open Terminal (for mac)
@@ -45,6 +52,19 @@ How to create your local host like this below.
 - `npm install` to install necessary packages
 - ask admin to give you `secrets.json` and `.env.local`
 - `npm run dev` to open this web site on local host
+
+### Procedures for development
+
+- First, `pwd` to check if you are in a root directory in your project.
+- `git branch --contain` to check if the current local branch is the main local branch.
+- `git pull origin main` to pull, which means fetch and merge, the latest changes from the main remote branch to the main local branch.
+- Then `git checkout -b <feature/branch-name>` e.g. `checkout -b feature/top-page` to create a new feature local branch with the latest changes and switch the current branch to it. `git checkout -b xxx` is the same as `git branch xxx` and `git checkout xxx`.
+- Develop the feature.
+- Then `git add .` to stage changes in local repository.
+- Then `git commit -m "message"` to commit the changes to the feature branch in the local repository.
+- Then `git push origin <feature/branch-name>` to push the changes to the feature branch in the remote repository.
+- Create a pull request to the main branch with reviewer on GitHub in a browser.
+- The pull request will be approved and merged by the reviewer on GitHub.
 
 ## Directory structure
 
@@ -87,3 +107,11 @@ Basically follow the style guide below:
 - [Airbnb JavaScript Style Guide](https://airbnb.io/javascript/)
 - [Airbnb React/JSX Style Guide](https://airbnb.io/javascript/react/)
 - [W3 JavaScript Style Guide](https://www.w3schools.com/js/js_conventions.asp)
+
+## End-to-End Test / Integration Test
+
+The steps to run the test are as follows.
+
+1. `npm run build` to build the site.
+2. And `npm run start` to start the site.
+3. Then `npm run cypress` in another terminal to run the test.
