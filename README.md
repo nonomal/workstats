@@ -65,6 +65,7 @@ The procedure for creating a local repository and checking the site on the local
 - Then `git push origin <feature/branch-name>` to push the changes to the feature branch in the remote repository.
 - Create a pull request to the main branch with reviewer on GitHub in a browser.
 - The pull request will be approved and merged by the reviewer on GitHub.
+- Finally, `git checkout main` and `git pull origin main` to merge the latest changes from the remote main branch to the local main branch.
 
 ## Directory structure
 

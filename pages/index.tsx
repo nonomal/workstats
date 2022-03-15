@@ -23,7 +23,17 @@ import {
 } from "../services/slackServices.server";
 import getAUserDoc from "../services/getAUserDocFromFirebase";
 
-export default function Home({ numberOfMentioned, numberOfNewSent }) {
+export default function Home({
+  numberOfMentioned,
+  numberOfNewSent,
+  asanaWorkspaceId,
+  asanaUserId,
+  asanaPersonalAccessToken,
+  githubOwnerName,
+  githubRepoName,
+  githubUserId,
+  githubUserName
+}) {
   // const { currentUser } = useAuth();
   // const [open, setOpen] = useState(false);
   // const [alertType, setAlertType] = useState("success");
@@ -70,6 +80,13 @@ export default function Home({ numberOfMentioned, numberOfNewSent }) {
           <CardList
             numberOfMentioned={numberOfMentioned}
             numberOfNewSent={numberOfNewSent}
+            asanaWorkspaceId={asanaWorkspaceId}
+            asanaUserId={asanaUserId}
+            asanaPersonalAccessToken={asanaPersonalAccessToken}
+            githubOwnerName={githubOwnerName}
+            githubRepoName={githubRepoName}
+            githubUserId={githubUserId}
+            githubUserName={githubUserName}
           />
         </div>
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
@@ -87,7 +104,24 @@ export const getServerSideProps: GetServerSideProps = async () => {
   // The docID should be changed to get it when clicking on the list of transition sources, or if not, get it from the firebase login user.
   const docID = "REArvdg1hv5I6pkJ40nC";
   const userDoc = await getAUserDoc(docID);
-  const searchQuery = await userDoc.slackUserID;
+
+  // Parameters for slack
+  const searchQuery: string = userDoc?.slackUserID;
+
+  // Parameters for asana
+  const asanaPersonalAccessToken =
+    userDoc?.asana?.workspace[0].personalAccessToken;
+  const asanaUserId: string | undefined = userDoc?.asana?.userId;
+  const asanaWorkspaceId: string | undefined =
+    userDoc?.asana?.workspace[0].workspaceId;
+
+  // Parameters for github
+  const githubRepoName: string | undefined =
+    userDoc?.github?.repositories[0].repo;
+  const githubOwnerName: string | undefined =
+    userDoc?.github?.repositories[0].owner;
+  const githubUserId: number | undefined = userDoc?.github?.userId;
+  const githubUserName: string | undefined = userDoc?.github?.userName;
 
   // Tabulate numberOfNewSent with "for in" loop
   const channelList = await slackConversationList();
@@ -101,5 +135,17 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const numberOfMentioned = await slackSearchFromServer(searchQuery);
 
   // Pass data to the page via props
-  return { props: { numberOfMentioned, numberOfNewSent } };
-}
+  return {
+    props: {
+      numberOfMentioned,
+      numberOfNewSent,
+      asanaUserId,
+      asanaWorkspaceId,
+      asanaPersonalAccessToken,
+      githubRepoName,
+      githubOwnerName,
+      githubUserId,
+      githubUserName,
+    },
+  };
+};

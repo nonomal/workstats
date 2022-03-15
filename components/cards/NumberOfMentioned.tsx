@@ -1,5 +1,5 @@
 import getAUserDoc from "../../services/getAUserDocFromFirebase";
-import useSlackSearch from "../../services/slackServices.client";
+import useSlackSearch from "../../services/deprecated/slackServices.client";
 
 const NumberOfMentioned = ({ data }) => {
 
