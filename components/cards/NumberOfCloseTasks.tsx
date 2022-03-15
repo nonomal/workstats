@@ -1,7 +1,7 @@
-import useAsanaData from "../../services/asanaServices.client";
+import { useNumberOfTasks } from "../../services/asanaServices.client";
 
-const NumberOfCloseTasks = () => {
-  const asanaData = useAsanaData();
+const NumberOfCloseTasks = ({asanaWorkspaceId, asanaUserId, asanaPersonalAccessToken}) => {
+  const numberOfTasks = useNumberOfTasks(asanaPersonalAccessToken, asanaWorkspaceId, asanaUserId);
   return (
     <div className="bg-white shadow rounded-lg p-4 hover:bg-slate-200">
       <div className="flex space-x-4 items-center">
@@ -33,7 +33,9 @@ const NumberOfCloseTasks = () => {
         </div>
         <div>
           <div className="text-gray-400"># of close tasks</div>
-          <div className=" text-2xl font-bold text-gray-900">{asanaData} times</div>
+          <div className=" text-2xl font-bold text-gray-900">
+            {numberOfTasks.numberOfClosed} times
+          </div>
         </div>
       </div>
     </div>

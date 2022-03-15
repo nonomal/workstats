@@ -1,6 +1,6 @@
 import { getApps, initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, Timestamp } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
@@ -20,4 +20,47 @@ const auth = getAuth();
 const googleProvider = new GoogleAuthProvider();
 // const analytics = getAnalytics(app);
 
+interface UserType extends Record<string, any> {
+  asana?: {
+    userId: string;
+    workspace: [
+      {
+        personalAccessToken: string;
+        workspaceId: string;
+        workspaceName: string;
+      },
+    ];
+  };
+  assessor?: string;
+  assignedPj?: string;
+  avatarUrl?: string;
+  birth?: Timestamp;
+  department?: string;
+  firstName?: string;
+  github?: {
+    repositories: [
+      {
+        owner: string;
+        repo: string;
+      },
+    ];
+    userId: number;
+    userName: string;
+  };
+  documentId?: string;
+  lastName?: string;
+  rank?: string;
+  role?: string;
+  slack?: {
+    workspace: [
+      {
+        memberId: string;
+        workspaceName: string;
+      },
+    ];
+  };
+  supervisor?: string;
+};
+
 export { app, db, auth, googleProvider };
+export type { UserType };
