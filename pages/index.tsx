@@ -1,7 +1,7 @@
 // Next.js and React related
-import Head from "next/head";
-import { useEffect } from "react";
-import { GetServerSideProps } from "next";
+import Head from 'next/head';
+import { useEffect } from 'react';
+import { GetServerSideProps } from 'next';
 // import { useState } from "react";
 
 // Config
@@ -9,30 +9,33 @@ import { GetServerSideProps } from "next";
 // import { useAuth } from "../auth";
 
 // Components
-import ProfileList from "../components/ProfileList";
-import CardList from "../components/cards/CardList";
-import Avatar from "../components/Avatar";
-import ButtonList from "../components/buttons/ButtonList";
-import SpecifyPeriodFromTo from "../components/buttons/SpecifyPeriodFromTo";
+import ProfileList from '../components/ProfileList';
+import CardList from '../components/cards/CardList';
+import Avatar from '../components/Avatar';
+import ButtonList from '../components/buttons/ButtonList';
+import SpecifyPeriodFromTo from '../components/buttons/SpecifyPeriodFromTo';
 
 // Services
 import {
+  countRepliesInSlack,
+  listTimestampInSlack,
   slackConversationHistory,
   slackConversationList,
   slackSearchFromServer,
-} from "../services/slackServices.server";
-import getAUserDoc from "../services/getAUserDocFromFirebase";
+} from '../services/slackServices.server';
+import getAUserDoc from '../services/getAUserDocFromFirebase';
 
 export default function Home({
   numberOfMentioned,
   numberOfNewSent,
+  numberOfReplies,
   asanaWorkspaceId,
   asanaUserId,
   asanaPersonalAccessToken,
   githubOwnerName,
   githubRepoName,
   githubUserId,
-  githubUserName
+  githubUserName,
 }) {
   // const { currentUser } = useAuth();
   // const [open, setOpen] = useState(false);
@@ -80,6 +83,7 @@ export default function Home({
           <CardList
             numberOfMentioned={numberOfMentioned}
             numberOfNewSent={numberOfNewSent}
+            numberOfReplies={numberOfReplies}
             asanaWorkspaceId={asanaWorkspaceId}
             asanaUserId={asanaUserId}
             asanaPersonalAccessToken={asanaPersonalAccessToken}
@@ -102,11 +106,8 @@ export default function Home({
 // The official document is here: https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props
 export const getServerSideProps: GetServerSideProps = async () => {
   // The docID should be changed to get it when clicking on the list of transition sources, or if not, get it from the firebase login user.
-  const docID = "REArvdg1hv5I6pkJ40nC";
+  const docID = 'REArvdg1hv5I6pkJ40nC';
   const userDoc = await getAUserDoc(docID);
-
-  // Parameters for slack
-  const searchQuery: string = userDoc?.slackUserID;
 
   // Parameters for asana
   const asanaPersonalAccessToken =
@@ -123,22 +124,50 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const githubUserId: number | undefined = userDoc?.github?.userId;
   const githubUserName: string | undefined = userDoc?.github?.userName;
 
-  // Tabulate numberOfNewSent with "for in" loop
-  const channelList = await slackConversationList();
+  // Parameters for slack
+  const searchQuery: string | undefined = userDoc?.slack?.workspace[0].memberId;
+  const slackUserToken: string = `Bearer ${userDoc?.slack?.workspace[0].userToken}`;
+
+  // Tabulate number of times a user has been mentioned in all slack public channels
+  const numberOfMentioned = await slackSearchFromServer(
+    searchQuery,
+    slackUserToken,
+  );
+
+  // Tabulate number of times a user has newly sent messages in all slack public channels
+  const channelList = await slackConversationList(slackUserToken);
   let numberOfNewSent: number = 0;
   for (let x in channelList) {
     let channel = channelList[x];
-    numberOfNewSent += await slackConversationHistory(channel, searchQuery);
+    numberOfNewSent += await slackConversationHistory(
+      channel,
+      searchQuery,
+      slackUserToken,
+    );
   }
 
-  // Call slackSearch here
-  const numberOfMentioned = await slackSearchFromServer(searchQuery);
+  // Tabulate number of times a user has replied in all slack public channels
+  let numberOfReplies: number = 0;
+  for (let x in channelList) {
+    // console.log(`x is: ${x} times`);
+    let channel = channelList[x];
+    // console.log(`Current channel is: ${channelList[x]}`);
+    let timestampList = await listTimestampInSlack(channel, slackUserToken);
+    // console.log(`Timestamp list length is: ${timestampList.length}`);
+    // console.log(`Timestamp list is: ${timestampList}`);
+    for (let y in timestampList) {
+      // console.log(`y is: ${y} times`);
+      numberOfReplies += await countRepliesInSlack(channel, timestampList[y], searchQuery,slackUserToken);
+    }
+  }
+  // console.log(`numberOfReplies is: ${numberOfReplies}`);
 
   // Pass data to the page via props
   return {
     props: {
       numberOfMentioned,
       numberOfNewSent,
+      numberOfReplies,
       asanaUserId,
       asanaWorkspaceId,
       asanaPersonalAccessToken,
