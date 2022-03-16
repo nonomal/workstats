@@ -5,13 +5,14 @@ import NumberOfMentioned from "./NumberOfMentioned";
 import NumberOfNewSent from "./NumberOfNewSent";
 import NumberOfOpenTasks from "./NumberOfOpenTasks";
 import NumberOfPullRequests from "./NumberOfPullRequests";
-import NumberOfReplies from "./NumberOfReply";
+import NumberOfReplies from "./NumberOfReplies";
 import NumberOfReviews from "./NumberOfReview";
 import TotalTimeOfMeetings from "./TotalTimeOfMtgs";
 
 const CardList = ({
   numberOfMentioned,
   numberOfNewSent,
+  numberOfReplies,
   asanaWorkspaceId,
   asanaUserId,
   asanaPersonalAccessToken,
@@ -59,7 +60,7 @@ const CardList = ({
       <h2 className="text-xl mt-4 mb-2">Communication - Slack & Gmail</h2>
       <div className="grid gap-6 grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
         <NumberOfMentioned data={numberOfMentioned} />
-        <NumberOfReplies />
+        <NumberOfReplies data={numberOfReplies} />
         <NumberOfNewSent data={numberOfNewSent} />
         <NumberOfMeetings />
         <TotalTimeOfMeetings />

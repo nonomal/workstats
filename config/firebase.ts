@@ -54,7 +54,9 @@ interface UserType extends Record<string, any> {
   slack?: {
     workspace: [
       {
+        botToken: string;
         memberId: string;
+        userToken: string;
         workspaceName: string;
       },
     ];
