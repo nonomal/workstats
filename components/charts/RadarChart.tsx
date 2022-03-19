@@ -10,7 +10,9 @@ import {
   Tooltip,
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
+// @ts-ignore
 import GetGithubData from "../../services/githubServices.client";
+// @ts-ignore
 import useAsanaData from "../../services/asanaClientService";
 
 const RadarChart = () => {
@@ -22,6 +24,7 @@ const RadarChart = () => {
   });
   useEffect(() => {
     // GetGithubData() returns a promise, so resolve it by connecting it with "then".
+    // @ts-ignore
     GetGithubData().then((githubData) => setGithubData(githubData));
   }, []);
 

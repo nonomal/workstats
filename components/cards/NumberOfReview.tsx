@@ -1,5 +1,6 @@
 import { useNumberOfReviews } from "../../services/githubServices.client";
 
+// @ts-ignore
 const NumberOfReviews = ({ githubOwnerName, githubRepoName, githubUserName }) => {
   const data = useNumberOfReviews(githubOwnerName, githubRepoName, githubUserName);
   // console.log(`data is: ${data}`);

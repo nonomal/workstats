@@ -49,6 +49,7 @@ const useNumberOfPullRequests = (
       const response = await fetch(url, {
         headers: headers,
       }).then((res) => res.json());
+      // @ts-ignore
       const filteredResponse = response.filter((item) => {
         return item.user.id === githubUserId;
       });

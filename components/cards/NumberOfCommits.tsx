@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetGithubData } from "../../services/githubServices.client";
-
+// @ts-ignore
 const NumberOfCommits = ({ githubOwnerName, githubRepoName, githubUserId, githubUserName }) => {
   // TODO: It is better to change GetGithubData to useSWR instead of useEffect so that it is easier to understand when to describe.
   const [githubData, setGithubData] = useState({

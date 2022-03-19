@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import "../styles/globals.css";
 // import Script from "next/script";
 
+// @ts-ignore
 function MyApp({ Component, pageProps }) {
   return (
     <Layout>

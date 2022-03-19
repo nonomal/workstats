@@ -26,15 +26,25 @@ import {
 import getAUserDoc from '../services/getAUserDocFromFirebase';
 
 export default function Home({
+  // @ts-ignore
   numberOfMentioned,
+  // @ts-ignore
   numberOfNewSent,
+  // @ts-ignore
   numberOfReplies,
+  // @ts-ignore
   asanaWorkspaceId,
+  // @ts-ignore
   asanaUserId,
+  // @ts-ignore
   asanaPersonalAccessToken,
+  // @ts-ignore
   githubOwnerName,
+  // @ts-ignore
   githubRepoName,
+  // @ts-ignore
   githubUserId,
+  // @ts-ignore
   githubUserName,
 }) {
   // const { currentUser } = useAuth();
@@ -130,6 +140,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   // Tabulate number of times a user has been mentioned in all slack public channels
   const numberOfMentioned = await slackSearchFromServer(
+    // @ts-ignore
     searchQuery,
     slackUserToken,
   );
@@ -141,6 +152,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     let channel = channelList[x];
     numberOfNewSent += await slackConversationHistory(
       channel,
+      // @ts-ignore
       searchQuery,
       slackUserToken,
     );
@@ -157,6 +169,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     // console.log(`Timestamp list is: ${timestampList}`);
     for (let y in timestampList) {
       // console.log(`y is: ${y} times`);
+      // @ts-ignore
       numberOfReplies += await countRepliesInSlack(channel, timestampList[y], searchQuery,slackUserToken);
     }
   }
