@@ -1,24 +1,35 @@
-import NumberOfCommits from "./NumberOfCommits";
-import NumberOfCloseTasks from "./NumberOfCloseTasks";
-import NumberOfMeetings from "./NumberOfMtgs";
-import NumberOfMentioned from "./NumberOfMentioned";
-import NumberOfNewSent from "./NumberOfNewSent";
-import NumberOfOpenTasks from "./NumberOfOpenTasks";
-import NumberOfPullRequests from "./NumberOfPullRequests";
-import NumberOfReplies from "./NumberOfReplies";
-import NumberOfReviews from "./NumberOfReview";
-import TotalTimeOfMeetings from "./TotalTimeOfMtgs";
+import NumberOfCommits from './NumberOfCommits';
+import NumberOfCloseTasks from './NumberOfCloseTasks';
+import NumberOfMeetings from './NumberOfMtgs';
+import NumberOfMentioned from './NumberOfMentioned';
+import NumberOfNewSent from './NumberOfNewSent';
+import NumberOfOpenTasks from './NumberOfOpenTasks';
+import NumberOfPullRequests from './NumberOfPullRequests';
+import NumberOfReplies from './NumberOfReplies';
+import NumberOfReviews from './NumberOfReview';
+import TotalTimeOfMeetings from './TotalTimeOfMtgs';
 
+// @ts-ignore
 const CardList = ({
+  // @ts-ignore
   numberOfMentioned,
+  // @ts-ignore
   numberOfNewSent,
+  // @ts-ignore
   numberOfReplies,
+  // @ts-ignore
   asanaWorkspaceId,
+  // @ts-ignore
   asanaUserId,
+  // @ts-ignore
   asanaPersonalAccessToken,
+  // @ts-ignore
   githubOwnerName,
+  // @ts-ignore
   githubRepoName,
+  // @ts-ignore
   githubUserId,
+  // @ts-ignore
   githubUserName,
 }) => {
   return (
@@ -40,6 +51,7 @@ const CardList = ({
         <NumberOfReviews
           githubOwnerName={githubOwnerName}
           githubRepoName={githubRepoName}
+          // @ts-ignore
           githubUserId={githubUserId}
           githubUserName={githubUserName}
         />

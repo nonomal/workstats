@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import ReactLoading from "react-loading";
 
 // User-defined components must start with a capital letter.
+// @ts-ignore
 const Loading = ({ type, color }) => {
   return (
     <Grid

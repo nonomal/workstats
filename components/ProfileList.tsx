@@ -23,6 +23,7 @@ const ProfileList = () => {
     const docRef = doc(db, "users", id);
     getDoc(docRef).then((docSnap) => {
       if (docSnap.exists()) {
+        // @ts-ignore
         setProfile({ ...docSnap.data(), id: docSnap.id });
       } else {
         console.log("No such document!");

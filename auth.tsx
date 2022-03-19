@@ -1,14 +1,15 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, FC} from "react";
 import { auth } from "./config/firebase";
 import Login from "./components/common/Login";
 import Loading from "./components/common/Loading";
 import nookies from "nookies";
 
+
 // Create a react context instance
 const AuthContext = createContext({});
 
-export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+export const AuthProvider: FC  = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export const AuthProvider = ({ children }) => {
       if (!user) {
         console.log("no user");
         nookies.set(undefined, "token", "", {});
-        setCurrentUser(null);
+        setCurrentUser({});
         setLoading(false);
         return;
       }

@@ -21,11 +21,14 @@ const GetGithubData = () => {
   // whenever the state changes, react renders the state again.
   return (
     <div>
+      {/* @ts-ignore */}
       {githubData["author"] && (
+        // @ts-ignore
+        // eslint-disable-next-line @next/next/no-img-element
         <img alt="test" src={githubData["author"]["avatar_url"]}></img>
       )}
     </div>
   );
 };
 
-// export default GetGithubData;
+export default GetGithubData;

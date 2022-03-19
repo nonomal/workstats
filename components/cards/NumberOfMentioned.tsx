@@ -1,6 +1,6 @@
 import getAUserDoc from "../../services/getAUserDocFromFirebase";
 import useSlackSearch from "../../services/deprecated/slackServices.client";
-
+// @ts-ignore
 const NumberOfMentioned = ({ data }) => {
 
   return (

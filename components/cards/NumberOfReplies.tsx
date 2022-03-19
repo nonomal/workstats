@@ -1,3 +1,4 @@
+// @ts-ignore
 const NumberOfReplies = ({data}) => {
     return (
       <div className="bg-white shadow rounded-lg p-4 hover:bg-slate-200">

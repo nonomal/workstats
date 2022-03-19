@@ -32,6 +32,7 @@ const slackConversationHistory = async (
   });
   const data = await res.json();
   // The contents of data.messages is an array. Each element of the array is called an item. Then, filter by one property in the item.
+  // @ts-ignore
   const filteredData = data.messages.filter((item) => {
     return item.user === newSentUser;
   });
@@ -54,6 +55,7 @@ const slackConversationList = async (token: string) => {
   const data = await res.json();
   // data.channels is an array. Each element in the array is an object containing various information about the channel.
   // So, we use the map method to create a new array with only the specific id property from that object.
+  // @ts-ignore
   const result = data.channels.map((item) => item.id);
   return result;
 };
@@ -74,6 +76,7 @@ const countRepliesInSlack = async (
     headers: myHeaders,
   });
   const data = await res.json();
+  // @ts-ignore
   const result = data.messages.filter((item) => {
     return item.ts !== timestamp && item.user === userId;
   });
@@ -91,6 +94,7 @@ const listTimestampInSlack = async (channel: string, token: string) => {
     headers: myHeaders,
   });
   const data = await res.json();
+  // @ts-ignore
   const result = data.messages.map((item) => {
     return item.ts;
   });

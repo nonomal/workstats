@@ -1,5 +1,6 @@
 import { useNumberOfTasks } from "../../services/asanaServices.client";
 
+// @ts-ignore
 const NumberOfOpenTasks = ({asanaWorkspaceId, asanaUserId, asanaPersonalAccessToken}) => {
   const numberOfTasks = useNumberOfTasks(asanaPersonalAccessToken, asanaWorkspaceId, asanaUserId);
   return (
@@ -26,6 +27,7 @@ const NumberOfOpenTasks = ({asanaWorkspaceId, asanaUserId, asanaPersonalAccessTo
         </div>
         <div>
           <div className="text-gray-400"># of open tasks</div>
+          {/* @ts-ignore */}
           <div className=" text-2xl font-bold text-gray-900">{numberOfTasks.numberOfOpened} times</div>
         </div>
       </div>

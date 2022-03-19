@@ -1,10 +1,15 @@
 import { useNumberOfPullRequests } from "../../services/githubServices.client";
 
 const NumberOfPullRequests = ({
+  // @ts-ignore
   githubOwnerName,
+  // @ts-ignore
   githubRepoName,
+  // @ts-ignore
   githubUserId,
+  // @ts-ignore
   githubUserName
+  // @ts-ignore
 }) => {
   const data = useNumberOfPullRequests(
     githubOwnerName,
