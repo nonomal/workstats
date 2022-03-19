@@ -1,7 +1,7 @@
 // Next.js and React related
 import Head from 'next/head';
 import { useEffect } from 'react';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 // import { useState } from "react";
 
 // Config
@@ -114,7 +114,7 @@ export default function Home({
 
 // This gets called on every request.
 // The official document is here: https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   // The docID should be changed to get it when clicking on the list of transition sources, or if not, get it from the firebase login user.
   const docID = 'REArvdg1hv5I6pkJ40nC';
   const userDoc = await getAUserDoc(docID);
