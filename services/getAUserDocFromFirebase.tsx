@@ -1,9 +1,10 @@
 import { doc, getDoc } from "firebase/firestore";
-import { db, UserType } from "../config/firebase";
+import { db } from "../config/firebaseClient";
+import { UserType } from "../config/firebaseTypes";
 
-const getAUserDoc = async (docID: string) => {
+const getAUserDoc = async (docId: string) => {
   // TODO: IDs can be obtained from the user list or from the logged-in user.
-  const docRef = doc(db, "users", docID);
+  const docRef = doc(db, "users", docId);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {

@@ -1,8 +1,5 @@
-import getAUserDoc from "../../services/getAUserDocFromFirebase";
-import useSlackSearch from "../../services/deprecated/slackServices.client";
 // @ts-ignore
 const NumberOfMentioned = ({ data }) => {
-
   return (
     <div className="bg-white shadow rounded-lg p-4 hover:bg-slate-200">
       <div className="flex space-x-4 items-center">
