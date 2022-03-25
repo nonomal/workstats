@@ -35,3 +35,6 @@ yarn-error.log*
 
 # firebase admin
 secrets.json
+
+# test data for admin
+services/setAUserDocToFirebase.js

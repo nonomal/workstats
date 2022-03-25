@@ -56,16 +56,18 @@ The procedure for creating a local repository and checking the site on the local
 ### Procedures for development
 
 - First, `pwd` to check if you are in a root directory in your project.
-- `git branch --contain` to check if the current local branch is the main local branch.
-- `git pull origin main` to pull, which means fetch and merge, the latest changes from the main remote branch to the main local branch.
+- `git branch --contain` to check if the current local branch is the `master` local branch.
+- `git pull origin master` or just `git pull` to pull, which means fetch and merge, the latest changes from the main remote branch to the main local branch.
 - Then `git checkout -b <feature/branch-name>` e.g. `checkout -b feature/top-page` to create a new feature local branch with the latest changes and switch the current branch to it. `git checkout -b xxx` is the same as `git branch xxx` and `git checkout xxx`.
 - Develop the feature.
-- Then `git add .` to stage changes in local repository.
+- Once it is done, before making any commit, `git checkout master` to switch back to the main local branch and `git pull origin master` to pull the latest changes other members made from the main remote branch to the main local branch.
+- And `git checkout <feature/branch-name>` to switch back to the feature local branch and `git merge master` to merge the latest changes from the main local branch to the feature local branch. If there is no conflict, it will be merged successfully.
+- Then `git add .` to stage changes in `<feature/branch-name>` in local repository.
 - Then `git commit -m "message"` to commit the changes to the feature branch in the local repository.
 - Then `git push origin <feature/branch-name>` to push the changes to the feature branch in the remote repository.
 - Create a pull request to the main branch with reviewer on GitHub in a browser.
 - The pull request will be approved and merged by the reviewer on GitHub.
-- Finally, `git checkout main` and `git pull origin main` to merge the latest changes from the remote main branch to the local main branch.
+- Finally, `git checkout master` and `git pull origin master` to merge the latest changes from the remote main branch to the local main branch.
 
 ## Directory structure
 
