@@ -48,6 +48,8 @@ export default function Home({
   githubUserId,
   // @ts-ignore
   githubUserName,
+  // @ts-ignore
+  profileList,
 }) {
   // const { currentUser } = useAuth();
   // const [open, setOpen] = useState(false);
@@ -64,6 +66,7 @@ export default function Home({
   //   }
   //   setOpen(false);
   // };
+  // console.log('userDoc is: ', userDoc);
 
   return (
     <div>
@@ -79,7 +82,8 @@ export default function Home({
       <main className="flex">
         <div className="flex-none w-72">
           <Avatar />
-          <ProfileList />
+          {/* <ProfileList user={userDoc} /> */}
+          <ProfileList profileList={profileList} />
         </div>
         <div>
           <ButtonList />
@@ -108,7 +112,9 @@ export default function Home({
 
 // This gets called on every request.
 // The official document is here: https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props
-export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext,
+) => {
   // export const getStaticProps: GetStaticProps = async () => {
   try {
     // The docID should be changed to get it when clicking on the list of transition sources, or if not, get it from the firebase login user.
@@ -120,6 +126,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
     // const currentUser = auth.currentUser;
     // const docId = currentUser?.uid ? currentUser.uid : '';
     const userDoc = await getAUserDoc(uid);
+
+    // Profile list to be displayed on the left side
+    const profileList = {
+      firstName: userDoc?.firstName ? userDoc.firstName : '',
+      lastName: userDoc?.lastName ? userDoc.lastName : '',
+      department: userDoc?.department ? userDoc.department : '',
+      rank: userDoc?.rank ? userDoc.rank : '',
+      supervisor: userDoc?.supervisor ? userDoc.supervisor : '',
+      assessor: userDoc?.assessor ? userDoc.assessor : '',
+      assignedPj: userDoc?.assignedPj ? userDoc.assignedPj : '',
+      role: userDoc?.role ? userDoc.role : '',
+    };
 
     // Parameters for asana
     const asanaPersonalAccessToken =
@@ -190,11 +208,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
         githubOwnerName,
         githubUserId,
         githubUserName,
+        profileList,
       },
     };
   } catch (error) {
     // either the `token` cookie didn't exist or token verification failed.
     // either way: redirect to the login page
+    // console.error(error);
+    // console.log("redirecting to login");
     ctx.res.writeHead(302, { Location: '/login' });
     ctx.res.end();
 

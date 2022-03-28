@@ -1,24 +1,44 @@
-import useSWR from "swr";
+import useSWR from 'swr';
 
 // HTTP endpoint v3 (REST API)
-const base = "https://api.github.com";
+const base = 'https://api.github.com';
+const options = {
+  shouldRetryOnError: false,
+  revalidateIfStale: false,
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+};
 
-const GetGithubData = async () => {
-  // Change the following strings (owner, repo and githubUserId) to be retrieved from user collection in firestore instead of being written here directly.
-  const owner: string = "Suchica";
-  const repo: string = "polygonHR";
-  // Since a text type is not an exact match, set a numeric type, but it is unclear whether the value does not start with 0 in the first place.
-  const githubUserId: number = 4620828;
-
+// Get a number of commits for a specific user
+// The official document is here https://docs.github.com/en/rest/reference/metrics#get-all-contributor-commit-activity
+const useNumberOfCommits = (
+  owner: string,
+  repo: string,
+  githubUserId: number,
+) => {
   const url = `${base}/repos/${owner}/${repo}/stats/contributors`;
+  const headers = new Headers();
+  headers.append('Accept', 'application/vnd.github.v3+json');
+  const fetcher = async (url: string) => {
+    const response = await fetch(url, {
+      headers: headers,
+    }).then((res) => res.json());
+    // @ts-ignore
+    const filteredResponse = response.filter((item) => {
+      return item.author.id === githubUserId;
+    });
+    return filteredResponse[0].total;
+  };
+  const { data, error } = useSWR(url, fetcher, options);
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    const message = `An error has occurred: ${response.status}`;
-    throw new Error(message);
+  if (error) {
+    console.log(`Failed to load number of commits: ${error}`);
+    return 0;
+  } else if (!data) {
+    return console.log('Loading number of commits...');
+  } else {
+    return data;
   }
-  const data = await response.json();
-  return data[0];
 };
 
 // List pull requests
@@ -26,12 +46,12 @@ const GetGithubData = async () => {
 const useNumberOfPullRequests = (
   owner: string,
   repo: string,
-  githubUserId: number
+  githubUserId: number,
 ) => {
   const params = {
-    state: "closed", // or "open", "all"
-    per_page: "10", // max = 100
-    page: "1",
+    state: 'closed', // or "open", "all"
+    per_page: '10', // max = 100
+    page: '1',
   };
   let query = new URLSearchParams(params);
   let url = `${base}/repos/${owner}/${repo}/pulls?${query}`;
@@ -40,7 +60,7 @@ const useNumberOfPullRequests = (
   // use useSWR function in Next.js
   // The official document is here: https://swr.vercel.app/docs/data-fetching
   const headers = new Headers();
-  headers.append("Accept", "application/vnd.github.v3+json");
+  headers.append('Accept', 'application/vnd.github.v3+json');
   const fetcher = async (url: string) => {
     let count = 0;
     let totalCount = 0;
@@ -68,15 +88,13 @@ const useNumberOfPullRequests = (
     return totalCount;
   };
 
-  const { data, error } = useSWR(url, fetcher, {
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  });
+  const { data, error } = useSWR(url, fetcher, options);
 
   if (error) {
-    return console.log(`Failed to load: ${error}`);
+    console.log(`Failed to load number of pull requests: ${error}`);
+    return 0;
   } else if (!data) {
-    return console.log("Loading...");
+    return console.log('Loading number of pull requests...');
   } else {
     // console.log(data);
     return data;
@@ -88,19 +106,19 @@ const useNumberOfPullRequests = (
 const useNumberOfReviews = (
   owner: string,
   repo: string,
-  githubUserName: string
+  githubUserName: string,
 ): number => {
   const params = {
     q: `is:pr repo:${owner}/${repo} reviewed-by:${githubUserName}`,
-    per_page: "10", // max = 100
-    page: "1",
+    per_page: '10', // max = 100
+    page: '1',
   };
   const query = new URLSearchParams(params);
   const url = `${base}/search/issues?${query}`;
   // console.log(url);
 
   const headers = new Headers();
-  headers.append("Accept", "application/vnd.github.v3+json");
+  headers.append('Accept', 'application/vnd.github.v3+json');
   const fetcher = async (url: string) => {
     const response = await fetch(url, {
       headers: headers,
@@ -108,20 +126,17 @@ const useNumberOfReviews = (
     return response.total_count;
   };
 
-  const { data, error } = useSWR(url, fetcher, {
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  });
+  const { data, error } = useSWR(url, fetcher, options);
 
   if (error) {
-    console.log(`Failed to load: ${error}`);
+    console.log(`Failed to load number of reviews: ${error}`);
     return 0;
   } else if (!data) {
-    console.log("Loading...");
+    console.log('Loading number of reviews...');
     return 0;
   } else {
     return data;
   }
 };
 
-export { GetGithubData, useNumberOfPullRequests, useNumberOfReviews };
+export { useNumberOfCommits, useNumberOfPullRequests, useNumberOfReviews };
