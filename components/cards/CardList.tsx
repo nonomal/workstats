@@ -40,7 +40,6 @@ const CardList = ({
           githubOwnerName={githubOwnerName}
           githubRepoName={githubRepoName}
           githubUserId={githubUserId}
-          githubUserName={githubUserName}
         />
         <NumberOfPullRequests
           githubOwnerName={githubOwnerName}

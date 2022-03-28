@@ -15,9 +15,11 @@ export const AuthProvider: FC = ({ children }) => {
   useEffect(() => {
     return auth.onIdTokenChanged(async (user) => {
       if (!user) {
-        console.log('no user');
+        // console.log('user variable is: ', user);
         nookies.set(undefined, 'token', '', {});
         setCurrentUser({});
+        // console.log('currentUser is now: ', currentUser);
+        // console.log('currentUser boolean is now: ', !!currentUser);
         setLoading(false);
         return;
       } else {
@@ -35,9 +37,13 @@ export const AuthProvider: FC = ({ children }) => {
     return <Loading type="spinningBubbles" color="yellowgreen" />;
   }
 
-  if (!currentUser) {
+  // Because an empty object would result in a boolean value of true
+  if (!Object.keys(currentUser).length) {
+    // console.log(`currentUser is: ${currentUser}`);
     return <Login />;
   } else {
+    // console.log('Object.keys(currentUser).length is: ', Object.keys(currentUser).length);
+    // console.log('Object.keys(currentUser).length boolean is: ', !!Object.keys(currentUser).length);
     return (
       <AuthContext.Provider value={{ currentUser }}>
         {children}
