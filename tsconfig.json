@@ -28,7 +28,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx", 
-    "config/firebaseClient.js"
+    "config/firebaseClient.js",
+    "services/googleCalendar.client.jsx"
   ],
   "exclude": [
     "node_modules"
