@@ -50,6 +50,8 @@ export default function Home({
   githubUserName,
   // @ts-ignore
   profileList,
+  // @ts-ignore
+  uid,
 }) {
   // const { currentUser } = useAuth();
   // const [open, setOpen] = useState(false);
@@ -81,7 +83,7 @@ export default function Home({
       </Head>
       <main className="flex">
         <div className="flex-none w-72">
-          <Avatar />
+          <Avatar userId={uid} />
           {/* <ProfileList user={userDoc} /> */}
           <ProfileList profileList={profileList} />
         </div>
@@ -137,6 +139,7 @@ export const getServerSideProps: GetServerSideProps = async (
       assessor: userDoc?.assessor ? userDoc.assessor : '',
       assignedPj: userDoc?.assignedPj ? userDoc.assignedPj : '',
       role: userDoc?.role ? userDoc.role : '',
+      avatarUrl: userDoc?.avatarUrl ? userDoc.avatarUrl : '',
     };
 
     // Parameters for asana
@@ -209,6 +212,7 @@ export const getServerSideProps: GetServerSideProps = async (
         githubUserId,
         githubUserName,
         profileList,
+        uid,
       },
     };
   } catch (error) {
