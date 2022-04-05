@@ -98,7 +98,7 @@ const listTimestampInSlack = async (channel: string, token: string) => {
   const result = data.messages.map((item) => {
     return item.ts;
   });
-  return result;
+  return { channel, result };
 };
 
 export {

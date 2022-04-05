@@ -172,31 +172,53 @@ export const getServerSideProps: GetServerSideProps = async (
     // Tabulate number of times a user has newly sent messages in all slack public channels
     const channelList = await slackConversationList(slackUserToken);
     let numberOfNewSent: number = 0;
+    const numberOfNewSentPromises = [];
     for (let x in channelList) {
       let channel = channelList[x];
-      numberOfNewSent += await slackConversationHistory(
-        channel,
-        // @ts-ignore
-        searchQuery,
-        slackUserToken,
-      );
-    }
-
-    // Tabulate number of times a user has replied in all slack public channels
-    let numberOfReplies: number = 0;
-    for (let x in channelList) {
-      let channel = channelList[x];
-      let timestampList = await listTimestampInSlack(channel, slackUserToken);
-      for (let y in timestampList) {
-        numberOfReplies += await countRepliesInSlack(
+      numberOfNewSentPromises.push(
+        slackConversationHistory(
           channel,
-          timestampList[y],
           // @ts-ignore
           searchQuery,
           slackUserToken,
-        );
-      }
+        ),
+      );
     }
+    (await Promise.all(numberOfNewSentPromises)).map(
+      (n) => (numberOfNewSent += n),
+    );
+
+    // Tabulate number of times a user has replied in all slack public channels
+    let numberOfReplies: number = 0;
+    const numberOfRepliesPromises: any = [];
+    const listTimestampInSlackPromises: any = [];
+
+    channelList.map((channel: string) => {
+      listTimestampInSlackPromises.push(
+        listTimestampInSlack(channel, slackUserToken),
+      );
+    });
+
+    (await Promise.all(listTimestampInSlackPromises)).map(
+      ({ channel, result }) => {
+        const timestampList: [] = result;
+        timestampList.map((timestamp: number) => {
+          numberOfRepliesPromises.push(
+            countRepliesInSlack(
+              channel,
+              timestamp,
+              // @ts-ignore
+              searchQuery,
+              slackUserToken,
+            ),
+          );
+        });
+      },
+    );
+
+    (await Promise.all(numberOfRepliesPromises)).map(
+      (n) => (numberOfReplies += n),
+    );
 
     // Pass data to the page via props
     return {
