@@ -81,33 +81,35 @@ export default function Home({
           href="https://unpkg.com/@themesberg/flowbite@1.3.3/dist/flowbite.min.css"
         /> */}
       </Head>
-      <main className="flex">
-        <div className="flex-none w-72">
-          <Avatar userId={uid} />
-          {/* <ProfileList user={userDoc} /> */}
-          <ProfileList profileList={profileList} />
-        </div>
-        <div>
-          <ButtonList />
-          <SpecifyPeriodFromTo />
-          <CardList
-            numberOfMentioned={numberOfMentioned}
-            numberOfNewSent={numberOfNewSent}
-            numberOfReplies={numberOfReplies}
-            asanaWorkspaceId={asanaWorkspaceId}
-            asanaUserId={asanaUserId}
-            asanaPersonalAccessToken={asanaPersonalAccessToken}
-            githubOwnerName={githubOwnerName}
-            githubRepoName={githubRepoName}
-            githubUserId={githubUserId}
-            githubUserName={githubUserName}
-          />
-        </div>
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        {/* <script src="https://unpkg.com/@themesberg/flowbite@1.3.3/dist/flowbite.bundle.js" /> */}
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        {/* <script src="https://unpkg.com/@themesberg/flowbite@1.3.3/dist/datepicker.bundle.js" /> */}
-      </main>
+      {profileList && (
+        <main className="flex">
+          <div className="flex-none w-72">
+            <Avatar userId={uid} />
+            {/* <ProfileList user={userDoc} /> */}
+            <ProfileList profileList={profileList} />
+          </div>
+          <div>
+            <ButtonList />
+            <SpecifyPeriodFromTo />
+            <CardList
+              numberOfMentioned={numberOfMentioned}
+              numberOfNewSent={numberOfNewSent}
+              numberOfReplies={numberOfReplies}
+              asanaWorkspaceId={asanaWorkspaceId}
+              asanaUserId={asanaUserId}
+              asanaPersonalAccessToken={asanaPersonalAccessToken}
+              githubOwnerName={githubOwnerName}
+              githubRepoName={githubRepoName}
+              githubUserId={githubUserId}
+              githubUserName={githubUserName}
+            />
+          </div>
+          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+          {/* <script src="https://unpkg.com/@themesberg/flowbite@1.3.3/dist/flowbite.bundle.js" /> */}
+          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+          {/* <script src="https://unpkg.com/@themesberg/flowbite@1.3.3/dist/datepicker.bundle.js" /> */}
+        </main>
+      )}
     </div>
   );
 }
@@ -118,10 +120,11 @@ export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext,
 ) => {
   // export const getStaticProps: GetStaticProps = async () => {
-  try {
-    // The docID should be changed to get it when clicking on the list of transition sources, or if not, get it from the firebase login user.
-    const cookies = nookies.get(ctx);
+  const cookies = nookies.get(ctx);
+
+  if (cookies.token) {
     const token = await verifyIdToken(cookies.token);
+    // The docID should be changed to get it when clicking on the list of transition sources, or if not, get it from the firebase login user.
 
     // the user is authenticated!
     const { uid, email } = token;
@@ -215,16 +218,7 @@ export const getServerSideProps: GetServerSideProps = async (
         uid,
       },
     };
-  } catch (error) {
-    // either the `token` cookie didn't exist or token verification failed.
-    // either way: redirect to the login page
-    // console.error(error);
-    // console.log("redirecting to login");
-    ctx.res.writeHead(302, { Location: '/login' });
-    ctx.res.end();
-
-    // `as never` prevents inference issues with InferGetServerSidePropsType.
-    // The props returned here don't matter because we've already redirected the user.
+  } else {
     return { props: {} as never };
   }
 };
