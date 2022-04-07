@@ -8,7 +8,11 @@ import GoogleIcon from "@mui/icons-material/Google";
 
 const Login = () => {
     const loginWithGoogle = () => {
-        signInWithPopup(auth, googleProvider);
+        signInWithPopup(auth, googleProvider)
+        .then(result => {
+            console.log('result is: ', result);
+            window.location.reload();
+        });
     }
     return (
         <Grid
