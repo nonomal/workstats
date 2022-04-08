@@ -63,17 +63,11 @@ const useNumberOfTasks = (
     console.log(`Failed to load: ${error}`);
     return 0;
   } else if (!data) {
-    console.log("Loading...");
+    console.log("Loading stats of asana...");
     return 0;
   } else {
     return data;
   }
 };
-
-// const useNumberOfOpenedTasks = () => {
-//   const query = new URLSearchParams(params);
-//   // The official document is here: https://developers.asana.com/docs/get-multiple-tasks
-//   const asanaUrl: string = `https://app.asana.com/api/1.0/tasks?${query}`;
-// };
 
 export { useNumberOfTasks };

@@ -18,6 +18,7 @@ import {
   countNumberOfEvents,
   handleClientLoad,
 } from '../../services/googleCalendar.client';
+import GoogleAuthButton from './Auth&SignInButton';
 
 // @ts-ignore
 const CardList = ({
@@ -46,11 +47,20 @@ const CardList = ({
 
   return (
     <>
-      {/* <Script
+      <Script
         src="https://apis.google.com/js/api.js"
-        strategy="afterInteractive"
-        onLoad={handleClientLoad}
-      /> */}
+        strategy="afterInteractive" // default. This is equivalent to loading a script with the `defer` attribute
+        onLoad={async () => {
+          console.log('1. google api script is loaded');
+          console.log('2. handleClientLoad is starting');
+          await handleClientLoad();
+          console.log('15. handleClientLoad finished');
+          // await countNumberOfEvents();
+        }}
+        onError={(e) => {
+          console.error('Script failed to load google api', e);
+        }}
+      />
       <div className="container max-w-6xl px-5 my-5">
         <h2 className="text-xl mt-4 mb-2">Coding - GitHub</h2>
         <div className="grid gap-6 grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
@@ -91,6 +101,7 @@ const CardList = ({
           <NumberOfMentioned data={numberOfMentioned} />
           <NumberOfReplies data={numberOfReplies} />
           <NumberOfNewSent data={numberOfNewSent} />
+          <GoogleAuthButton />
           <NumberOfMeetings data={numberOfMeetings} />
           <TotalTimeOfMeetings />
         </div>

@@ -76,6 +76,9 @@ const countRepliesInSlack = async (
     headers: myHeaders,
   });
   const data = await res.json();
+  if (data.messages.length === 0) {
+    return 0;
+  }
   // @ts-ignore
   const result = data.messages.filter((item) => {
     return item.ts !== timestamp && item.user === userId;
