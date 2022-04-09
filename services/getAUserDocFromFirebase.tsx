@@ -3,7 +3,6 @@ import { db } from "../config/firebaseClient";
 import { UserType } from "../config/firebaseTypes";
 
 const getAUserDoc = async (docId: string) => {
-  // TODO: IDs can be obtained from the user list or from the logged-in user.
   const docRef = doc(db, "users", docId);
   const docSnap = await getDoc(docRef);
 

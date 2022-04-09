@@ -203,6 +203,7 @@ export const getServerSideProps: GetServerSideProps = async (
     });
 
     (await Promise.all(listTimestampInSlackPromises)).map(
+      // @ts-ignore
       ({ channel, result }) => {
         const timestampList: [] = result;
         timestampList.map((timestamp: number) => {
@@ -220,6 +221,8 @@ export const getServerSideProps: GetServerSideProps = async (
     );
 
     (await Promise.all(numberOfRepliesPromises)).map(
+      // n must be a number but type error is thrown
+      // @ts-ignore
       (n) => (numberOfReplies += n),
     );
 

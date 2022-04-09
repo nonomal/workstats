@@ -29,7 +29,7 @@
     "**/*.ts",
     "**/*.tsx", 
     "config/firebaseClient.js",
-    "services/googleCalendar.client.jsx"
+    "services/googleCalendar.client.tsx"
   ],
   "exclude": [
     "node_modules"
