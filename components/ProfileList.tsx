@@ -2,9 +2,9 @@
 const ProfileList = ({ profileList }) => {
   return (
     <div className="grid grid-cols-2 gap-3 m-4">
-      <div>Name / Age :</div>
+      <div>Full Name :</div>
       <div>
-        {profileList.firstName} {profileList.lastName} / 34
+        {profileList.firstName} {profileList.middleName} {profileList.lastName}
       </div>
       <div>Department :</div>
       <div>{profileList.department}</div>

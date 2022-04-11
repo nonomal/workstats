@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from "next/link";
+import Link from 'next/link';
 
 const Sidebar = () => {
   return (
@@ -13,19 +13,24 @@ const Sidebar = () => {
             Home
           </a>
         </Link>
-        <Link href="/about">
+        {/* <Link href="/about">
           <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
             About
           </a>
-        </Link>
-        <Link href="/team-analysis">
+        </Link> */}
+        {/* <Link href="/team-analysis">
           <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
             Team Analysis
           </a>
-        </Link>
-        <Link href="/personal-analysis">
+        </Link> */}
+        {/* <Link href="/personal-analysis">
           <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
             Personal Analysis
+          </a>
+        </Link> */}
+        <Link href="/user-list">
+          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
+            User List
           </a>
         </Link>
         <Link href="/team-list">
@@ -33,29 +38,19 @@ const Sidebar = () => {
             Team List
           </a>
         </Link>
-        <Link href="/user-list">
+        {/* <Link href="/api-settings">
           <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
-            User List
+            API Settings
+          </a>
+        </Link> */}
+        <Link href="/user-settings">
+          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
+            User Settings
           </a>
         </Link>
-        <Link href="/contact">
+        <Link href="/team-settings">
           <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
-            Contact
-          </a>
-        </Link>
-        <Link href="/api-config">
-          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
-            API Config
-          </a>
-        </Link>
-        <Link href="/user-config">
-          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
-            User Config
-          </a>
-        </Link>
-        <Link href="/team-config">
-          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
-            Team Config
+            Team Settings
           </a>
         </Link>
         <Link href="/invoice">
@@ -63,14 +58,14 @@ const Sidebar = () => {
             Invoice
           </a>
         </Link>
-        <Link href="/payment-config">
-          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
-            Payment Config
-          </a>
-        </Link>
         <Link href="/usage-plan">
           <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
             Usage Plan
+          </a>
+        </Link>
+        <Link href="/payment-settings">
+          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
+            Payment Settings
           </a>
         </Link>
         <Link href="/terms-of-service">
@@ -83,11 +78,16 @@ const Sidebar = () => {
             Privacy Policy
           </a>
         </Link>
-        <Link href="/company">
+        <Link href="/contact-us">
+          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
+            Contact Us
+          </a>
+        </Link>
+        {/* <Link href="/company">
           <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
             Company
           </a>
-        </Link>
+        </Link> */}
       </nav>
     </div>
   );

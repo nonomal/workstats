@@ -14,6 +14,7 @@ let GoogleAuth; // Google Auth object.
 const handleClientLoad = async () => {
   console.log(`3. gapi.load is starting`);
   gapi.load('client:auth2', {
+  // gapi.load('client', {
     callback: async () => {
       console.log('4. initClient is starting');
       await initClient();
@@ -58,6 +59,26 @@ const initClient = async () => {
   // authorizeButton.onclick = handleAuthClick;
   // signoutButton.onclick = handleSignoutClick;
 };
+
+// Initialize a client where the user's browser receives an auth code from Google and sends it to your server.
+// The reference is here: https://developers.google.com/identity/oauth2/web/guides/use-code-model#popup_or_redirect_mode
+// const client = google.accounts.oauth2.initCodeClient({
+//   client_id: clientId,
+//   scope: scope,
+//   ux_mode: 'popup',
+//   // @ts-ignore for 'response'
+//   callback: (response) => {
+//     const xhr = new XMLHttpRequest();
+//     xhr.open('POST', code_receiver_uri, true);
+//     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+//     // Set custom header for CSRF
+//     xhr.setRequestHeader('X-Requested-With', 'XmlHttpRequest');
+//     xhr.onload = () => {
+//       console.log('Auth code response: ' + xhr.responseText);
+//     };
+//     xhr.send('code=' + code);
+//   },
+// });
 
 // Called when the signed in status changes, to update the UI appropriately.
 // After a sign-in, the API is called.
