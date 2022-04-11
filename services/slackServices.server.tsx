@@ -76,7 +76,7 @@ const countRepliesInSlack = async (
     headers: myHeaders,
   });
   const data = await res.json();
-  if (data.messages.length === 0) {
+  if (data.messages === undefined || data.messages.length === 0) {
     return 0;
   }
   // @ts-ignore

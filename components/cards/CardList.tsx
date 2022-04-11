@@ -49,6 +49,7 @@ const CardList = ({
     <>
       <Script
         src="https://apis.google.com/js/api.js"
+        // src='https://accounts.google.com/gsi/client'
         strategy="afterInteractive" // default. This is equivalent to loading a script with the `defer` attribute
         onLoad={async () => {
           console.log('1. google api script is loaded');
@@ -96,7 +97,9 @@ const CardList = ({
             asanaUserId={asanaUserId}
           />
         </div>
-        <h2 className="text-xl mt-4 mb-2">Communication - Slack & Gmail</h2>
+        <h2 className="text-xl mt-4 mb-2">
+          Communication - Slack, Google Calendar & Gmail
+        </h2>
         <div className="grid gap-6 grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
           <NumberOfMentioned data={numberOfMentioned} />
           <NumberOfReplies data={numberOfReplies} />

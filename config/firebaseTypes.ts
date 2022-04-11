@@ -29,6 +29,7 @@ interface UserType extends Record<string, any> {
   };
   documentId?: string;
   lastName?: string;
+  middleName?: string;
   rank?: string;
   role?: string;
   slack?: {
