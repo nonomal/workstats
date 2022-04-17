@@ -9,12 +9,17 @@ interface UserType extends Record<string, any> {
         workspaceId: string;
         workspaceName: string;
       },
+      {
+        personalAccessToken: string;
+        workspaceId: string;
+        workspaceName: string;
+      },
     ];
   };
   assessor?: string;
   assignedPj?: string;
   avatarUrl?: string;
-  birth?: Timestamp;
+  birth?: Timestamp | number; // DB has Timestamp type but birth could be converted to number
   department?: string;
   firstName?: string;
   github?: {
@@ -22,6 +27,12 @@ interface UserType extends Record<string, any> {
       {
         owner: string;
         repo: string;
+        visibility: string;
+      },
+      {
+        owner: string;
+        repo: string;
+        visibility: string;
       },
     ];
     userId: number;
@@ -34,6 +45,12 @@ interface UserType extends Record<string, any> {
   role?: string;
   slack?: {
     workspace: [
+      {
+        botToken: string;
+        memberId: string;
+        userToken: string;
+        workspaceName: string;
+      },
       {
         botToken: string;
         memberId: string;

@@ -4,6 +4,7 @@ import getAvatarUrl from '../services/getAnImageFromStorage';
 
 // @ts-ignore
 const Avatar = ({ userId }) => {
+  // console.log('userId: ', userId);
   const noImage = '/noProfileImage.png';
   const [avatarUrl, setAvatarUrl] = useState(noImage);
 
@@ -11,7 +12,7 @@ const Avatar = ({ userId }) => {
     getAvatarUrl(userId).then((url) => {
       setAvatarUrl(url);
     });
-  }, []);
+  }, [userId]);
 
   return (
     <div className="object-center m-4">
