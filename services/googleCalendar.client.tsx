@@ -12,9 +12,9 @@ let GoogleAuth; // Google Auth object.
 // 1. Load the JavaScript client library arg1='client:auth2' which means client and auth2 libraries then does callback arg2.
 // The official documentation is here: https://github.com/google/google-api-javascript-client/blob/master/docs/reference.md#loading-the-client-library
 const handleClientLoad = async () => {
-  console.log(`3. gapi.load is starting`);
+  console.log('3. gapi.load is starting');
   gapi.load('client:auth2', {
-  // gapi.load('client', {
+    // gapi.load('client', {
     callback: async () => {
       console.log('4. initClient is starting');
       await initClient();
@@ -29,7 +29,7 @@ const handleClientLoad = async () => {
     ontimeout: () => {
       // Handle timeout.
       alert('gapi.client could not load in a timely manner!');
-    },
+    }
   });
 };
 
@@ -37,12 +37,12 @@ const handleClientLoad = async () => {
 // The reference is here: https://github.com/google/google-api-javascript-client/blob/master/docs/reference.md#----gapiclientinitargs--
 const initClient = async () => {
   // console.log(`{apiKey: ${apiKey}, clientId: ${clientId}, scope: ${scope}}`);
-  console.log(`5. gapi.client.init is starting`);
+  console.log('5. gapi.client.init is starting');
   await gapi.client.init({
     apiKey: apiKey, // When using Oauth 2.0, no need to set the API key but, it's a good practice, in case expanding to handle unauthorized requests.
     // discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'], // Unnecessary to specify this, or it saves one network request and reduces application size
     clientId: clientId,
-    scope: scope,
+    scope: scope
   });
   console.log('6. Google API client is initialized by gapi.client.init');
 
@@ -83,13 +83,13 @@ const initClient = async () => {
 // Called when the signed in status changes, to update the UI appropriately.
 // After a sign-in, the API is called.
 const updateSigninStatus = async (isSignedIn: boolean) => {
-  console.log(`8. updateSigninStatus is running`);
+  console.log('8. updateSigninStatus is running');
   if (isSignedIn) {
     console.log('9. Confirmed user is signed in');
     // authorizeButton.style.display = 'none';
     // signoutButton.style.display = 'block';
     const numberOfEvents: number = await countNumberOfEvents();
-    console.log(`12. countNumberOfEvents is finished`);
+    console.log('12. countNumberOfEvents is finished');
     return numberOfEvents;
   } else {
     // authorizeButton.style.display = 'block';
@@ -108,13 +108,13 @@ const countNumberOfEvents = async () => {
     maxResults: 250, // Max is 2500
     orderBy: 'startTime', // ascending
     timeMin: new Date(d.setMonth(d.getMonth() - 1)).toISOString(), // 1 month ago
-    timeMax: d.toISOString(), // today
+    timeMax: d.toISOString() // today
   };
-  console.log(`11. gapi.client.request is starting`);
+  console.log('11. gapi.client.request is starting');
   const response = await gapi.client.request({
     path: `${baseUrl}/calendars/${calendarId}/events`,
     method: 'GET',
-    params: params,
+    params: params
   });
   if (response.status === 200) {
     console.log(response.result);
@@ -149,5 +149,5 @@ export {
   handleClientLoad,
   handleSignoutClick,
   initClient,
-  updateSigninStatus,
+  updateSigninStatus
 };

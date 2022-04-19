@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp } from 'firebase/firestore';
 
 interface UserType extends Record<string, any> {
   asana?: {
@@ -13,7 +13,7 @@ interface UserType extends Record<string, any> {
         personalAccessToken: string;
         workspaceId: string;
         workspaceName: string;
-      },
+      }
     ];
   };
   assessor?: string;
@@ -33,7 +33,7 @@ interface UserType extends Record<string, any> {
         owner: string;
         repo: string;
         visibility: string;
-      },
+      }
     ];
     userId: number;
     userName: string;
@@ -56,10 +56,10 @@ interface UserType extends Record<string, any> {
         memberId: string;
         userToken: string;
         workspaceName: string;
-      },
+      }
     ];
   };
   supervisor?: string;
-};
+}
 
 export type { UserType };

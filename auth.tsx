@@ -34,7 +34,7 @@ export const AuthProvider: FC = ({ children }) => {
   }, []);
 
   if (loading) {
-    return <Loading type="spinningBubbles" color="yellowgreen" />;
+    return <Loading type='spinningBubbles' color='yellowgreen' />;
   }
 
   // Because an empty object would result in a boolean value of true

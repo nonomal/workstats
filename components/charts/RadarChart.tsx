@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Chart,
   Filler,
@@ -7,20 +7,20 @@ import {
   PointElement,
   RadialLinearScale,
   Title,
-  Tooltip,
-} from "chart.js";
-import { Radar } from "react-chartjs-2";
+  Tooltip
+} from 'chart.js';
+import { Radar } from 'react-chartjs-2';
 // @ts-ignore
-import GetGithubData from "../../services/githubServices.client";
+import GetGithubData from '../../services/githubServices.client';
 // @ts-ignore
-import useAsanaData from "../../services/asanaClientService";
+import useAsanaData from '../../services/asanaClientService';
 
 const RadarChart = () => {
   // TODO: It is better to change GetGithubData to useSWR instead of useEffect so that it is easier to understand when to describe.
   const [githubData, setGithubData] = useState({
     author: {},
     total: 0,
-    weeks: [],
+    weeks: []
   });
   useEffect(() => {
     // GetGithubData() returns a promise, so resolve it by connecting it with "then".
@@ -28,7 +28,7 @@ const RadarChart = () => {
     GetGithubData().then((githubData) => setGithubData(githubData));
   }, []);
 
-  const githubCommitCount = githubData["total"] ? githubData["total"] : 0;
+  const githubCommitCount = githubData['total'] ? githubData['total'] : 0;
   const randomNumber2 = 35;
   // Even though I'm using useSWR, if there is no cache, it will be Undefined and cause an error, so I'm doing this.
   const asanaData = useAsanaData();
@@ -39,31 +39,31 @@ const RadarChart = () => {
 
   const data = {
     labels: [
-      "Code (GitHub)",
-      "Review (GitHub)",
-      "Tasks (Asana)",
-      "Communication (Slack)",
-      "Activity (Twitter)",
+      'Code (GitHub)',
+      'Review (GitHub)',
+      'Tasks (Asana)',
+      'Communication (Slack)',
+      'Activity (Twitter)'
     ],
     datasets: [
       {
-        label: "Hiroshi Nishio's Stats",
+        label: 'Stats of Hiroshi Nishio',
         data: [
           githubCommitCount,
           randomNumber2,
           asanaCompletedTaskCount,
           randomNumber4,
-          randomNumber5,
+          randomNumber5
         ],
         fill: true,
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        pointBackgroundColor: "rgba(255, 99, 132, 1)",
-        pointBorderColor: "#fff",
-        pointHoverBackgroundColor: "#fff",
-        pointHoverBorderColor: "rgba(255, 99, 132, 1)",
-      },
-    ],
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
+      }
+    ]
   };
 
   const fontSize = 18;
@@ -71,18 +71,18 @@ const RadarChart = () => {
     plugins: {
       title: {
         display: true,
-        text: "Radar chart of individual KPIs on a deviation basis",
+        text: 'Radar chart of individual KPIs on a deviation basis',
         font: {
-          size: fontSize,
-        },
+          size: fontSize
+        }
       },
       legend: {
         labels: {
           font: {
-            size: fontSize,
-          },
-        },
-      },
+            size: fontSize
+          }
+        }
+      }
     },
     scales: {
       r: {
@@ -90,16 +90,16 @@ const RadarChart = () => {
         suggestedMax: 75,
         ticks: {
           font: {
-            size: fontSize,
-          },
+            size: fontSize
+          }
         },
         pointLabels: {
           font: {
-            size: fontSize,
-          },
-        },
-      },
-    },
+            size: fontSize
+          }
+        }
+      }
+    }
   };
 
   Chart.register(

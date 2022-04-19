@@ -1,7 +1,7 @@
-import type { AppProps } from "next/app";
-import { AuthProvider } from "../auth";
-import Layout from "../components/Layout";
-import "../styles/globals.css";
+import type { AppProps } from 'next/app';
+import { AuthProvider } from '../auth';
+import Layout from '../components/Layout';
+import '../styles/globals.css';
 // import Script from "next/script";
 
 function MyApp({ Component, pageProps }: AppProps) {

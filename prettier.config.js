@@ -5,5 +5,5 @@ module.exports = {
   tabWidth: 2,
   trailingComma: 'none', // turn off trailing commas
   arrowParens: 'always',
-  bracketSpacing: true,
+  bracketSpacing: true
 };

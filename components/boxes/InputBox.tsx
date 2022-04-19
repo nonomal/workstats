@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 interface InputBoxType {
-  label?: string;
   inputType?: string;
+  label?: string;
+  max?: number;
+  min?: number;
+  name?: string;
   placeholder?: string;
-  width?: number;
   value?: string | number | undefined;
+  width?: number;
 }
 
 const InputBox = ({
-  label = 'a label here',
   inputType = 'text',
+  label = 'a label here',
+  max,
+  min,
+  name,
   placeholder = 'a placeholder here',
-  width = 36,
   value = undefined,
+  width = 36
 }: InputBoxType) => {
   const [inputValue, setInputValue] = useState(value);
 
@@ -23,10 +29,14 @@ const InputBox = ({
 
   return (
     <>
-      <div className="px-3 py-1 mx-2 my-1">
-        <span className="text-slate-800 pl-3">{label}</span>
+      <div className='px-3 py-1 mx-2 my-1'>
+        <span className='text-slate-800 pl-3'>{label}</span>
         <input
           type={inputType}
+          id={name}
+          max={max}
+          min={min}
+          name={name}
           className={`bg-white text-gray-700 border border-gray-300 rounded-lg block w-${width} dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 px-2 py-1 pl-3 mt-1`}
           placeholder={placeholder}
           value={inputValue}

@@ -8,7 +8,7 @@ const slackSearchFromServer = async (searchQuery: string, token: string) => {
   // This URL itself will be changed to a temporary argument later.
   const slackURL = `https://slack.com/api/search.messages?query=${searchQuery}`;
   const res = await fetch(slackURL, {
-    headers: myHeaders,
+    headers: myHeaders
   });
   const data = await res.json();
   return data;
@@ -19,7 +19,7 @@ const slackSearchFromServer = async (searchQuery: string, token: string) => {
 const slackConversationHistory = async (
   channel: string,
   newSentUser: string,
-  token: string,
+  token: string
 ) => {
   // Common part of each function
   const myHeaders = new Headers();
@@ -28,7 +28,7 @@ const slackConversationHistory = async (
 
   const slackURL = `https://slack.com/api/conversations.history?channel=${channel}`;
   const res = await fetch(slackURL, {
-    headers: myHeaders,
+    headers: myHeaders
   });
   const data = await res.json();
   // The contents of data.messages is an array. Each element of the array is called an item. Then, filter by one property in the item.
@@ -48,9 +48,9 @@ const slackConversationList = async (token: string) => {
   myHeaders.append('Authorization', token);
   myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
-  const slackURL = `https://slack.com/api/conversations.list`;
+  const slackURL = 'https://slack.com/api/conversations.list';
   const res = await fetch(slackURL, {
-    headers: myHeaders,
+    headers: myHeaders
   });
   const data = await res.json();
   // data.channels is an array. Each element in the array is an object containing various information about the channel.
@@ -64,7 +64,7 @@ const countRepliesInSlack = async (
   channel: string,
   timestamp: number,
   userId: string,
-  token: string,
+  token: string
 ) => {
   // Common part of each function
   const myHeaders = new Headers();
@@ -73,7 +73,7 @@ const countRepliesInSlack = async (
 
   const slackURL = `https://slack.com/api/conversations.replies?channel=${channel}&ts=${timestamp}`;
   const res = await fetch(slackURL, {
-    headers: myHeaders,
+    headers: myHeaders
   });
   const data = await res.json();
   if (data.messages === undefined || data.messages.length === 0) {
@@ -94,7 +94,7 @@ const listTimestampInSlack = async (channel: string, token: string) => {
 
   const slackURL = `https://slack.com/api/conversations.history?channel=${channel}`;
   const res = await fetch(slackURL, {
-    headers: myHeaders,
+    headers: myHeaders
   });
   const data = await res.json();
   // @ts-ignore
@@ -109,5 +109,5 @@ export {
   slackConversationHistory,
   slackConversationList,
   countRepliesInSlack,
-  listTimestampInSlack,
+  listTimestampInSlack
 };
