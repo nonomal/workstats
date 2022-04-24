@@ -20,7 +20,8 @@ module.exports = {
   rules: {
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
-    'prefer-const': 'error',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    'prefer-const': 'warn',
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     // no-unused

@@ -15,13 +15,13 @@ const Avatar = ({ userId }) => {
   }, [userId]);
 
   return (
-    <div className="object-center m-4">
+    <div className='object-center m-4'>
       <Image
-        className="inline object-cover rounded-full"
+        className='inline object-cover rounded-full'
         src={avatarUrl}
         width={256}
         height={256}
-        alt="Profile image"
+        alt='Profile image'
       />
     </div>
   );

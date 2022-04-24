@@ -14,10 +14,7 @@ import NumberOfReviews from './NumberOfReview';
 import TotalTimeOfMeetings from './TotalTimeOfMtgs';
 
 // import services
-import {
-  countNumberOfEvents,
-  handleClientLoad,
-} from '../../services/googleCalendar.client';
+import { handleClientLoad } from '../../services/googleCalendar.client';
 import GoogleAuthButton from './Auth&SignInButton';
 
 // @ts-ignore
@@ -41,16 +38,16 @@ const CardList = ({
   // @ts-ignore
   githubUserId,
   // @ts-ignore
-  githubUserName,
+  githubUserName
 }) => {
   const numberOfMeetings = 0;
 
   return (
     <>
       <Script
-        src="https://apis.google.com/js/api.js"
+        src='https://apis.google.com/js/api.js'
         // src='https://accounts.google.com/gsi/client'
-        strategy="afterInteractive" // default. This is equivalent to loading a script with the `defer` attribute
+        strategy='afterInteractive' // default. This is equivalent to loading a script with the `defer` attribute
         onLoad={async () => {
           console.log('1. google api script is loaded');
           console.log('2. handleClientLoad is starting');
@@ -62,9 +59,9 @@ const CardList = ({
           console.error('Script failed to load google api', e);
         }}
       />
-      <div className="container max-w-6xl px-5 my-5">
-        <h2 className="text-xl mt-4 mb-2">Coding - GitHub</h2>
-        <div className="grid gap-6 grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+      <div className='container max-w-6xl px-5 my-5'>
+        <h2 className='text-xl mt-4 mb-2'>Coding - GitHub</h2>
+        <div className='grid gap-6 grid-cols-3 lg:grid-cols-3 xl:grid-cols-3'>
           <NumberOfCommits
             githubOwnerName={githubOwnerName}
             githubRepoName={githubRepoName}
@@ -74,18 +71,15 @@ const CardList = ({
             githubOwnerName={githubOwnerName}
             githubRepoName={githubRepoName}
             githubUserId={githubUserId}
-            githubUserName={githubUserName}
           />
           <NumberOfReviews
             githubOwnerName={githubOwnerName}
             githubRepoName={githubRepoName}
-            // @ts-ignore
-            githubUserId={githubUserId}
             githubUserName={githubUserName}
           />
         </div>
-        <h2 className="text-xl mt-4 mb-2">Tasks - Asana</h2>
-        <div className="grid gap-6 grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+        <h2 className='text-xl mt-4 mb-2'>Tasks - Asana</h2>
+        <div className='grid gap-6 grid-cols-3 lg:grid-cols-3 xl:grid-cols-3'>
           <NumberOfCloseTasks
             asanaPersonalAccessToken={asanaPersonalAccessToken}
             asanaWorkspaceId={asanaWorkspaceId}
@@ -97,10 +91,10 @@ const CardList = ({
             asanaUserId={asanaUserId}
           />
         </div>
-        <h2 className="text-xl mt-4 mb-2">
+        <h2 className='text-xl mt-4 mb-2'>
           Communication - Slack, Google Calendar & Gmail
         </h2>
-        <div className="grid gap-6 grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+        <div className='grid gap-6 grid-cols-3 lg:grid-cols-3 xl:grid-cols-3'>
           <NumberOfMentioned data={numberOfMentioned} />
           <NumberOfReplies data={numberOfReplies} />
           <NumberOfNewSent data={numberOfNewSent} />

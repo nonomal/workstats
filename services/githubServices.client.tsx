@@ -6,7 +6,7 @@ const options = {
   shouldRetryOnError: false,
   revalidateIfStale: false,
   revalidateOnFocus: false,
-  revalidateOnReconnect: false,
+  revalidateOnReconnect: false
 };
 
 // Get a number of commits for a specific user
@@ -14,14 +14,14 @@ const options = {
 const useNumberOfCommits = (
   owner: string,
   repo: string,
-  githubUserId: number,
+  githubUserId: number
 ) => {
   const url = `${base}/repos/${owner}/${repo}/stats/contributors`;
   const headers = new Headers();
   headers.append('Accept', 'application/vnd.github.v3+json');
   const fetcher = async (url: string) => {
     const response = await fetch(url, {
-      headers: headers,
+      headers: headers
     }).then((res) => res.json());
     // @ts-ignore
     const filteredResponse = response.filter((item) => {
@@ -46,15 +46,15 @@ const useNumberOfCommits = (
 const useNumberOfPullRequests = (
   owner: string,
   repo: string,
-  githubUserId: number,
+  githubUserId: number
 ) => {
   const params = {
     state: 'closed', // or "open", "all"
     per_page: '10', // max = 100
-    page: '1',
+    page: '1'
   };
   let query = new URLSearchParams(params);
-  let url = `${base}/repos/${owner}/${repo}/pulls?${query}`;
+  const url = `${base}/repos/${owner}/${repo}/pulls?${query}`;
   // console.log(url);
 
   // use useSWR function in Next.js
@@ -67,7 +67,7 @@ const useNumberOfPullRequests = (
     let pageCount = 1;
     do {
       const response = await fetch(url, {
-        headers: headers,
+        headers: headers
       }).then((res) => res.json());
       // @ts-ignore
       const filteredResponse = response.filter((item) => {
@@ -106,12 +106,12 @@ const useNumberOfPullRequests = (
 const useNumberOfReviews = (
   owner: string,
   repo: string,
-  githubUserName: string,
+  githubUserName: string
 ): number => {
   const params = {
     q: `is:pr repo:${owner}/${repo} reviewed-by:${githubUserName}`,
     per_page: '10', // max = 100
-    page: '1',
+    page: '1'
   };
   const query = new URLSearchParams(params);
   const url = `${base}/search/issues?${query}`;
@@ -121,7 +121,7 @@ const useNumberOfReviews = (
   headers.append('Accept', 'application/vnd.github.v3+json');
   const fetcher = async (url: string) => {
     const response = await fetch(url, {
-      headers: headers,
+      headers: headers
     }).then((res) => res.json());
     return response.total_count;
   };

@@ -1,11 +1,11 @@
 /**
  * @type {import('next').NextConfig}
  **/
- const nextConfig = {
+const nextConfig = {
   images: {
-    domains: ['firebasestorage.googleapis.com'],
+    domains: ['firebasestorage.googleapis.com']
   },
-  reactStrictMode: true,
+  reactStrictMode: true
   // webpack: (config, { isServer }) => {
   //   // Fixes npm packages that depend on `fs` module
   //   if (!isServer) {

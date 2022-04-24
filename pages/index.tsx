@@ -19,7 +19,7 @@ import {
   listTimestampInSlack,
   slackConversationHistory,
   slackConversationList,
-  slackSearchFromServer,
+  slackSearchFromServer
 } from '../services/slackServices.server';
 import getAUserDoc from '../services/getAUserDocFromFirebase';
 
@@ -47,7 +47,7 @@ export default function Home({
   // @ts-ignore
   profileList,
   // @ts-ignore
-  uid,
+  uid
 }) {
   // const { currentUser } = useAuth();
   // const [open, setOpen] = useState(false);
@@ -70,16 +70,16 @@ export default function Home({
     <>
       <Head>
         <title>PolygonHR</title>
-        <meta name="description" content="PolygonHR" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta name='description' content='PolygonHR' />
+        <link rel='icon' href='/favicon.ico' />
         {/* <link
           rel="stylesheet"
           href="https://unpkg.com/@themesberg/flowbite@1.3.3/dist/flowbite.min.css"
         /> */}
       </Head>
       {profileList && (
-        <main className="flex">
-          <div className="flex-none w-72">
+        <main className='flex'>
+          <div className='flex-none w-72'>
             <Avatar userId={uid} />
             <ProfileList profileList={profileList} />
           </div>
@@ -98,7 +98,7 @@ export default function Home({
               githubUserId={githubUserId}
               githubUserName={githubUserName}
             />
-            <div className="h-10"></div>
+            <div className='h-10'></div>
           </div>
           {/* eslint-disable-next-line @next/next/no-sync-scripts */}
           {/* <script src="https://unpkg.com/@themesberg/flowbite@1.3.3/dist/flowbite.bundle.js" /> */}
@@ -113,7 +113,7 @@ export default function Home({
 // This gets called on every request.
 // The official document is here: https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props
 export const getServerSideProps: GetServerSideProps = async (
-  ctx: GetServerSidePropsContext,
+  ctx: GetServerSidePropsContext
 ) => {
   const cookies = nookies.get(ctx);
 
@@ -137,7 +137,7 @@ export const getServerSideProps: GetServerSideProps = async (
       assessor: userDoc?.assessor ? userDoc.assessor : '',
       assignedPj: userDoc?.assignedPj ? userDoc.assignedPj : '',
       role: userDoc?.role ? userDoc.role : '',
-      avatarUrl: userDoc?.avatarUrl ? userDoc.avatarUrl : '',
+      avatarUrl: userDoc?.avatarUrl ? userDoc.avatarUrl : ''
     };
 
     // Parameters for asana
@@ -158,18 +158,18 @@ export const getServerSideProps: GetServerSideProps = async (
     // Parameters for slack
     const searchQuery: string | undefined =
       userDoc?.slack?.workspace[0].memberId;
-    const slackUserToken: string = `Bearer ${userDoc?.slack?.workspace[0].userToken}`;
+    const slackUserToken = `Bearer ${userDoc?.slack?.workspace[0].userToken}`;
 
     // Tabulate number of times a user has been mentioned in all slack public channels
     const numberOfMentioned = await slackSearchFromServer(
       // @ts-ignore
       searchQuery,
-      slackUserToken,
+      slackUserToken
     );
 
     // Tabulate number of times a user has newly sent messages in all slack public channels
     const channelList = await slackConversationList(slackUserToken);
-    let numberOfNewSent: number = 0;
+    let numberOfNewSent = 0;
     const numberOfNewSentPromises = [];
     for (let x in channelList) {
       let channel = channelList[x];
@@ -178,22 +178,22 @@ export const getServerSideProps: GetServerSideProps = async (
           channel,
           // @ts-ignore
           searchQuery,
-          slackUserToken,
-        ),
+          slackUserToken
+        )
       );
     }
     (await Promise.all(numberOfNewSentPromises)).map(
-      (n) => (numberOfNewSent += n),
+      (n) => (numberOfNewSent += n)
     );
 
     // Tabulate number of times a user has replied in all slack public channels
-    let numberOfReplies: number = 0;
+    let numberOfReplies = 0;
     const numberOfRepliesPromises: any = [];
     const listTimestampInSlackPromises: any = [];
 
     channelList.map((channel: string) => {
       listTimestampInSlackPromises.push(
-        listTimestampInSlack(channel, slackUserToken),
+        listTimestampInSlack(channel, slackUserToken)
       );
     });
 
@@ -208,17 +208,17 @@ export const getServerSideProps: GetServerSideProps = async (
               timestamp,
               // @ts-ignore
               searchQuery,
-              slackUserToken,
-            ),
+              slackUserToken
+            )
           );
         });
-      },
+      }
     );
 
     (await Promise.all(numberOfRepliesPromises)).map(
       // n must be a number but type error is thrown
       // @ts-ignore
-      (n) => (numberOfReplies += n),
+      (n) => (numberOfReplies += n)
     );
 
     // Pass data to the page via props
@@ -235,8 +235,8 @@ export const getServerSideProps: GetServerSideProps = async (
         githubUserId,
         githubUserName,
         profileList,
-        uid,
-      },
+        uid
+      }
     };
   } else {
     return { props: {} as never };
