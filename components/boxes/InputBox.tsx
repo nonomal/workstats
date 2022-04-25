@@ -7,6 +7,7 @@ interface InputBoxType {
   min?: number;
   name?: string;
   placeholder?: string;
+  // required?: boolean;
   value?: string | number | undefined;
   width?: number;
 }
@@ -18,6 +19,7 @@ const InputBox = ({
   min,
   name,
   placeholder = 'a placeholder here',
+  // required = false,
   value = undefined,
   width = 36
 }: InputBoxType) => {
@@ -30,7 +32,9 @@ const InputBox = ({
   return (
     <>
       <div className='px-3 py-1 mx-2 my-1'>
-        <span className='text-slate-800 pl-3'>{label}</span>
+        <label htmlFor={name} className='text-slate-800 pl-3'>
+          {label}
+        </label>
         <input
           type={inputType}
           id={name}
@@ -38,7 +42,7 @@ const InputBox = ({
           min={min}
           name={name}
           className={`bg-white text-gray-700 border border-gray-300 rounded-lg block w-${width} dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 px-2 py-1 pl-3 mt-1`}
-          placeholder={placeholder}
+          placeholder={placeholder} // Placeholder is NOT recommended, see https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/number#placeholder
           value={inputValue}
           onChange={(e) => handleInputOnChange(e)}
         />

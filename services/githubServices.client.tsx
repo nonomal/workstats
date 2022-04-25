@@ -16,17 +16,21 @@ const useNumberOfCommits = (
   repo: string,
   githubUserId: number
 ) => {
+  console.log(`githubUserId is: ${githubUserId}`);
   const url = `${base}/repos/${owner}/${repo}/stats/contributors`;
+  // console.log(url);
   const headers = new Headers();
   headers.append('Accept', 'application/vnd.github.v3+json');
   const fetcher = async (url: string) => {
     const response = await fetch(url, {
       headers: headers
     }).then((res) => res.json());
+    // console.log(`response is: ${JSON.stringify(response)}`);
     // @ts-ignore
     const filteredResponse = response.filter((item) => {
       return item.author.id === githubUserId;
     });
+    // console.log(filteredResponse);
     return filteredResponse[0].total;
   };
   const { data, error } = useSWR(url, fetcher, options);
