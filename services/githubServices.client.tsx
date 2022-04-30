@@ -16,7 +16,7 @@ const useNumberOfCommits = (
   repo: string,
   githubUserId: number
 ) => {
-  console.log(`githubUserId is: ${githubUserId}`);
+  // console.log(`githubUserId is: ${githubUserId}`);
   const url = `${base}/repos/${owner}/${repo}/stats/contributors`;
   // console.log(url);
   const headers = new Headers();

@@ -50,7 +50,7 @@ const handleSubmitSourceCode = async (
           visibility: event.currentTarget.githubRepoVisibility2.value
         }
       ],
-      userId: event.currentTarget.githubUserId.valueAsNumber,
+      userId: event.currentTarget.githubUserId.valueAsNumber, // should be a number
       userName: event.currentTarget.githubUserName.value
     }
   };
