@@ -6,8 +6,8 @@ import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
-      <AuthProvider>
+    <AuthProvider>
+      <Layout>
         {/* <Script
           src="https://unpkg.com/flowbite@1.3.3/dist/flowbite.js"
           strategy="beforeInteractive"
@@ -17,8 +17,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           href="https://unpkg.com/flowbite@1.3.3/dist/flowbite.min.css"
         /> */}
         <Component {...pageProps} />
-      </AuthProvider>
-    </Layout>
+      </Layout>
+    </AuthProvider>
   );
 }
 

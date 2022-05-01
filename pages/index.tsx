@@ -69,8 +69,8 @@ export default function Home({
   return (
     <>
       <Head>
-        <title>PolygonHR</title>
-        <meta name='description' content='PolygonHR' />
+        <title>WorkStats</title>
+        <meta name='description' content='WorkStats' />
         <link rel='icon' href='/favicon.ico' />
         {/* <link
           rel="stylesheet"
