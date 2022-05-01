@@ -1,5 +1,9 @@
 // firebase related
-import { signInWithPopup } from '@firebase/auth';
+import {
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup
+} from '@firebase/auth';
 import {
   auth,
   githubProvider,
@@ -15,21 +19,67 @@ import SlackIcon from '../../public/slack-svgrepo-com.svg';
 import GoogleCalendarIcon from '../../public/google-calendar-svgrepo-com.svg';
 import GitHubIcon2 from '../../public/github-svgrepo-com.svg';
 
+// Scopes in detail: https://developers.google.com/identity/protocols/oauth2/scopes#calendar
+const scopes = 'https://www.googleapis.com/auth/calendar.readonly	';
+googleProvider.addScope(scopes);
+
 const Login = () => {
   // google login handler
   const loginWithGoogle = () => {
-    signInWithPopup(auth, googleProvider).then((result) => {
-      console.log('result is: ', result);
-      window.location.reload();
-    });
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        console.log('result is: ', result);
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        console.log('credential is: ', credential);
+        const token = credential?.accessToken;
+        console.log('token is: ', token);
+        // The signed-in user info.
+        const user = result.user;
+        console.log('user is: ', user);
+        window.location.reload();
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        console.log('errorCode is: ', errorCode);
+        const errorMessage = error.message;
+        console.log('errorMessage is: ', errorMessage);
+        // The email of the user's account used.
+        const email = error.email;
+        console.log('email is: ', email);
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log('credential is: ', credential);
+      });
   };
 
   // github login handler
   const loginWithGithub = () => {
-    signInWithPopup(auth, githubProvider).then((result) => {
-      console.log('result is: ', result);
-      window.location.reload();
-    });
+    signInWithPopup(auth, githubProvider)
+      .then((result) => {
+        console.log('result is: ', result);
+        const credential = GithubAuthProvider.credentialFromResult(result);
+        console.log('credential is: ', credential);
+        const token = credential?.accessToken;
+        console.log('token is: ', token);
+        const user = result.user;
+        console.log('user is: ', user);
+        window.location.reload();
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        console.log('errorCode is: ', errorCode);
+        const errorMessage = error.message;
+        console.log('errorMessage is: ', errorMessage);
+        // The email of the user's account used.
+        const email = error.email;
+        console.log('email is: ', email);
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log('credential is: ', credential);
+      });
   };
 
   return (
@@ -67,28 +117,40 @@ const Login = () => {
             width={30}
             height={30}
             layout='intrinsic'
-            alt='asana logo'
+            alt='GitHub logo'
+            quality={75}
+            priority={false}
+            placeholder='empty'
           />
           <Image
             src={AsanaIcon}
             width={30}
             height={30}
             layout='intrinsic'
-            alt='asana logo'
+            alt='Asana logo'
+            quality={75}
+            priority={false}
+            placeholder='empty'
           />
           <Image
             src={SlackIcon}
             width={30}
             height={30}
             layout='intrinsic'
-            alt='asana logo'
+            alt='Slack logo'
+            quality={75}
+            priority={false}
+            placeholder='empty'
           />
           <Image
             src={GoogleCalendarIcon}
             width={30}
             height={30}
             layout='intrinsic'
-            alt='asana logo'
+            alt='Google Calendar logo'
+            quality={75}
+            priority={false}
+            placeholder='empty'
           />
         </div>
       </div>
