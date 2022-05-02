@@ -1,5 +1,6 @@
 // firebase related
 import {
+  linkWithPopup,
   GithubAuthProvider,
   GoogleAuthProvider,
   signInWithPopup
@@ -37,20 +38,21 @@ const Login = () => {
         // The signed-in user info.
         const user = result.user;
         console.log('user is: ', user);
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
-        console.log('errorCode is: ', errorCode);
-        const errorMessage = error.message;
-        console.log('errorMessage is: ', errorMessage);
-        // The email of the user's account used.
-        const email = error.email;
-        console.log('email is: ', email);
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log('credential is: ', credential);
+        if (errorCode === 'auth/account-exists-with-different-credential') {
+          // OAuth providers are only available for Google and GitHub, so if this error occurs at Google, sign in at GitHub.
+          signInWithPopup(auth, githubProvider).then(() => {
+            if (auth.currentUser) {
+              // Link a Google account to a GitHub account
+              linkWithPopup(auth.currentUser, googleProvider);
+            }
+          });
+        } else {
+          window.location.reload();
+        }
       });
   };
 
@@ -65,20 +67,21 @@ const Login = () => {
         console.log('token is: ', token);
         const user = result.user;
         console.log('user is: ', user);
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
-        console.log('errorCode is: ', errorCode);
-        const errorMessage = error.message;
-        console.log('errorMessage is: ', errorMessage);
-        // The email of the user's account used.
-        const email = error.email;
-        console.log('email is: ', email);
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log('credential is: ', credential);
+        if (errorCode === 'auth/account-exists-with-different-credential') {
+          // OAuth providers are only available for Google and GitHub, so if this error occurs at GitHub, sign in at Google.
+          signInWithPopup(auth, googleProvider).then(() => {
+            if (auth.currentUser) {
+              // Link a Github account to a Google account
+              linkWithPopup(auth.currentUser, githubProvider);
+            }
+          });
+        } else {
+          window.location.reload();
+        }
       });
   };
 
