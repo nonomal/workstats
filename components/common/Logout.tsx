@@ -6,7 +6,8 @@ const LogOut = () => {
   const handleClick = () => {
     signOut(auth)
       .then(() => {
-        window.location.reload(); // https://developer.mozilla.org/en-US/docs/Web/API/Location/reload
+        console.log('signed out');
+        // window.location.reload(); // https://developer.mozilla.org/en-US/docs/Web/API/Location/reload
       })
       .catch((error) => {
         console.log('error is: ', error);
