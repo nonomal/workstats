@@ -38,7 +38,7 @@ const Login = () => {
         // The signed-in user info.
         const user = result.user;
         console.log('user is: ', user);
-        // window.location.reload();
+        window.location.reload();
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -67,7 +67,7 @@ const Login = () => {
         console.log('token is: ', token);
         const user = result.user;
         console.log('user is: ', user);
-        // window.location.reload();
+        window.location.reload();
       })
       .catch((error) => {
         const errorCode = error.code;

@@ -115,7 +115,9 @@ export default function Home({
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
+  // console.log('ctx is: ', ctx);
   const cookies = nookies.get(ctx);
+  // console.log('cookies is: ', cookies);
 
   if (cookies.token) {
     const token = await verifyIdToken(cookies.token);
