@@ -35,7 +35,7 @@ interface UserType extends Record<string, any> {
         visibility: string;
       }
     ];
-    userId: number;
+    userId: number | null;
     userName: string;
   };
   documentId?: string;

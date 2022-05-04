@@ -1,8 +1,8 @@
 // firebase related
 import {
   linkWithPopup,
-  GithubAuthProvider,
-  GoogleAuthProvider,
+  // GithubAuthProvider,
+  // GoogleAuthProvider,
   signInWithPopup
 } from '@firebase/auth';
 import {
@@ -20,6 +20,9 @@ import SlackIcon from '../../public/slack-svgrepo-com.svg';
 import GoogleCalendarIcon from '../../public/google-calendar-svgrepo-com.svg';
 import GitHubIcon2 from '../../public/github-svgrepo-com.svg';
 
+// Custom services
+import { createUserDoc } from '../../services/setUserDocToFirestore';
+
 // Scopes in detail: https://developers.google.com/identity/protocols/oauth2/scopes#calendar
 const scopes = 'https://www.googleapis.com/auth/calendar.readonly	';
 googleProvider.addScope(scopes);
@@ -29,16 +32,14 @@ const Login = () => {
   const loginWithGoogle = () => {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
-        console.log('result is: ', result);
+        // console.log('result is: ', result);
         // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        console.log('credential is: ', credential);
-        const token = credential?.accessToken;
-        console.log('token is: ', token);
-        // The signed-in user info.
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // console.log('credential is: ', credential);
         const user = result.user;
-        console.log('user is: ', user);
-        window.location.reload();
+        // console.log('user is: ', user);
+        createUserDoc(user.uid);
+        // window.location.reload();
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -60,14 +61,13 @@ const Login = () => {
   const loginWithGithub = () => {
     signInWithPopup(auth, githubProvider)
       .then((result) => {
-        console.log('result is: ', result);
-        const credential = GithubAuthProvider.credentialFromResult(result);
-        console.log('credential is: ', credential);
-        const token = credential?.accessToken;
-        console.log('token is: ', token);
+        // console.log('result is: ', result);
+        // const credential = GithubAuthProvider.credentialFromResult(result);
+        // console.log('credential is: ', credential);
         const user = result.user;
-        console.log('user is: ', user);
-        window.location.reload();
+        // console.log('user is: ', user);
+        createUserDoc(user.uid);
+        // window.location.reload();
       })
       .catch((error) => {
         const errorCode = error.code;
