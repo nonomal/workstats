@@ -55,7 +55,7 @@ const useNumberOfTasks = (
   };
 
   const { data, error } = useSWR(asanaUrl, fetcher, {
-    revalidateOnFocus: true,
+    revalidateOnFocus: false, // Don't revalidate on focus because a new user has not set up their asana profile yet
     revalidateOnReconnect: true
   });
 
