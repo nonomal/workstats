@@ -46,7 +46,11 @@ const NumberOfCloseTasks = ({
           <div className='text-gray-400'># of close tasks</div>
           <div className=' text-2xl font-bold text-gray-900'>
             {/* @ts-ignore */}
-            {numberOfTasks.numberOfClosed} times
+            {numberOfTasks?.numberOfClosed
+              ? // @ts-ignore
+                numberOfTasks?.numberOfClosed
+              : 0}{' '}
+            times
           </div>
         </div>
       </div>
