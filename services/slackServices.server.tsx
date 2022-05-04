@@ -55,6 +55,9 @@ const slackConversationList = async (token: string) => {
   const data = await res.json();
   // data.channels is an array. Each element in the array is an object containing various information about the channel.
   // So, we use the map method to create a new array with only the specific id property from that object.
+  if (data.channels === undefined || data.channels.length === 0) {
+    return [];
+  }
   // @ts-ignore
   const result = data.channels.map((item) => item.id);
   return result;
