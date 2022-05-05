@@ -21,8 +21,8 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
   return (
     <>
       <Head>
-        <title>PolygonHR</title>
-        <meta name='description' content='PolygonHR' />
+        <title>WorkStats</title>
+        <meta name='description' content='WorkStats' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className='flex'>

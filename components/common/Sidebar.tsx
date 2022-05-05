@@ -5,7 +5,7 @@ const Sidebar = () => {
   return (
     <div className='sidebar bg-gray-800 text-blue-100 w-56 space-y-6 py-7 px-2 flex-none'>
       <a href='#' className='text-white flex items-center space-x-2 px-4'>
-        <span className='text-2xl font-extrabold'>PolygonHR</span>
+        <span className='text-2xl font-bold'>WorkStats</span>
       </a>
       <nav>
         <Link href='/'>
@@ -18,56 +18,51 @@ const Sidebar = () => {
             About
           </a>
         </Link> */}
-        {/* <Link href="/team-analysis">
-          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
-            Team Analysis
-          </a>
-        </Link> */}
         {/* <Link href="/personal-analysis">
           <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
             Personal Analysis
           </a>
         </Link> */}
-        <Link href='/user-list'>
-          <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
-            User List
-          </a>
-        </Link>
-        <Link href='/team-list'>
-          <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
-            Team List
-          </a>
-        </Link>
-        {/* <Link href="/api-settings">
+        {/* <Link href="/team-analysis">
           <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
-            API Settings
+            Team Analysis
           </a>
         </Link> */}
+        {/* <Link href='/user-list'> */}
+        <a role='link' aria-disabled='true' className='block py-2 px-4 rounded'>
+          User List
+        </a>
+        {/* </Link> */}
+        {/* <Link href='/team-list'> */}
+        <a role='link' aria-disabled='true' className='block py-2 px-4 rounded'>
+          Team List
+        </a>
+        {/* </Link> */}
         <Link href='/user-settings'>
           <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
             User Settings
           </a>
         </Link>
-        <Link href='/team-settings'>
-          <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
-            Team Settings
-          </a>
-        </Link>
-        <Link href='/invoice'>
-          <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
-            Invoice
-          </a>
-        </Link>
-        <Link href='/usage-plan'>
-          <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
-            Usage Plan
-          </a>
-        </Link>
-        <Link href='/payment-settings'>
-          <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
-            Payment Settings
-          </a>
-        </Link>
+        {/* <Link href='/team-settings'> */}
+        <a role='link' aria-disabled='true' className='block py-2 px-4 rounded'>
+          Team Settings
+        </a>
+        {/* </Link> */}
+        {/* <Link href='/invoice'> */}
+        <a role='link' aria-disabled='true' className='block py-2 px-4 rounded'>
+          Invoices
+        </a>
+        {/* </Link> */}
+        {/* <Link href='/usage-plan'> */}
+        <a role='link' aria-disabled='true' className='block py-2 px-4 rounded'>
+          Usage Plan
+        </a>
+        {/* </Link> */}
+        {/* <Link href='/payment-settings'> */}
+        <a role='link' aria-disabled='true' className='block py-2 px-4 rounded'>
+          Payment Settings
+        </a>
+        {/* </Link> */}
         <Link href='/terms-of-service'>
           <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
             Terms of Service
