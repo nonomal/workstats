@@ -39,7 +39,7 @@ const Login = () => {
         const user = result.user;
         // console.log('user is: ', user);
         createUserDoc(user.uid);
-        // window.location.reload();
+        window.location.reload();
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -67,7 +67,7 @@ const Login = () => {
         const user = result.user;
         // console.log('user is: ', user);
         createUserDoc(user.uid);
-        // window.location.reload();
+        window.location.reload();
       })
       .catch((error) => {
         const errorCode = error.code;
