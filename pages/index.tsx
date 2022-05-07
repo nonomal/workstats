@@ -7,9 +7,9 @@ import nookies from 'nookies';
 import { verifyIdToken } from '../firebaseAdmin';
 
 // Components
-import ProfileList from '../components/ProfileList';
+import ProfileList from '../components/common/ProfileList';
 import CardList from '../components/cards/CardList';
-import Avatar from '../components/Avatar';
+import Avatar from '../components/common/Avatar';
 import ButtonList from '../components/buttons/ButtonList';
 import SpecifyPeriodFromTo from '../components/buttons/SpecifyPeriodFromTo';
 
@@ -69,7 +69,7 @@ export default function Home({
   return (
     <>
       <Head>
-        <title>WorkStats</title>
+        <title>Dashboard - WorkStats</title>
         <meta name='description' content='WorkStats' />
         <link rel='icon' href='/favicon.ico' />
         {/* <link
