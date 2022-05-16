@@ -2,10 +2,12 @@
   "name": "polygon-hr",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://workstats.dev",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next build && next start",
+    "export": "next build && next export",
     "lint": "next lint",
     "test": "jest --watch",
     "cypress": "cypress open"
