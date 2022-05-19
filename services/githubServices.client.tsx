@@ -40,7 +40,7 @@ const useNumberOfCommits = (
     console.log(`Failed to load number of commits: ${error}`);
     return 0;
   } else if (!data) {
-    console.log('Loading number of commits...');
+    // console.log('Loading number of commits...');
     return 0;
   } else {
     return data;
@@ -100,7 +100,7 @@ const useNumberOfPullRequests = (
     console.log(`Failed to load number of pull requests: ${error}`);
     return 0;
   } else if (!data) {
-    console.log('Loading number of pull requests...');
+    // console.log('Loading number of pull requests...');
     return 0;
   } else {
     // console.log(data);
@@ -139,7 +139,7 @@ const useNumberOfReviews = (
     console.log(`Failed to load number of reviews: ${error}`);
     return 0;
   } else if (!data) {
-    console.log('Loading number of reviews...');
+    // console.log('Loading number of reviews...');
     return 0;
   } else {
     return data;

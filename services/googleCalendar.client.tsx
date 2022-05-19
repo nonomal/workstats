@@ -12,13 +12,13 @@ let GoogleAuth; // Google Auth object.
 // 1. Load the JavaScript client library arg1='client:auth2' which means client and auth2 libraries then does callback arg2.
 // The official documentation is here: https://github.com/google/google-api-javascript-client/blob/master/docs/reference.md#loading-the-client-library
 const handleClientLoad = async () => {
-  console.log('3. gapi.load is starting');
+  // console.log('3. gapi.load is starting');
   gapi.load('client:auth2', {
     // gapi.load('client', {
     callback: async () => {
-      console.log('4. initClient is starting');
+      // console.log('4. initClient is starting');
       await initClient();
-      console.log('14. initClient is finished');
+      // console.log('14. initClient is finished');
       // await countNumberOfEvents();
     },
     onerror: () => {
@@ -37,14 +37,14 @@ const handleClientLoad = async () => {
 // The reference is here: https://github.com/google/google-api-javascript-client/blob/master/docs/reference.md#----gapiclientinitargs--
 const initClient = async () => {
   // console.log(`{apiKey: ${apiKey}, clientId: ${clientId}, scope: ${scope}}`);
-  console.log('5. gapi.client.init is starting');
+  // console.log('5. gapi.client.init is starting');
   await gapi.client.init({
     apiKey: apiKey, // When using Oauth 2.0, no need to set the API key but, it's a good practice, in case expanding to handle unauthorized requests.
     // discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'], // Unnecessary to specify this, or it saves one network request and reduces application size
     clientId: clientId,
     scope: scope
   });
-  console.log('6. Google API client is initialized by gapi.client.init');
+  // console.log('6. Google API client is initialized by gapi.client.init');
 
   // Listen for sign-in state changes and listen(listener) passes true to this listener when the user signs in, and false when the user signs out.
   // The reference is here: https://developers.google.com/identity/sign-in/web/reference#gapiauth2getauthinstance and https://developers.google.com/identity/sign-in/web/reference#googleauthissignedinlistenlistener
@@ -53,9 +53,9 @@ const initClient = async () => {
 
   // Handle the initial sign-in state.
   // The reference is here: https://developers.google.com/identity/sign-in/web/reference#googleauthissignedinget
-  console.log('7. updateSigninStatus is starting');
+  // console.log('7. updateSigninStatus is starting');
   updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-  console.log('13. updateSigninStatus is finished');
+  // console.log('13. updateSigninStatus is finished');
   // authorizeButton.onclick = handleAuthClick;
   // signoutButton.onclick = handleSignoutClick;
 };
@@ -83,18 +83,18 @@ const initClient = async () => {
 // Called when the signed in status changes, to update the UI appropriately.
 // After a sign-in, the API is called.
 const updateSigninStatus = async (isSignedIn: boolean) => {
-  console.log('8. updateSigninStatus is running');
+  // console.log('8. updateSigninStatus is running');
   if (isSignedIn) {
-    console.log('9. Confirmed user is signed in');
+    // console.log('9. Confirmed user is signed in');
     // authorizeButton.style.display = 'none';
     // signoutButton.style.display = 'block';
     const numberOfEvents: number = await countNumberOfEvents();
-    console.log('12. countNumberOfEvents is finished');
+    // console.log('12. countNumberOfEvents is finished');
     return numberOfEvents;
   } else {
     // authorizeButton.style.display = 'block';
     // signoutButton.style.display = 'none';
-    console.log('9. Confirmed user is signed out');
+    // console.log('9. Confirmed user is signed out');
     return 0;
   }
 };
@@ -102,7 +102,7 @@ const updateSigninStatus = async (isSignedIn: boolean) => {
 // 3. Initialize and make the API request.
 // The reference is here: https://github.com/google/google-api-javascript-client/blob/master/docs/reference.md#----gapiclientrequestargs--
 const countNumberOfEvents = async () => {
-  console.log('10. countNumberOfEvents is running');
+  // console.log('10. countNumberOfEvents is running');
   const d = new Date();
   const params = {
     maxResults: 250, // Max is 2500
@@ -110,7 +110,7 @@ const countNumberOfEvents = async () => {
     timeMin: new Date(d.setMonth(d.getMonth() - 1)).toISOString(), // 1 month ago
     timeMax: d.toISOString() // today
   };
-  console.log('11. gapi.client.request is starting');
+  // console.log('11. gapi.client.request is starting');
   const response = await gapi.client.request({
     path: `${baseUrl}/calendars/${calendarId}/events`,
     method: 'GET',
@@ -120,10 +120,10 @@ const countNumberOfEvents = async () => {
     console.log(response.result);
     const events = response.result.items;
     const numberOfEvents = events.length;
-    console.log(`11. Number of events: ${numberOfEvents}`);
+    // console.log(`11. Number of events: ${numberOfEvents}`);
     return numberOfEvents;
   } else {
-    console.log(`11. Error message: ${response.result.error.message}`);
+    // console.log(`11. Error message: ${response.result.error.message}`);
     return 0;
   }
 };
