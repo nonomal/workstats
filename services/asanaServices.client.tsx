@@ -63,7 +63,7 @@ const useNumberOfTasks = (
     console.log(`Failed to load: ${error}`);
     return 0;
   } else if (!data) {
-    console.log('Loading stats of asana...');
+    // console.log('Loading stats of asana...');
     return 0;
   } else {
     return data;

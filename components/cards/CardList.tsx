@@ -1,20 +1,20 @@
 // import custom nextjs components
-import Script from 'next/script';
+// import Script from 'next/script';
 
 // import card components
 import NumberOfCommits from './NumberOfCommits';
 import NumberOfCloseTasks from './NumberOfCloseTasks';
-import NumberOfMeetings from './NumberOfMtgs';
+// import NumberOfMeetings from './NumberOfMtgs';
 import NumberOfMentioned from './NumberOfMentioned';
 import NumberOfNewSent from './NumberOfNewSent';
 import NumberOfOpenTasks from './NumberOfOpenTasks';
 import NumberOfPullRequests from './NumberOfPullRequests';
 import NumberOfReplies from './NumberOfReplies';
 import NumberOfReviews from './NumberOfReview';
-import TotalTimeOfMeetings from './TotalTimeOfMtgs';
+// import TotalTimeOfMeetings from './TotalTimeOfMtgs';
 
 // import services
-import { handleClientLoad } from '../../services/googleCalendar.client';
+// import { handleClientLoad } from '../../services/googleCalendar.client';
 // import GoogleAuthButton from './Auth&SignInButton';
 import GearIconLink from '../common/GearIcon';
 
@@ -41,11 +41,11 @@ const CardList = ({
   // @ts-ignore
   githubUserName
 }) => {
-  const numberOfMeetings = 0;
+  // const numberOfMeetings = 0;
 
   return (
     <>
-      <Script
+      {/* <Script
         src='https://apis.google.com/js/api.js'
         // src='https://accounts.google.com/gsi/client'
         strategy='afterInteractive' // default. This is equivalent to loading a script with the `defer` attribute
@@ -59,7 +59,7 @@ const CardList = ({
         onError={(e) => {
           console.error('Script failed to load google api', e);
         }}
-      />
+      /> */}
       <div className='container max-w-6xl px-5 my-5'>
         <div className='flex'>
           <h2 className='text-xl mt-4 mb-2'>Coding - GitHub</h2>
@@ -109,9 +109,7 @@ const CardList = ({
           />
         </div>
         <div className='flex'>
-          <h2 className='text-xl mt-4 mb-2'>
-            Communication - Slack, Google Calendar & Gmail
-          </h2>
+          <h2 className='text-xl mt-4 mb-2'>Communication - Slack</h2>
           <GearIconLink
             mt={5}
             mb={2}
@@ -124,8 +122,8 @@ const CardList = ({
           <NumberOfReplies data={numberOfReplies} />
           <NumberOfNewSent data={numberOfNewSent} />
           {/* <GoogleAuthButton /> */}
-          <NumberOfMeetings data={numberOfMeetings} />
-          <TotalTimeOfMeetings />
+          {/* <NumberOfMeetings data={numberOfMeetings} /> */}
+          {/* <TotalTimeOfMeetings /> */}
         </div>
       </div>
     </>
