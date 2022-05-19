@@ -1,20 +1,20 @@
 // import custom nextjs components
-import Script from 'next/script';
+// import Script from 'next/script';
 
 // import card components
 import NumberOfCommits from './NumberOfCommits';
 import NumberOfCloseTasks from './NumberOfCloseTasks';
-import NumberOfMeetings from './NumberOfMtgs';
+// import NumberOfMeetings from './NumberOfMtgs';
 import NumberOfMentioned from './NumberOfMentioned';
 import NumberOfNewSent from './NumberOfNewSent';
 import NumberOfOpenTasks from './NumberOfOpenTasks';
 import NumberOfPullRequests from './NumberOfPullRequests';
 import NumberOfReplies from './NumberOfReplies';
 import NumberOfReviews from './NumberOfReview';
-import TotalTimeOfMeetings from './TotalTimeOfMtgs';
+// import TotalTimeOfMeetings from './TotalTimeOfMtgs';
 
 // import services
-import { handleClientLoad } from '../../services/googleCalendar.client';
+// import { handleClientLoad } from '../../services/googleCalendar.client';
 // import GoogleAuthButton from './Auth&SignInButton';
 import GearIconLink from '../common/GearIcon';
 
