@@ -21,7 +21,7 @@ import GoogleCalendarIcon from '../../public/google-calendar-svgrepo-com.svg';
 import GitHubIcon2 from '../../public/github-svgrepo-com.svg';
 
 // Custom services
-import { createUserDoc } from '../../services/setUserDocToFirestore';
+import { createUserDoc } from '../../services/setDocToFirestore';
 
 // Scopes in detail: https://developers.google.com/identity/protocols/oauth2/scopes#calendar
 const scopes = 'https://www.googleapis.com/auth/calendar.readonly	';
@@ -32,12 +32,8 @@ const Login = () => {
   const loginWithGoogle = () => {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
-        // console.log('result is: ', result);
         // This gives you a Google Access Token. You can use it to access the Google API.
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        // console.log('credential is: ', credential);
         const user = result.user;
-        // console.log('user is: ', user);
         createUserDoc(user.uid);
         window.location.reload();
       })
@@ -62,11 +58,7 @@ const Login = () => {
   const loginWithGithub = () => {
     signInWithPopup(auth, githubProvider)
       .then((result) => {
-        // console.log('result is: ', result);
-        // const credential = GithubAuthProvider.credentialFromResult(result);
-        // console.log('credential is: ', credential);
         const user = result.user;
-        // console.log('user is: ', user);
         createUserDoc(user.uid);
         window.location.reload();
       })
