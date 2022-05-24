@@ -18,22 +18,23 @@ const useNumberOfCommits = (
 ) => {
   // console.log(`githubUserId is: ${githubUserId}`);
   const url = `${base}/repos/${owner}/${repo}/stats/contributors`;
-  // console.log(url);
+  if (owner === null || repo === null || githubUserId === 0) {
+    return 0;
+  }
   const headers = new Headers();
   headers.append('Accept', 'application/vnd.github.v3+json');
   const fetcher = async (url: string) => {
     const response = await fetch(url, {
       headers: headers
     }).then((res) => res.json());
-    // console.log(`response is: ${JSON.stringify(response)}`);
     // @ts-ignore
     const filteredResponse = response.filter((item) => {
       return item.author.id === githubUserId;
     });
-    // console.log(filteredResponse);
     const output: number = filteredResponse[0].total;
     return output;
   };
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, error } = useSWR(url, fetcher, options);
 
   if (error) {
@@ -61,7 +62,9 @@ const useNumberOfPullRequests = (
   };
   let query = new URLSearchParams(params);
   const url = `${base}/repos/${owner}/${repo}/pulls?${query}`;
-  // console.log(url);
+  if (owner === null || repo === null || githubUserId === 0) {
+    return 0;
+  }
 
   // use useSWR function in Next.js
   // The official document is here: https://swr.vercel.app/docs/data-fetching
@@ -85,15 +88,11 @@ const useNumberOfPullRequests = (
       params.page = pageCount.toString();
       query = new URLSearchParams(params);
       url = `${base}/repos/${owner}/${repo}/pulls?${query}`;
-      // console.log(`count is: ${count}`);
-      // console.log(`totalCount is: ${totalCount}`);
-      // console.log(`pageCount is: ${pageCount}`);
-      // console.log(`params.page is: ${params.page}`);
-      // console.log(`url is: ${url}`)
     } while (count > 0);
     return totalCount;
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, error } = useSWR(url, fetcher, options);
 
   if (error) {

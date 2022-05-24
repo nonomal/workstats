@@ -115,17 +115,13 @@ export default function Home({
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  // console.log('ctx is: ', ctx);
   const cookies = nookies.get(ctx);
-  // console.log('cookies is: ', cookies);
 
   if (cookies.token) {
     const token = await verifyIdToken(cookies.token);
 
     // the user is authenticated!
     const { uid } = token;
-    // const currentUser = auth.currentUser;
-    // const docId = currentUser?.uid ? currentUser.uid : '';
     const userDoc = await getAUserDoc(uid);
 
     // Profile list to be displayed on the left side

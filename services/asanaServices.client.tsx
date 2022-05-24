@@ -40,11 +40,13 @@ const useNumberOfTasks = (
       headers: myHeaders
     }).then((res) => res.json());
 
-    const numberOfAll: number = response.data.length;
+    const numberOfAll: number = response.data?.length
+      ? response.data.length
+      : 0;
 
-    const numberOfClosed: number = response['data'].filter((item: item) => {
+    const numberOfClosed: number = response['data']?.filter((item: item) => {
       return item['completed'] === true;
-    }).length;
+    })?.length;
 
     const output = {
       numberOfAll: numberOfAll,
@@ -60,7 +62,7 @@ const useNumberOfTasks = (
   });
 
   if (error) {
-    console.log(`Failed to load: ${error}`);
+    console.log(`Failed to load Asana data: ${error}`);
     return 0;
   } else if (!data) {
     // console.log('Loading stats of asana...');

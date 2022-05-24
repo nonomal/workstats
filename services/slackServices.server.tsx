@@ -107,10 +107,35 @@ const listTimestampInSlack = async (channel: string, token: string) => {
   return { channel, result };
 };
 
+// Post a message to Slack
+const postMessageToSlack = async () => {
+  // Prepare arguments for the Slack API call
+  const auth = `Bearer ${process.env.NEXT_PUBLIC_SLACK_BOT_TOKEN}`;
+  const slackChannel = 'C03GG1FFZFC'; // channel name is 'cancel-membership'
+  const slackMessage = 'A user has canceled their membership.';
+  // const slackMessage = `
+  // A new user has joined the app!
+  // User name: Test
+  // `;
+  const slackURL = 'https://slack.com/api/chat.postMessage';
+
+  // How to call the Slack API
+  const response = await fetch(slackURL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: `token=${auth}&channel=${slackChannel}&text=${slackMessage}`
+  });
+  const data = await response.json();
+  console.log('data is: ', data);
+};
+
 export {
   slackSearchFromServer,
   slackConversationHistory,
   slackConversationList,
   countRepliesInSlack,
-  listTimestampInSlack
+  listTimestampInSlack,
+  postMessageToSlack
 };

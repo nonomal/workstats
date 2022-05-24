@@ -1,6 +1,8 @@
 // Frameworks and libraries
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
+import Image from 'next/image';
 import nookies from 'nookies';
 
 // Components and others
@@ -15,10 +17,16 @@ import {
   handleSubmitCommunicationActivity,
   handleSubmitSourceCode,
   handleSubmitTaskTicket
-} from '../services/setUserDocToFirestore';
+} from '../services/setDocToFirestore';
 import QuestionMark from '../components/common/QuestionMark';
+import NewTabIcon from '../public/new-tab-svgrepo-com.svg';
 
-const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
+interface UserSettingsProps {
+  uid: string;
+  userDoc: UserType | null;
+}
+
+const userSettings = ({ uid, userDoc }: UserSettingsProps) => {
   return (
     <>
       <Head>
@@ -56,63 +64,63 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
               name={'firstName'}
               placeholder={'Oliver'}
               width={32}
-              value={userDoc.firstName}
+              value={userDoc?.firstName}
             />
             <InputBox
               label={'Middle Name'}
               name={'middleName'}
               placeholder={'Alan'}
               width={36}
-              value={userDoc.middleName}
+              value={userDoc?.middleName}
             />
             <InputBox
               label={'Last Name'}
               name={'lastName'}
               placeholder={'Smith'}
               width={36}
-              value={userDoc.lastName}
+              value={userDoc?.lastName}
             />
             <InputBox
               label={'Department'}
               name={'department'}
               placeholder={'IT & Development'}
               width={96}
-              value={userDoc.department}
+              value={userDoc?.department}
             />
             <InputBox
               label={'Rank'}
               name={'rank'}
               placeholder={'Director'}
               width={36}
-              value={userDoc.rank}
+              value={userDoc?.rank}
             />
             <InputBox
               label={'Supervisor'}
               name={'supervisor'}
               placeholder={'A name here'}
               width={36}
-              value={userDoc.supervisor}
+              value={userDoc?.supervisor}
             />
             <InputBox
               label={'Assessor'}
               name={'assessor'}
               placeholder={'A name here'}
               width={36}
-              value={userDoc.assessor}
+              value={userDoc?.assessor}
             />
             <InputBox
               label={'Assigned Project'}
               name={'assignedPj'}
               placeholder={'New Business Development'}
               width={96}
-              value={userDoc.assignedPj}
+              value={userDoc?.assignedPj}
             />
             <InputBox
               label={'Role'}
               name={'role'}
               placeholder={'Product Manager'}
               width={36}
-              value={userDoc.role}
+              value={userDoc?.role}
             />
             <SubmitButton />
           </form>
@@ -139,14 +147,14 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
             inputType={'number'}
             placeholder={'4620828'}
             width={36}
-            value={userDoc.github?.userId}
+            value={userDoc?.github?.userId}
           />
           <InputBox
             label={'User Name'}
             name={'githubUserName'}
             placeholder={'oliversmith'}
             width={36}
-            value={userDoc.github?.userName}
+            value={userDoc?.github?.userName}
           />
         </div>
         <div className='flex flex-wrap items-center'>
@@ -156,21 +164,21 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
             name={'githubRepoOwner1'}
             placeholder={'octocat'}
             width={36}
-            value={userDoc.github?.repositories[0]?.owner}
+            value={userDoc?.github?.repositories[0]?.owner}
           />
           <InputBox
             label={'Repo Name'}
             name={'githubRepo1'}
             placeholder={'hello-world'}
             width={36}
-            value={userDoc.github?.repositories[0]?.repo}
+            value={userDoc?.github?.repositories[0]?.repo}
           />
           <InputBox
             label={'Repo Visibility'}
             name={'githubRepoVisibility1'}
             placeholder={'Public or Private'}
             width={36}
-            value={userDoc.github?.repositories[0]?.visibility}
+            value={userDoc?.github?.repositories[0]?.visibility}
           />
         </div>
         <div className='flex flex-wrap items-center'>
@@ -180,21 +188,21 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
             name={'githubRepoOwner2'}
             placeholder={'octocat'}
             width={36}
-            value={userDoc.github?.repositories[1]?.owner}
+            value={userDoc?.github?.repositories[1]?.owner}
           />
           <InputBox
             label={'Repo Name'}
             name={'githubRepo2'}
             placeholder={'hello-world'}
             width={36}
-            value={userDoc.github?.repositories[1]?.repo}
+            value={userDoc?.github?.repositories[1]?.repo}
           />
           <InputBox
             label={'Repo Visibility'}
             name={'githubRepoVisibility2'}
             placeholder={'Public or Private'}
             width={36}
-            value={userDoc.github?.repositories[1]?.visibility}
+            value={userDoc?.github?.repositories[1]?.visibility}
           />
           <SubmitButton />
         </div>
@@ -220,7 +228,7 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
             inputType={'number'}
             placeholder={'1200781652740141'}
             width={48}
-            value={userDoc.asana?.userId}
+            value={userDoc?.asana?.userId}
           />
         </div>
         <div className='flex flex-wrap items-center'>
@@ -231,21 +239,21 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
             inputType={'number'}
             placeholder={'1234567890123456'}
             width={48}
-            value={userDoc.asana?.workspace[0]?.workspaceId}
+            value={userDoc?.asana?.workspace[0]?.workspaceId}
           />
           <InputBox
             label={'Workspace Name'}
             name={'asanaWorkspaceName1'}
             placeholder={'Suchica'}
             width={36}
-            value={userDoc.asana?.workspace[0]?.workspaceName}
+            value={userDoc?.asana?.workspace[0]?.workspaceName}
           />
           <InputBox
             label={'Personal Access Token'}
             name={'asanaWorkspacePersonalAccessToken1'}
             placeholder={'1/1234567890123456:031..........................a63'}
             width={96}
-            value={userDoc.asana?.workspace[0]?.personalAccessToken}
+            value={userDoc?.asana?.workspace[0]?.personalAccessToken}
           />
         </div>
         <div className='flex flex-wrap items-center'>
@@ -256,21 +264,21 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
             inputType={'number'}
             placeholder={'1234567890123456'}
             width={48}
-            value={userDoc.asana?.workspace[1]?.workspaceId}
+            value={userDoc?.asana?.workspace[1]?.workspaceId}
           />
           <InputBox
             label={'Workspace Name'}
             name={'asanaWorkspaceName2'}
             placeholder={'Suchica'}
             width={36}
-            value={userDoc.asana?.workspace[1]?.workspaceName}
+            value={userDoc?.asana?.workspace[1]?.workspaceName}
           />
           <InputBox
             label={'Personal Access Token'}
             name={'asanaWorkspacePersonalAccessToken2'}
             placeholder={'1/1234567890123456:031..........................a63'}
             width={96}
-            value={userDoc.asana?.workspace[1]?.personalAccessToken}
+            value={userDoc?.asana?.workspace[1]?.personalAccessToken}
           />
           <SubmitButton />
         </div>
@@ -296,14 +304,14 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
               name={'slackWorkspaceName1'}
               placeholder={'Suchica'}
               width={36}
-              value={userDoc.slack?.workspace[0]?.workspaceName}
+              value={userDoc?.slack?.workspace[0]?.workspaceName}
             />
             <InputBox
               label={'Member ID'}
               name={'slackWorkspaceMemberId1'}
               placeholder={'U02DK80DN9H'}
               width={36}
-              value={userDoc.slack?.workspace[0]?.memberId}
+              value={userDoc?.slack?.workspace[0]?.memberId}
             />
             <InputBox
               label={'User Token'}
@@ -312,7 +320,7 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
                 'xoxp-1234567890123-1234567890123-1234567890123-a94..........................16e'
               }
               width={96}
-              value={userDoc.slack?.workspace[0]?.userToken}
+              value={userDoc?.slack?.workspace[0]?.userToken}
             />
             <InputBox
               label={'Bot Token'}
@@ -321,7 +329,7 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
                 'xoxb-1234567890123-1234567890123-Uia..................8HH'
               }
               width={96}
-              value={userDoc.slack?.workspace[0]?.botToken}
+              value={userDoc?.slack?.workspace[0]?.botToken}
             />
           </div>
         </div>
@@ -333,14 +341,14 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
               name={'slackWorkspaceName2'}
               placeholder={'Suchica'}
               width={36}
-              value={userDoc.slack?.workspace[1]?.workspaceName}
+              value={userDoc?.slack?.workspace[1]?.workspaceName}
             />
             <InputBox
               label={'Member ID'}
               name={'slackWorkspaceMemberId2'}
               placeholder={'U02DK80DN9H'}
               width={36}
-              value={userDoc.slack?.workspace[1]?.memberId}
+              value={userDoc?.slack?.workspace[1]?.memberId}
             />
             <InputBox
               label={'User Token'}
@@ -349,7 +357,7 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
                 'xoxp-1234567890123-1234567890123-1234567890123-a94..........................16e'
               }
               width={96}
-              value={userDoc.slack?.workspace[1]?.userToken}
+              value={userDoc?.slack?.workspace[1]?.userToken}
             />
             <InputBox
               label={'Bot Token'}
@@ -358,12 +366,41 @@ const userSettings = ({ uid, userDoc }: { uid: string; userDoc: UserType }) => {
                 'xoxb-1234567890123-1234567890123-Uia..................8HH'
               }
               width={96}
-              value={userDoc.slack?.workspace[1]?.botToken}
+              value={userDoc?.slack?.workspace[1]?.botToken}
             />
             <SubmitButton />
           </div>
         </div>
       </form>
+      <div className='flex'>
+        <Link href='/cancel-membership'>
+          <a
+            className='mr-3'
+            target='_blank'
+            rel='noreferrer noopener' // Must pair with target='_blank'
+          >
+            <button className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+              Cancel Membership
+            </button>
+          </a>
+        </Link>
+        <div className='mt-9 mb-1'>
+          <Image
+            src={NewTabIcon}
+            width={24}
+            height={24}
+            layout='intrinsic'
+            alt='Open a new tab'
+            quality={75}
+            priority={false}
+            placeholder='empty'
+          />
+        </div>
+      </div>
+      <p className='py-1 ml-6'>
+        If you wish to cancel your membership to this service, please follow
+        this link.
+      </p>
       <div className='h-20'></div>
     </>
   );
@@ -378,7 +415,7 @@ export const getServerSideProps: GetServerSideProps = async (
   if (cookies.token) {
     const token = await verifyIdToken(cookies.token);
     const { uid } = token;
-    const userDoc = await getAUserDoc(uid);
+    const userDoc = (await getAUserDoc(uid)) ? await getAUserDoc(uid) : null;
     return {
       props: { uid, userDoc }
     };

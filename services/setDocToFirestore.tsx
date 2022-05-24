@@ -14,9 +14,7 @@ const handleSubmitBasicInfo = async (
   event: React.FormEvent<HTMLFormElement>,
   docId: string
 ) => {
-  // Stop the form from submitting and refreshing the page.
   event.preventDefault();
-
   const docRef = doc(db, 'users', docId);
   const docData: UserType = {
     assessor: event.currentTarget.assessor.value,
@@ -40,9 +38,7 @@ const handleSubmitSourceCode = async (
   event: React.FormEvent<HTMLFormElement>,
   docId: string
 ) => {
-  // Stop the form from submitting and refreshing the page.
   event.preventDefault();
-
   const docRef = doc(db, 'users', docId);
   const docData = {
     github: {
@@ -73,9 +69,7 @@ const handleSubmitTaskTicket = async (
   event: React.FormEvent<HTMLFormElement>,
   docId: string
 ) => {
-  // Stop the form from submitting and refreshing the page.
   event.preventDefault();
-
   const docRef = doc(db, 'users', docId);
   const docData = {
     asana: {
@@ -107,9 +101,7 @@ const handleSubmitCommunicationActivity = async (
   event: React.FormEvent<HTMLFormElement>,
   docId: string
 ) => {
-  // Stop the form from submitting and refreshing the page.
   event.preventDefault();
-
   const docRef = doc(db, 'users', docId);
   const docData = {
     slack: {
@@ -136,10 +128,36 @@ const handleSubmitCommunicationActivity = async (
   return;
 };
 
+const handleSubmitSurveyWhyYouLeave = async (
+  event: React.FormEvent<HTMLFormElement>,
+  docId: string,
+  n: number
+) => {
+  event.preventDefault();
+  const docRef = doc(db, 'unsub-reasons', docId);
+  const arrayData = Array(n)
+    .fill(0) // fill with 0 because map() will not work with undefined
+    .map((_, i) => {
+      return {
+        reasonId: event.currentTarget[`reason${i + 1}`].id,
+        reasonName: event.currentTarget[`reason${i + 1}`].name,
+        checked: event.currentTarget[`reason${i + 1}`].checked
+      };
+    });
+  const docData = {
+    reasons: arrayData
+  };
+  const option = { merge: true }; // means that if the doc already exists, it will be updated instead of creating a new one.
+
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 export {
   createUserDoc,
   handleSubmitBasicInfo,
   handleSubmitSourceCode,
   handleSubmitTaskTicket,
-  handleSubmitCommunicationActivity
+  handleSubmitCommunicationActivity,
+  handleSubmitSurveyWhyYouLeave
 };
