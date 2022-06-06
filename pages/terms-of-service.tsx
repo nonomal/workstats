@@ -8,8 +8,11 @@ export default function TermsOfService() {
     <>
       <Head>
         <title>Terms of Service - WorkStats</title>
-        <meta name='description' content='WorkStats' />
-        <link rel='icon' href='/favicon.ico' />
+        <meta
+          name='description'
+          content='This is the WorkStats Terms of Service page'
+        />
+        <link rel='icon' href='/icononly_transparent_nobuffer.ico' />
       </Head>
       <main className='px-5'>
         <h1 className='text-3xl py-4'>Terms and Conditions</h1>
@@ -19,7 +22,7 @@ export default function TermsOfService() {
         <p className='py-1'>
           These terms and conditions outline the rules and regulations for the
           use of Suchica, Inc.'s Website, located at{' '}
-          <a className='py-1 text-blue-600' href='https://workstats.io'>
+          <a className='py-1 text-blue-600' href='https://workstats.dev'>
             here
           </a>
           .

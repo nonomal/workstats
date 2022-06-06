@@ -7,15 +7,18 @@ export default function PrivacyPolicy() {
     <>
       <Head>
         <title>Privacy Policy - WorkStats</title>
-        <meta name='description' content='WorkStats' />
-        <link rel='icon' href='/favicon.ico' />
+        <meta
+          name='description'
+          content='This is the WorkStats Privacy Policy page'
+        />
+        <link rel='icon' href='/icononly_transparent_nobuffer.ico' />
       </Head>
       <main className='px-5'>
         <h1 className='text-3xl py-4'>Privacy Policy for Suchica, Inc.</h1>
 
         <p className='py-1'>
           At WorkStats, accessible from{' '}
-          <a className='py-1 text-blue-600' href='https://workstats.io'>
+          <a className='py-1 text-blue-600' href='https://workstats.dev'>
             https://workstats.io
           </a>
           , one of our main priorities is the privacy of our visitors. This
