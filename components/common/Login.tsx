@@ -35,6 +35,8 @@ const Login = () => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const user = result.user;
         createUserDoc(user.uid);
+      })
+      .then(() => {
         window.location.reload();
       })
       .catch((error) => {
@@ -60,6 +62,8 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         createUserDoc(user.uid);
+      })
+      .then(() => {
         window.location.reload();
       })
       .catch((error) => {
