@@ -22,6 +22,7 @@ import GitHubIcon2 from '../../public/github-svgrepo-com.svg';
 
 // Custom services
 import { createUserDoc } from '../../services/setDocToFirestore';
+import ProductHunt from '../buttons/ProductHunt';
 
 // Scopes in detail: https://developers.google.com/identity/protocols/oauth2/scopes#calendar
 const scopes = 'https://www.googleapis.com/auth/calendar.readonly	';
@@ -83,17 +84,23 @@ const Login = () => {
       });
   };
 
+  // const d = new Date();
+  // const year = d.getFullYear();
+
   return (
     <div className='h-screen md:flex'>
-      <div className='grid gap-4 md:gap-6 md:w-1/2 h-3/5 md:h-screen bg-slate-800 content-center justify-center justify-items-center'>
-        <h1 className='text-white text-4xl md:text-5xl text-center'>
-          Welcome to &quot;WorkStats&quot;
-        </h1>
-        <p className='text-white text-xl md:text-2xl text-center'>
+      <div className='grid gap-4 md:gap-6 md:w-1/2 h-1/2 md:h-screen bg-slate-800 content-center justify-center justify-items-center'>
+        <div className='grid gap-0.5 md:gap-2 place-items-center'>
+          <h1 className='text-white text-3xl md:text-5xl text-center'>
+            Welcome to &quot;WorkStats&quot;
+          </h1>
+          <span className='text-green-300 text-base md:text-lg px-1.5 py-0 border-green-300 border rounded-md'>
+            Beta
+          </span>
+        </div>
+        <p className='text-white px-4 text-lg md:text-2xl text-center'>
           This app visualizes contribution of you and your team in numbers!
-        </p>
-        <p className='text-white text-xl md:text-2xl text-center'>
-          Aggregate from the following services.
+          Aggregates from the following services.
         </p>
         <div className='flex gap-3'>
           <Image
@@ -138,8 +145,10 @@ const Login = () => {
           />
         </div>
       </div>
-      <div className='grid gap-4 md:w-1/2 h-2/5 md:h-screen bg-white content-center justify-center justify-items-center'>
-        <p className='text-xl text-slate-900'>Log in with OAuth provider</p>
+      <div className='grid gap-4 md:w-1/2 h-1/2 md:h-screen bg-white content-center justify-center justify-items-center'>
+        <p className='text-lg md:text-xl text-slate-900'>
+          Log in with OAuth provider
+        </p>
         <button
           className='text-white bg-blue-600 hover:bg-blue-800 font-bold rounded-md w-52 h-10'
           onClick={loginWithGoogle}
@@ -154,7 +163,14 @@ const Login = () => {
           <GitHubIcon className='text-white mr-2' />
           Login with GitHub
         </button>
+        <p className='text-lg md:text-xl text-slate-900'>
+          Upvote me on Product Hunt!
+        </p>
+        <ProductHunt />
       </div>
+      {/* <span className='text-sm md:text-base'>
+        Copyright {year} Suchica, Inc. All rights reserved.
+      </span> */}
     </div>
   );
 };

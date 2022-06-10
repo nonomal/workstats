@@ -3,7 +3,9 @@
  **/
 const nextConfig = {
   images: {
-    domains: ['firebasestorage.googleapis.com']
+    domains: ['firebasestorage.googleapis.com', 'api.producthunt.com'],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: 'default-src "self"; script-src "none"; sandbox;'
   },
   reactStrictMode: true
   // webpack: (config, { isServer }) => {
