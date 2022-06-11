@@ -36,12 +36,12 @@ const handleSubmitBasicInfo = async (
 
 const handleSubmitGithubAccessToken = async (
   docId: string,
-  githubAccessToken: string
+  accessToken: string
 ) => {
   const docRef = doc(db, 'users', docId);
   const docData = {
     github: {
-      accessToken: githubAccessToken
+      accessToken: accessToken
     }
   };
   const option = { merge: true };
@@ -77,6 +77,25 @@ const handleSubmitSourceCode = async (
 
   await setDoc(docRef, docData, option);
   alert('Source code info updated!');
+  return;
+};
+
+const handleSubmitAsanaAccessToken = async (
+  docId: string,
+  accessToken: string,
+  refreshToken: string,
+  userId: string
+) => {
+  const docRef = doc(db, 'users', docId);
+  const docData = {
+    asana: {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      userId: userId
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
   return;
 };
 
@@ -173,6 +192,7 @@ export {
   handleSubmitBasicInfo,
   handleSubmitGithubAccessToken,
   handleSubmitSourceCode,
+  handleSubmitAsanaAccessToken,
   handleSubmitTaskTicket,
   handleSubmitCommunicationActivity,
   handleSubmitSurveyWhyYouLeave

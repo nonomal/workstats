@@ -14,6 +14,7 @@ import { UserType } from '../config/firebaseTypes';
 import { verifyIdToken } from '../firebaseAdmin';
 import getAUserDoc from '../services/getAUserDocFromFirebase';
 import {
+  handleSubmitAsanaAccessToken,
   handleSubmitBasicInfo,
   handleSubmitCommunicationActivity,
   handleSubmitGithubAccessToken,
@@ -22,24 +23,32 @@ import {
 } from '../services/setDocToFirestore';
 import QuestionMark from '../components/common/QuestionMark';
 import NewTabIcon from '../public/new-tab-svgrepo-com.svg';
-import ConnectWithGithubButton from '../components/buttons/ConnectWithGithub';
+import RequestOAuthButton from '../components/buttons/RequestOAuthButton';
 import DisconnectWithGithubButton from '../components/buttons/DisconnectWithGithubButton';
+import { requestGithubUserIdentity } from '../services/githubServices.client';
+import { requestAsanaUserIdentity } from '../services/asanaServices.client';
+import DisconnectWithAsanaButton from '../components/buttons/DisconnectWithAsanaButton';
 
 interface UserSettingsProps {
   uid: string;
   userDoc: UserType | null;
+  isAsanaAuthenticated: boolean;
   isGithubAuthenticated: boolean;
 }
 
 const useUserSettings = ({
   uid,
   userDoc,
+  isAsanaAuthenticated,
   isGithubAuthenticated
 }: UserSettingsProps) => {
   // If a user click 'Connect with GitHub' button to agree to authenticate WorkStats with GitHub scopes, a code will be passed to the redirect URL.
   const htmlParams = window.location.search;
   const code = htmlParams.startsWith('?code=')
     ? htmlParams.split(/[=&]+/)[1] // split by '=' or '&'
+    : undefined;
+  const asanaCode = htmlParams.startsWith('?asana=')
+    ? decodeURIComponent(htmlParams.split(/[=&]+/)[3]) // ['asana', 'true', 'code', 'codeValue']
     : undefined;
 
   // If code is defined and isGithubAuthenticatedState is false, call /api/get-github-access-token to exchange the code for a GitHub access token
@@ -68,13 +77,71 @@ const useUserSettings = ({
     }
   }, [code, isGithubAuthenticatedState]);
 
-  // If githubAccessToken is defined and isGithubAuthenticatedState is false, update/insert the access token to Firestore
+  // If githubAccessToken is defined and isGithubAuthenticatedState is false, update/insert the GitHub access token to Firestore
   useEffect(() => {
     if (githubAccessToken && !isGithubAuthenticatedState) {
       handleSubmitGithubAccessToken(uid, githubAccessToken);
       setIsGithubAuthenticatedState(true);
     }
   }, [githubAccessToken, isGithubAuthenticatedState, uid]);
+
+  // If asanaCode is defined and isAsanaAuthenticatedState is false, call /api/get-asana-access-token to exchange the code for a Asana access token
+  const [isAsanaAuthenticatedState, setIsAsanaAuthenticatedState] =
+    useState(isAsanaAuthenticated);
+  const [asanaAccessToken, setAsanaAccessToken] = useState('');
+  const [asanaRefreshToken, setAsanaRefreshToken] = useState('');
+  const [asanaUserId, setAsanaUserId] = useState('');
+  useEffect(() => {
+    if (asanaCode && !isAsanaAuthenticatedState) {
+      console.log({ asanaCode, isAsanaAuthenticatedState });
+      const url = '/api/get-asana-access-token';
+      const headers = new Headers();
+      headers.append('Accept', 'application/json');
+      headers.append('Content-Type', 'application/json');
+      const body = {
+        grant_type: 'authorization_code',
+        code: asanaCode
+      };
+      fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setAsanaAccessToken(res.access_token);
+          setAsanaRefreshToken(res.refresh_token);
+          res.data?.id ? setAsanaUserId(res.data.id) : undefined;
+        });
+    }
+  }, [asanaCode, isAsanaAuthenticatedState]);
+
+  // If asanaAccessToken is defined and isAsanaAuthenticatedState is false, update/insert the access token to Firestore
+  useEffect(() => {
+    if (
+      asanaAccessToken &&
+      asanaRefreshToken &&
+      asanaUserId &&
+      !isAsanaAuthenticatedState
+    ) {
+      handleSubmitAsanaAccessToken(
+        uid,
+        asanaAccessToken,
+        asanaRefreshToken,
+        asanaUserId
+      ).then(() => {
+        setIsAsanaAuthenticatedState(true);
+        alert('Asana and WorkStats are successfully connected.');
+        window.location.replace(window.location.pathname);
+      });
+    }
+  }, [
+    asanaAccessToken,
+    asanaRefreshToken,
+    asanaUserId,
+    isAsanaAuthenticatedState,
+    uid
+  ]);
 
   return (
     <>
@@ -189,7 +256,10 @@ const useUserSettings = ({
             uid={uid}
           />
         ) : (
-          <ConnectWithGithubButton label='Connect with GitHub' />
+          <RequestOAuthButton
+            label='Connect with GitHub'
+            handleClick={requestGithubUserIdentity}
+          />
         )}
       </div>
       <form
@@ -233,21 +303,21 @@ const useUserSettings = ({
             name={'githubRepoOwner1'}
             placeholder={'octocat'}
             width={36}
-            value={userDoc?.github?.repositories[0]?.owner}
+            value={userDoc?.github?.repositories?.[0]?.owner}
           />
           <InputBox
             label={'Repo Name'}
             name={'githubRepo1'}
             placeholder={'hello-world'}
             width={36}
-            value={userDoc?.github?.repositories[0]?.repo}
+            value={userDoc?.github?.repositories?.[0]?.repo}
           />
           <InputBox
             label={'Repo Visibility'}
             name={'githubRepoVisibility1'}
             placeholder={'Public or Private'}
             width={36}
-            value={userDoc?.github?.repositories[0]?.visibility}
+            value={userDoc?.github?.repositories?.[0]?.visibility}
           />
         </div>
         <div className='flex flex-wrap items-center'>
@@ -257,21 +327,21 @@ const useUserSettings = ({
             name={'githubRepoOwner2'}
             placeholder={'octocat'}
             width={36}
-            value={userDoc?.github?.repositories[1]?.owner}
+            value={userDoc?.github?.repositories?.[1]?.owner}
           />
           <InputBox
             label={'Repo Name'}
             name={'githubRepo2'}
             placeholder={'hello-world'}
             width={36}
-            value={userDoc?.github?.repositories[1]?.repo}
+            value={userDoc?.github?.repositories?.[1]?.repo}
           />
           <InputBox
             label={'Repo Visibility'}
             name={'githubRepoVisibility2'}
             placeholder={'Public or Private'}
             width={36}
-            value={userDoc?.github?.repositories[1]?.visibility}
+            value={userDoc?.github?.repositories?.[1]?.visibility}
           />
           <SubmitButton />
         </div>
@@ -281,6 +351,18 @@ const useUserSettings = ({
           Task Ticket / Asana
         </h2>
         <QuestionMark mt={9} mb={1} href='/help/how-to-get-asana-info' />
+        {isAsanaAuthenticatedState ? (
+          <DisconnectWithAsanaButton
+            label='Disconnect with Asana'
+            uid={uid}
+            refreshToken={userDoc?.asana?.refreshToken}
+          />
+        ) : (
+          <RequestOAuthButton
+            label='Connect with Asana'
+            handleClick={requestAsanaUserIdentity}
+          />
+        )}
       </div>
       <form
         name='task-ticket'
@@ -299,6 +381,15 @@ const useUserSettings = ({
             width={48}
             value={userDoc?.asana?.userId}
           />
+          <InputBox
+            label={'Access Token'}
+            name={'asanaAccessToken'}
+            placeholder={'No Access Token is set'}
+            width={36}
+            value={userDoc?.asana?.accessToken}
+            disabled={true}
+            bgColor={'bg-gray-200'}
+          />
         </div>
         <div className='flex flex-wrap items-center'>
           <h3 className='ml-6 w-28'>Workspace 1 :</h3>
@@ -308,21 +399,21 @@ const useUserSettings = ({
             inputType={'number'}
             placeholder={'1234567890123456'}
             width={48}
-            value={userDoc?.asana?.workspace[0]?.workspaceId}
+            value={userDoc?.asana?.workspace?.[0]?.workspaceId}
           />
           <InputBox
             label={'Workspace Name'}
             name={'asanaWorkspaceName1'}
             placeholder={'Suchica'}
             width={36}
-            value={userDoc?.asana?.workspace[0]?.workspaceName}
+            value={userDoc?.asana?.workspace?.[0]?.workspaceName}
           />
           <InputBox
             label={'Personal Access Token'}
             name={'asanaWorkspacePersonalAccessToken1'}
             placeholder={'1/1234567890123456:031..........................a63'}
             width={96}
-            value={userDoc?.asana?.workspace[0]?.personalAccessToken}
+            value={userDoc?.asana?.workspace?.[0]?.personalAccessToken}
           />
         </div>
         <div className='flex flex-wrap items-center'>
@@ -333,21 +424,21 @@ const useUserSettings = ({
             inputType={'number'}
             placeholder={'1234567890123456'}
             width={48}
-            value={userDoc?.asana?.workspace[1]?.workspaceId}
+            value={userDoc?.asana?.workspace?.[1]?.workspaceId}
           />
           <InputBox
             label={'Workspace Name'}
             name={'asanaWorkspaceName2'}
             placeholder={'Suchica'}
             width={36}
-            value={userDoc?.asana?.workspace[1]?.workspaceName}
+            value={userDoc?.asana?.workspace?.[1]?.workspaceName}
           />
           <InputBox
             label={'Personal Access Token'}
             name={'asanaWorkspacePersonalAccessToken2'}
             placeholder={'1/1234567890123456:031..........................a63'}
             width={96}
-            value={userDoc?.asana?.workspace[1]?.personalAccessToken}
+            value={userDoc?.asana?.workspace?.[1]?.personalAccessToken}
           />
           <SubmitButton />
         </div>
@@ -373,14 +464,14 @@ const useUserSettings = ({
               name={'slackWorkspaceName1'}
               placeholder={'Suchica'}
               width={36}
-              value={userDoc?.slack?.workspace[0]?.workspaceName}
+              value={userDoc?.slack?.workspace?.[0]?.workspaceName}
             />
             <InputBox
               label={'Member ID'}
               name={'slackWorkspaceMemberId1'}
               placeholder={'U02DK80DN9H'}
               width={36}
-              value={userDoc?.slack?.workspace[0]?.memberId}
+              value={userDoc?.slack?.workspace?.[0]?.memberId}
             />
             <InputBox
               label={'User Token'}
@@ -389,7 +480,7 @@ const useUserSettings = ({
                 'xoxp-1234567890123-1234567890123-1234567890123-a94..........................16e'
               }
               width={96}
-              value={userDoc?.slack?.workspace[0]?.userToken}
+              value={userDoc?.slack?.workspace?.[0]?.userToken}
             />
             <InputBox
               label={'Bot Token'}
@@ -398,7 +489,7 @@ const useUserSettings = ({
                 'xoxb-1234567890123-1234567890123-Uia..................8HH'
               }
               width={96}
-              value={userDoc?.slack?.workspace[0]?.botToken}
+              value={userDoc?.slack?.workspace?.[0]?.botToken}
             />
           </div>
         </div>
@@ -410,14 +501,14 @@ const useUserSettings = ({
               name={'slackWorkspaceName2'}
               placeholder={'Suchica'}
               width={36}
-              value={userDoc?.slack?.workspace[1]?.workspaceName}
+              value={userDoc?.slack?.workspace?.[1]?.workspaceName}
             />
             <InputBox
               label={'Member ID'}
               name={'slackWorkspaceMemberId2'}
               placeholder={'U02DK80DN9H'}
               width={36}
-              value={userDoc?.slack?.workspace[1]?.memberId}
+              value={userDoc?.slack?.workspace?.[1]?.memberId}
             />
             <InputBox
               label={'User Token'}
@@ -426,7 +517,7 @@ const useUserSettings = ({
                 'xoxp-1234567890123-1234567890123-1234567890123-a94..........................16e'
               }
               width={96}
-              value={userDoc?.slack?.workspace[1]?.userToken}
+              value={userDoc?.slack?.workspace?.[1]?.userToken}
             />
             <InputBox
               label={'Bot Token'}
@@ -435,7 +526,7 @@ const useUserSettings = ({
                 'xoxb-1234567890123-1234567890123-Uia..................8HH'
               }
               width={96}
-              value={userDoc?.slack?.workspace[1]?.botToken}
+              value={userDoc?.slack?.workspace?.[1]?.botToken}
             />
             <SubmitButton />
           </div>
@@ -489,8 +580,18 @@ export const getServerSideProps: GetServerSideProps = async (
       userDoc?.github?.accessToken && userDoc?.github?.accessToken !== ''
         ? true
         : false;
+    const isAsanaAuthenticated =
+      userDoc?.asana?.accessToken && userDoc?.asana?.accessToken !== ''
+        ? true
+        : false;
+
     return {
-      props: { uid, userDoc, isGithubAuthenticated }
+      props: {
+        uid,
+        userDoc,
+        isAsanaAuthenticated,
+        isGithubAuthenticated
+      }
     };
   } else {
     return { props: {} as never };
