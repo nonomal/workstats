@@ -139,20 +139,20 @@ export const getServerSideProps: GetServerSideProps = async (
     };
 
     // Parameters for asana
-    const asanaPersonalAccessToken = userDoc?.asana?.workspace[0]
-      .personalAccessToken
+    const asanaPersonalAccessToken = userDoc?.asana?.workspace?.[0]
+      ?.personalAccessToken
       ? userDoc.asana.workspace[0].personalAccessToken
       : null;
     const asanaUserId = userDoc?.asana?.userId ? userDoc.asana.userId : null;
-    const asanaWorkspaceId = userDoc?.asana?.workspace[0].workspaceId
+    const asanaWorkspaceId = userDoc?.asana?.workspace?.[0]?.workspaceId
       ? userDoc.asana.workspace[0].workspaceId
       : null;
 
     // Parameters for github
-    const githubRepoName = userDoc?.github?.repositories[0].repo
+    const githubRepoName = userDoc?.github?.repositories?.[0]?.repo
       ? userDoc.github.repositories[0].repo
       : null;
-    const githubOwnerName = userDoc?.github?.repositories[0].owner
+    const githubOwnerName = userDoc?.github?.repositories?.[0]?.owner
       ? userDoc.github.repositories[0].owner
       : null;
     const githubUserId = userDoc?.github?.userId ? userDoc.github.userId : null;
@@ -165,8 +165,8 @@ export const getServerSideProps: GetServerSideProps = async (
 
     // Parameters for slack
     const searchQuery: string | undefined =
-      userDoc?.slack?.workspace[0].memberId;
-    const slackUserToken = `Bearer ${userDoc?.slack?.workspace[0].userToken}`;
+      userDoc?.slack?.workspace?.[0]?.memberId;
+    const slackUserToken = `Bearer ${userDoc?.slack?.workspace?.[0]?.userToken}`;
 
     // Tabulate number of times a user has been mentioned in all slack public channels
     const numberOfMentioned = await slackSearchFromServer(
