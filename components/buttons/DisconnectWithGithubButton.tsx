@@ -2,11 +2,11 @@ import React from 'react';
 import { handleSubmitGithubAccessToken } from '../../services/setDocToFirestore';
 
 interface PropTypes {
-  label?: string;
+  label: string;
   uid: string;
 }
 
-const DisconnectWithGithubButton = ({ label = 'Submit', uid }: PropTypes) => {
+const DisconnectWithGithubButton = ({ label, uid }: PropTypes) => {
   const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
   const url = `https://github.com/settings/connections/applications/${clientId}`;
   return (

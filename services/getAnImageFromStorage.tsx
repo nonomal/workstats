@@ -17,16 +17,16 @@ const getAvatarUrl = (docId: string) => {
       // A full list of error codes is available at https://firebase.google.com/docs/storage/web/handle-errors
       switch (error.code) {
         case 'storage/object-not-found':
-          console.log('The file does not exist');
+          // console.log('The file does not exist');
           break;
         case 'storage/unauthorized':
-          console.log('User does not have permission to access the object');
+          // console.log('User does not have permission to access the object');
           break;
         case 'storage/canceled':
-          console.log('User canceled the upload');
+          // console.log('User canceled the upload');
           break;
         case 'storage/unknown':
-          console.log('Unknown error occurred, inspect the server response');
+        // console.log('Unknown error occurred, inspect the server response');
       }
       return noImage;
     });
