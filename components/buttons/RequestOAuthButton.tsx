@@ -1,19 +1,19 @@
 import React from 'react';
-import { requestGithubUserIdentity } from '../../services/githubServices.client';
 
 interface PropTypes {
-  label?: string;
+  label: string;
+  handleClick: () => void;
 }
 
-const ConnectWithGithubButton = ({ label = 'Submit' }: PropTypes) => {
+const RequestOAuthButton = ({ label, handleClick }: PropTypes) => {
   return (
     <button
       className='w-auto h-7 bg-green-600 hover:bg-green-700 text-white font-semibold px-3 ml-3 mt-9 rounded-lg inline-block align-middle'
-      onClick={requestGithubUserIdentity}
+      onClick={handleClick}
     >
       {label}
     </button>
   );
 };
 
-export default ConnectWithGithubButton;
+export default RequestOAuthButton;

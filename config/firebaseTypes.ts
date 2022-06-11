@@ -2,7 +2,9 @@ import { Timestamp } from 'firebase/firestore';
 
 interface UserType extends Record<string, any> {
   asana?: {
-    userId: string;
+    userId?: string;
+    accessToken?: string;
+    refreshToken?: string;
     workspace: [
       {
         personalAccessToken: string;
