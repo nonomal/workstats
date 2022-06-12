@@ -11,13 +11,49 @@ const params: Params = {
   assignee: ''
 };
 
+// Request a user's Asana identity
+// THe official document is here 'User Authorization Endpoint' in https://developers.asana.com/docs/oauth
+const requestAsanaUserIdentity = () => {
+  const scope = 'default';
+  const unguessableRandomString = (outputLength: number) => {
+    const stringPool =
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return Array.from({ length: outputLength }, () =>
+      stringPool.charAt(Math.floor(Math.random() * stringPool.length))
+    ).join('');
+  };
+  interface PramsTypes {
+    client_id: string;
+    redirect_uri: string;
+    response_type: 'code' | 'id_token' | 'code id_token';
+    state: string;
+    // code_challenge_method?: 'S256';
+    // code_challenge?: string;
+    scope: 'default' | 'openid' | 'email' | 'profile';
+    [key: string]: string; // To avoid type error ts(7053) in params[key]
+  }
+  const params: PramsTypes = {
+    client_id: process.env.NEXT_PUBLIC_ASANA_CLIENT_ID || '',
+    redirect_uri: process.env.NEXT_PUBLIC_ASANA_REDIRECT_URI || '',
+    response_type: 'code',
+    state: unguessableRandomString(16),
+    // code_challenge_method: 'S256',
+    // code_challenge: unguessableRandomString(16), // This needs to be different from state
+    scope: scope
+  };
+  const queryString = Object.keys(params)
+    .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+    .join('&');
+  const url = `https://app.asana.com/-/oauth_authorize?${queryString}`;
+  window.location.href = url;
+};
+
 const useNumberOfTasks = (
-  asanaPersonalAccessToken: string,
+  asanaAccessToken: string,
   asanaWorkspaceId: string,
   asanaUserId: string
 ) => {
-  // The official document is here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#headers
-  const token = asanaPersonalAccessToken;
+  const token = asanaAccessToken;
   const myHeaders = new Headers();
   myHeaders.append('Accept', 'application/json');
   myHeaders.append('Authorization', 'Bearer ' + token);
@@ -61,15 +97,20 @@ const useNumberOfTasks = (
     revalidateOnReconnect: true
   });
 
+  const noResults = {
+    numberOfAll: 0,
+    numberOfClosed: 0,
+    numberOfOpened: 0
+  };
+
   if (error) {
     console.log(`Failed to load Asana data: ${error}`);
-    return 0;
+    return noResults;
   } else if (!data) {
-    // console.log('Loading stats of asana...');
-    return 0;
+    return noResults;
   } else {
     return data;
   }
 };
 
-export { useNumberOfTasks };
+export { requestAsanaUserIdentity, useNumberOfTasks };

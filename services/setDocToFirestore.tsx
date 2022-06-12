@@ -36,12 +36,12 @@ const handleSubmitBasicInfo = async (
 
 const handleSubmitGithubAccessToken = async (
   docId: string,
-  githubAccessToken: string
+  accessToken: string
 ) => {
   const docRef = doc(db, 'users', docId);
   const docData = {
     github: {
-      accessToken: githubAccessToken
+      accessToken: accessToken
     }
   };
   const option = { merge: true };
@@ -80,6 +80,25 @@ const handleSubmitSourceCode = async (
   return;
 };
 
+const handleSubmitAsanaAccessToken = async (
+  docId: string,
+  accessToken: string,
+  refreshToken: string,
+  userId: string
+) => {
+  const docRef = doc(db, 'users', docId);
+  const docData = {
+    asana: {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      userId: userId
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 const handleSubmitTaskTicket = async (
   event: React.FormEvent<HTMLFormElement>,
   docId: string
@@ -91,14 +110,10 @@ const handleSubmitTaskTicket = async (
       userId: event.currentTarget.asanaUserId.value,
       workspace: [
         {
-          personalAccessToken:
-            event.currentTarget.asanaWorkspacePersonalAccessToken1.value,
           workspaceId: event.currentTarget.asanaWorkspaceId1.value,
           workspaceName: event.currentTarget.asanaWorkspaceName1.value
         },
         {
-          personalAccessToken:
-            event.currentTarget.asanaWorkspacePersonalAccessToken2.value,
           workspaceId: event.currentTarget.asanaWorkspaceId2.value,
           workspaceName: event.currentTarget.asanaWorkspaceName2.value
         }
@@ -173,6 +188,7 @@ export {
   handleSubmitBasicInfo,
   handleSubmitGithubAccessToken,
   handleSubmitSourceCode,
+  handleSubmitAsanaAccessToken,
   handleSubmitTaskTicket,
   handleSubmitCommunicationActivity,
   handleSubmitSurveyWhyYouLeave

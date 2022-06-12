@@ -30,7 +30,7 @@ interface PropTypes {
   numberOfReplies: number;
   asanaWorkspaceId: string;
   asanaUserId: string;
-  asanaPersonalAccessToken: string;
+  asanaOAuthAccessToken: string;
   githubOwnerName: string;
   githubRepoName: string;
   githubUserId: number;
@@ -46,7 +46,7 @@ export default function Home({
   numberOfReplies,
   asanaWorkspaceId,
   asanaUserId,
-  asanaPersonalAccessToken,
+  asanaOAuthAccessToken,
   githubOwnerName,
   githubRepoName,
   githubUserId,
@@ -95,7 +95,7 @@ export default function Home({
               numberOfReplies={numberOfReplies}
               asanaWorkspaceId={asanaWorkspaceId}
               asanaUserId={asanaUserId}
-              asanaPersonalAccessToken={asanaPersonalAccessToken}
+              asanaOAuthAccessToken={asanaOAuthAccessToken}
               githubOwnerName={githubOwnerName}
               githubRepoName={githubRepoName}
               githubUserId={githubUserId}
@@ -139,9 +139,8 @@ export const getServerSideProps: GetServerSideProps = async (
     };
 
     // Parameters for asana
-    const asanaPersonalAccessToken = userDoc?.asana?.workspace?.[0]
-      ?.personalAccessToken
-      ? userDoc.asana.workspace[0].personalAccessToken
+    const asanaOAuthAccessToken = userDoc?.asana?.accessToken
+      ? userDoc.asana.accessToken
       : null;
     const asanaUserId = userDoc?.asana?.userId ? userDoc.asana.userId : null;
     const asanaWorkspaceId = userDoc?.asana?.workspace?.[0]?.workspaceId
@@ -237,7 +236,7 @@ export const getServerSideProps: GetServerSideProps = async (
         numberOfReplies,
         asanaUserId,
         asanaWorkspaceId,
-        asanaPersonalAccessToken,
+        asanaOAuthAccessToken,
         githubRepoName,
         githubOwnerName,
         githubUserId,
