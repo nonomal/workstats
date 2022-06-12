@@ -408,13 +408,6 @@ const useUserSettings = ({
             width={36}
             value={userDoc?.asana?.workspace?.[0]?.workspaceName}
           />
-          <InputBox
-            label={'Personal Access Token'}
-            name={'asanaWorkspacePersonalAccessToken1'}
-            placeholder={'1/1234567890123456:031..........................a63'}
-            width={96}
-            value={userDoc?.asana?.workspace?.[0]?.personalAccessToken}
-          />
         </div>
         <div className='flex flex-wrap items-center'>
           <h3 className='ml-6 w-28'>Workspace 2 :</h3>
@@ -432,13 +425,6 @@ const useUserSettings = ({
             placeholder={'Suchica'}
             width={36}
             value={userDoc?.asana?.workspace?.[1]?.workspaceName}
-          />
-          <InputBox
-            label={'Personal Access Token'}
-            name={'asanaWorkspacePersonalAccessToken2'}
-            placeholder={'1/1234567890123456:031..........................a63'}
-            width={96}
-            value={userDoc?.asana?.workspace?.[1]?.personalAccessToken}
           />
           <SubmitButton />
         </div>

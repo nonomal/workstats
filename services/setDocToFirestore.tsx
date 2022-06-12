@@ -110,14 +110,10 @@ const handleSubmitTaskTicket = async (
       userId: event.currentTarget.asanaUserId.value,
       workspace: [
         {
-          personalAccessToken:
-            event.currentTarget.asanaWorkspacePersonalAccessToken1.value,
           workspaceId: event.currentTarget.asanaWorkspaceId1.value,
           workspaceName: event.currentTarget.asanaWorkspaceName1.value
         },
         {
-          personalAccessToken:
-            event.currentTarget.asanaWorkspacePersonalAccessToken2.value,
           workspaceId: event.currentTarget.asanaWorkspaceId2.value,
           workspaceName: event.currentTarget.asanaWorkspaceName2.value
         }

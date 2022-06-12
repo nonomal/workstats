@@ -17,6 +17,7 @@ import NumberOfReviews from './NumberOfReview';
 // import { handleClientLoad } from '../../services/googleCalendar.client';
 // import GoogleAuthButton from './Auth&SignInButton';
 import GearIconLink from '../common/GearIcon';
+import { useNumberOfTasks } from '../../services/asanaServices.client';
 
 interface PropTypes {
   numberOfMentioned: number;
@@ -24,7 +25,7 @@ interface PropTypes {
   numberOfReplies: number;
   asanaWorkspaceId: string;
   asanaUserId: string;
-  asanaPersonalAccessToken: string;
+  asanaOAuthAccessToken: string;
   githubOwnerName: string;
   githubRepoName: string;
   githubUserId: number;
@@ -39,7 +40,7 @@ const CardList = ({
   numberOfReplies,
   asanaWorkspaceId,
   asanaUserId,
-  asanaPersonalAccessToken,
+  asanaOAuthAccessToken,
   githubOwnerName,
   githubRepoName,
   githubUserId,
@@ -47,6 +48,11 @@ const CardList = ({
   githubAccessToken
 }: PropTypes) => {
   // const numberOfMeetings = 0;
+  const numberOfTasks = useNumberOfTasks(
+    asanaOAuthAccessToken,
+    asanaWorkspaceId,
+    asanaUserId
+  );
 
   return (
     <>
@@ -105,16 +111,8 @@ const CardList = ({
           />
         </div>
         <div className='grid gap-3 md:gap-6 grid-cols-2 md:grid-cols-3'>
-          <NumberOfCloseTasks
-            asanaPersonalAccessToken={asanaPersonalAccessToken}
-            asanaWorkspaceId={asanaWorkspaceId}
-            asanaUserId={asanaUserId}
-          />
-          <NumberOfOpenTasks
-            asanaPersonalAccessToken={asanaPersonalAccessToken}
-            asanaWorkspaceId={asanaWorkspaceId}
-            asanaUserId={asanaUserId}
-          />
+          <NumberOfCloseTasks number={numberOfTasks.numberOfClosed} />
+          <NumberOfOpenTasks number={numberOfTasks.numberOfOpened} />
         </div>
         <div className='flex'>
           <h2 className='text-xl mt-4 mb-2'>Communication - Slack</h2>

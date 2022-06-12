@@ -49,12 +49,11 @@ const requestAsanaUserIdentity = () => {
 };
 
 const useNumberOfTasks = (
-  asanaPersonalAccessToken: string,
+  asanaAccessToken: string,
   asanaWorkspaceId: string,
   asanaUserId: string
 ) => {
-  // The official document is here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#headers
-  const token = asanaPersonalAccessToken;
+  const token = asanaAccessToken;
   const myHeaders = new Headers();
   myHeaders.append('Accept', 'application/json');
   myHeaders.append('Authorization', 'Bearer ' + token);
@@ -98,12 +97,17 @@ const useNumberOfTasks = (
     revalidateOnReconnect: true
   });
 
+  const noResults = {
+    numberOfAll: 0,
+    numberOfClosed: 0,
+    numberOfOpened: 0
+  };
+
   if (error) {
     console.log(`Failed to load Asana data: ${error}`);
-    return 0;
+    return noResults;
   } else if (!data) {
-    // console.log('Loading stats of asana...');
-    return 0;
+    return noResults;
   } else {
     return data;
   }

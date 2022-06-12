@@ -1,18 +1,8 @@
-import { useNumberOfTasks } from '../../services/asanaServices.client';
-// @ts-ignore
-const NumberOfCloseTasks = ({
-  // @ts-ignore
-  asanaWorkspaceId,
-  // @ts-ignore
-  asanaUserId,
-  // @ts-ignore
-  asanaPersonalAccessToken
-}) => {
-  const numberOfTasks = useNumberOfTasks(
-    asanaPersonalAccessToken,
-    asanaWorkspaceId,
-    asanaUserId
-  );
+interface PropTypes {
+  number: number;
+}
+
+const NumberOfCloseTasks = ({ number }: PropTypes) => {
   return (
     <div className='bg-white shadow rounded-lg p-3 md:p-4 hover:bg-slate-200'>
       <div className='flex space-x-4 items-center'>
@@ -47,22 +37,12 @@ const NumberOfCloseTasks = ({
             # of close tasks
           </div>
           <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
-            {/* @ts-ignore */}
-            {numberOfTasks?.numberOfClosed
-              ? // @ts-ignore
-                numberOfTasks?.numberOfClosed
-              : 0}{' '}
-            times
+            {number ? number : 0} times
           </div>
         </div>
       </div>
       <div className='md:hidden text-xl font-bold text-gray-900'>
-        {/* @ts-ignore */}
-        {numberOfTasks?.numberOfClosed
-          ? // @ts-ignore
-            numberOfTasks?.numberOfClosed
-          : 0}{' '}
-        times
+        {number ? number : 0} times
       </div>
     </div>
   );
