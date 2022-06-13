@@ -93,14 +93,15 @@ const useUserSettings = ({
   const [asanaUserId, setAsanaUserId] = useState('');
   useEffect(() => {
     if (asanaCode && !isAsanaAuthenticatedState) {
-      console.log({ asanaCode, isAsanaAuthenticatedState });
+      // console.log({ asanaCode, isAsanaAuthenticatedState });
       const url = '/api/get-asana-access-token';
       const headers = new Headers();
       headers.append('Accept', 'application/json');
       headers.append('Content-Type', 'application/json');
       const body = {
         grant_type: 'authorization_code',
-        code: asanaCode
+        code: asanaCode,
+        refresh_token: '' // No refresh tokens yet as this will be the first exchange here.
       };
       fetch(url, {
         method: 'POST',
@@ -127,8 +128,8 @@ const useUserSettings = ({
       handleSubmitAsanaAccessToken(
         uid,
         asanaAccessToken,
-        asanaRefreshToken,
-        asanaUserId
+        asanaUserId,
+        asanaRefreshToken
       ).then(() => {
         setIsAsanaAuthenticatedState(true);
         alert('Asana and WorkStats are successfully connected.');
@@ -387,6 +388,15 @@ const useUserSettings = ({
             placeholder={'No Access Token is set'}
             width={36}
             value={userDoc?.asana?.accessToken}
+            disabled={true}
+            bgColor={'bg-gray-200'}
+          />
+          <InputBox
+            label={'Refresh Token'}
+            name={'asanaRefreshToken'}
+            placeholder={'No Access Token is set'}
+            width={36}
+            value={userDoc?.asana?.refreshToken}
             disabled={true}
             bgColor={'bg-gray-200'}
           />

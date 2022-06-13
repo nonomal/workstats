@@ -26,11 +26,13 @@ interface PropTypes {
   asanaWorkspaceId: string;
   asanaUserId: string;
   asanaOAuthAccessToken: string;
+  asanaRefreshToken: string;
   githubOwnerName: string;
   githubRepoName: string;
   githubUserId: number;
   githubUserName: string;
   githubAccessToken: string;
+  uid: string;
 }
 
 // @ts-ignore
@@ -41,17 +43,21 @@ const CardList = ({
   asanaWorkspaceId,
   asanaUserId,
   asanaOAuthAccessToken,
+  asanaRefreshToken,
   githubOwnerName,
   githubRepoName,
   githubUserId,
   githubUserName,
-  githubAccessToken
+  githubAccessToken,
+  uid
 }: PropTypes) => {
   // const numberOfMeetings = 0;
   const numberOfTasks = useNumberOfTasks(
     asanaOAuthAccessToken,
     asanaWorkspaceId,
-    asanaUserId
+    asanaUserId,
+    asanaRefreshToken,
+    uid
   );
 
   return (
