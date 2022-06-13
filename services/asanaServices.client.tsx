@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+import moment from 'moment';
 import { handleSubmitAsanaAccessToken } from './setDocToFirestore';
 
 // Record<Keys,Type> is a Utility type in typescript. It is a much cleaner alternative for key-value pairs where property-names are not known. It's worth noting that Record<Keys,Type> is a named alias to {[k: Keys]: Type} where Keys and Type are generics.
@@ -98,10 +99,11 @@ const useNumberOfTasks = (
   // Query parameters are passed in the URL.
   params.workspace = asanaWorkspaceId;
   params.assignee = asanaUserId;
-  params.opt_fields = 'completed,completed_at';
+  params.opt_fields = 'completed,completed_at,created_at';
   interface item {
     completed: boolean;
     completed_at: string;
+    created_at: string;
   }
   const query = new URLSearchParams(params);
   // The official document is here: https://developers.asana.com/docs/get-multiple-tasks
@@ -142,24 +144,47 @@ const useNumberOfTasks = (
       return item['completed'] === true;
     })?.length;
 
+    // Get the earliest created_at date
+    // See the MDN docs here, https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+    const now = moment().toISOString();
+    const earliestCreatedAt: string = response['data']?.reduce(
+      (earliest: string, item: item) => {
+        if (item.created_at < earliest) {
+          return item.created_at;
+        }
+        return earliest;
+      },
+      now // Initial value
+    );
+    const durationDays = moment(now).diff(earliestCreatedAt, 'days', true);
+
     const output = {
       numberOfAll: numberOfAll,
       numberOfClosed: numberOfClosed ? numberOfClosed : 0,
       numberOfOpened:
-        numberOfAll - numberOfClosed ? numberOfAll - numberOfClosed : 0
+        numberOfAll - numberOfClosed ? numberOfAll - numberOfClosed : 0,
+      durationDays: durationDays ? durationDays : 0,
+      velocityPerDays: Math.round((numberOfClosed / durationDays) * 7)
+        ? Math.round(((numberOfClosed / durationDays) * 70) / 5) / 10
+        : 0,
+      velocityPerWeeks: Math.round((numberOfClosed / durationDays) * 7)
+        ? Math.round((numberOfClosed / durationDays) * 70) / 10
+        : 0
     };
     return output;
   };
 
   const { data, error } = useSWR(asanaUrl, fetcher, {
-    revalidateOnFocus: false, // Don't revalidate on focus because a new user has not set up their asana profile yet
+    revalidateOnFocus: true, // Don't revalidate on focus because a new user has not set up their asana profile yet
     revalidateOnReconnect: true
   });
 
   const noResults = {
     numberOfAll: 0,
     numberOfClosed: 0,
-    numberOfOpened: 0
+    numberOfOpened: 0,
+    velocityPerDays: 0,
+    velocityPerWeeks: 0
   };
 
   if (error) {
