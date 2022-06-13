@@ -122,6 +122,7 @@ const useNumberOfTasks = (
                 res.access_token,
                 res.data.gid
               );
+              myHeaders.set('Authorization', 'Bearer ' + res.access_token);
             })
             .then(async () => {
               await fetch(url, {
