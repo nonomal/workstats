@@ -11,6 +11,7 @@ import NumberOfOpenTasks from './NumberOfOpenTasks';
 import NumberOfPullRequests from './NumberOfPullRequests';
 import NumberOfReplies from './NumberOfReplies';
 import NumberOfReviews from './NumberOfReview';
+import VelocityOfTaskClose from './VelocityOfTaskClose';
 // import TotalTimeOfMeetings from './TotalTimeOfMtgs';
 
 // import services
@@ -87,7 +88,7 @@ const CardList = ({
             alt='Gear icon links to user settings'
           />
         </div>
-        <div className='grid gap-3 md:gap-6 grid-cols-2 md:grid-cols-3'>
+        <div className='grid gap-3 md:gap-6 grid-cols-2 lg:grid-cols-3'>
           <NumberOfCommits
             githubOwnerName={githubOwnerName}
             githubRepoName={githubRepoName}
@@ -116,9 +117,10 @@ const CardList = ({
             alt='Gear icon links to user settings'
           />
         </div>
-        <div className='grid gap-3 md:gap-6 grid-cols-2 md:grid-cols-3'>
+        <div className='grid gap-3 md:gap-6 grid-cols-2 lg:grid-cols-3'>
           <NumberOfCloseTasks number={numberOfTasks.numberOfClosed} />
           <NumberOfOpenTasks number={numberOfTasks.numberOfOpened} />
+          <VelocityOfTaskClose number={numberOfTasks.velocityPerWeeks} />
         </div>
         <div className='flex'>
           <h2 className='text-xl mt-4 mb-2'>Communication - Slack</h2>
@@ -129,7 +131,7 @@ const CardList = ({
             alt='Gear icon links to user settings'
           />
         </div>
-        <div className='grid gap-3 md:gap-6 grid-cols-2 md:grid-cols-3'>
+        <div className='grid gap-3 md:gap-6 grid-cols-2 lg:grid-cols-3'>
           <NumberOfMentioned data={numberOfMentioned} />
           <NumberOfReplies data={numberOfReplies} />
           <NumberOfNewSent data={numberOfNewSent} />
