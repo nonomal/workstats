@@ -31,6 +31,7 @@ interface PropTypes {
   asanaWorkspaceId: string;
   asanaUserId: string;
   asanaOAuthAccessToken: string;
+  asanaRefreshToken: string;
   githubOwnerName: string;
   githubRepoName: string;
   githubUserId: number;
@@ -47,6 +48,7 @@ export default function Home({
   asanaWorkspaceId,
   asanaUserId,
   asanaOAuthAccessToken,
+  asanaRefreshToken,
   githubOwnerName,
   githubRepoName,
   githubUserId,
@@ -96,11 +98,13 @@ export default function Home({
               asanaWorkspaceId={asanaWorkspaceId}
               asanaUserId={asanaUserId}
               asanaOAuthAccessToken={asanaOAuthAccessToken}
+              asanaRefreshToken={asanaRefreshToken}
               githubOwnerName={githubOwnerName}
               githubRepoName={githubRepoName}
               githubUserId={githubUserId}
               githubUserName={githubUserName}
               githubAccessToken={githubAccessToken}
+              uid={uid}
             />
             <div className='h-20'></div>
           </div>
@@ -141,6 +145,9 @@ export const getServerSideProps: GetServerSideProps = async (
     // Parameters for asana
     const asanaOAuthAccessToken = userDoc?.asana?.accessToken
       ? userDoc.asana.accessToken
+      : null;
+    const asanaRefreshToken = userDoc?.asana?.refreshToken
+      ? userDoc.asana.refreshToken
       : null;
     const asanaUserId = userDoc?.asana?.userId ? userDoc.asana.userId : null;
     const asanaWorkspaceId = userDoc?.asana?.workspace?.[0]?.workspaceId
@@ -237,6 +244,7 @@ export const getServerSideProps: GetServerSideProps = async (
         asanaUserId,
         asanaWorkspaceId,
         asanaOAuthAccessToken,
+        asanaRefreshToken,
         githubRepoName,
         githubOwnerName,
         githubUserId,

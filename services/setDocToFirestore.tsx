@@ -83,17 +83,25 @@ const handleSubmitSourceCode = async (
 const handleSubmitAsanaAccessToken = async (
   docId: string,
   accessToken: string,
-  refreshToken: string,
-  userId: string
+  userId: string,
+  refreshToken?: string
 ) => {
   const docRef = doc(db, 'users', docId);
-  const docData = {
-    asana: {
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      userId: userId
-    }
-  };
+  const docData =
+    !refreshToken && refreshToken !== ''
+      ? {
+          asana: {
+            accessToken: accessToken,
+            userId: userId
+          }
+        }
+      : {
+          asana: {
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            userId: userId
+          }
+        };
   const option = { merge: true };
   await setDoc(docRef, docData, option);
   return;

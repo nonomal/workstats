@@ -75,7 +75,7 @@ const useNumberOfCommits = (
   const { data, error } = useSWR(url, fetcher, options);
 
   if (error) {
-    console.log(`Failed to load number of commits: ${error}`);
+    // console.log(`Failed to load number of commits: ${error}`);
     return 0;
   } else if (!data) {
     // console.log('Loading number of commits...');
@@ -137,7 +137,7 @@ const useNumberOfPullRequests = (
   const { data, error } = useSWR(url, fetcher, options);
 
   if (error) {
-    console.log(`Failed to load number of pull requests: ${error}`);
+    // console.log(`Failed to load number of pull requests: ${error}`);
     return 0;
   } else if (!data) {
     // console.log('Loading number of pull requests...');
@@ -180,7 +180,7 @@ const useNumberOfReviews = (
   const { data, error } = useSWR(url, fetcher, options);
 
   if (error) {
-    console.log(`Failed to load number of reviews: ${error}`);
+    // console.log(`Failed to load number of reviews: ${error}`);
     return 0;
   } else if (!data) {
     // console.log('Loading number of reviews...');

@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+import { handleSubmitAsanaAccessToken } from './setDocToFirestore';
 
 // Record<Keys,Type> is a Utility type in typescript. It is a much cleaner alternative for key-value pairs where property-names are not known. It's worth noting that Record<Keys,Type> is a named alias to {[k: Keys]: Type} where Keys and Type are generics.
 interface Params extends Record<string, string> {
@@ -48,10 +49,46 @@ const requestAsanaUserIdentity = () => {
   window.location.href = url;
 };
 
+type ResponseData = {
+  access_token: string;
+  expires_in: number;
+  token_type: string;
+  refresh_token: string;
+  data: {
+    id: number;
+    gid: string;
+    name: string;
+    email: string;
+  };
+};
+
+const refreshAccessToken = async (
+  refreshToken: string
+): Promise<ResponseData> => {
+  const url = '/api/get-asana-access-token';
+  const headers = new Headers();
+  headers.append('Accept', 'application/json');
+  headers.append('Content-Type', 'application/json');
+  const body = {
+    grant_type: 'refresh_token',
+    code: '',
+    refresh_token: refreshToken
+  };
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(body)
+  });
+  const output = response.json();
+  return output;
+};
+
 const useNumberOfTasks = (
   asanaAccessToken: string,
   asanaWorkspaceId: string,
-  asanaUserId: string
+  asanaUserId: string,
+  asanaRefreshToken?: string,
+  uid?: string
 ) => {
   const token = asanaAccessToken;
   const myHeaders = new Headers();
@@ -74,7 +111,28 @@ const useNumberOfTasks = (
   const fetcher = async (url: string) => {
     const response = await fetch(url, {
       headers: myHeaders
-    }).then((res) => res.json());
+    })
+      .then((res) => {
+        // if res.status is 401, which means Unauthorized, then refresh the access token and try again
+        if (res.status === 401 && asanaRefreshToken && uid) {
+          refreshAccessToken(asanaRefreshToken)
+            .then(async (res) => {
+              await handleSubmitAsanaAccessToken(
+                uid,
+                res.access_token,
+                res.data.gid
+              );
+              myHeaders.set('Authorization', 'Bearer ' + res.access_token);
+            })
+            .then(async () => {
+              await fetch(url, {
+                headers: myHeaders
+              }).then((res) => res.json());
+            });
+        }
+        return res.json();
+      })
+      .catch((err) => console.log({ err }));
 
     const numberOfAll: number = response.data?.length
       ? response.data.length
@@ -86,8 +144,9 @@ const useNumberOfTasks = (
 
     const output = {
       numberOfAll: numberOfAll,
-      numberOfClosed: numberOfClosed,
-      numberOfOpened: numberOfAll - numberOfClosed
+      numberOfClosed: numberOfClosed ? numberOfClosed : 0,
+      numberOfOpened:
+        numberOfAll - numberOfClosed ? numberOfAll - numberOfClosed : 0
     };
     return output;
   };
@@ -104,7 +163,6 @@ const useNumberOfTasks = (
   };
 
   if (error) {
-    console.log(`Failed to load Asana data: ${error}`);
     return noResults;
   } else if (!data) {
     return noResults;

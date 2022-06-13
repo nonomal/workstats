@@ -19,7 +19,7 @@ interface bodyType {
   client_secret: string;
   redirect_uri: string;
   code: string;
-  // refresh_token?: string;
+  refresh_token: string;
   // code_verifier?: string;
   [key: string]: string; // To avoid type error ts(7053) in params[key]
 }
@@ -35,7 +35,8 @@ const GetAsanaAccessToken = async (
     client_id: process.env.NEXT_PUBLIC_ASANA_CLIENT_ID || '',
     client_secret: process.env.ASANA_CLIENT_SECRET || '',
     redirect_uri: process.env.NEXT_PUBLIC_ASANA_REDIRECT_URI || '',
-    code: req.body.code
+    code: req.body.code,
+    refresh_token: req.body.refresh_token || ''
   };
   const bodyString = Object.keys(body)
     .map((key) => `${key}=${encodeURIComponent(body[key])}`)
