@@ -19,7 +19,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta property='og:description' content={contentShort} />
         <meta property='og:type' content='website' />
         <meta property='og:url' content='https://workstats.dev' />
-        <meta property='og:image' content='../public/WorkStats_Dashboard.png' />
+        <meta
+          property='og:image'
+          content='https://drive.google.com/file/d/1oP-avBzGd6YCISYUia0XvklWuV3mOg3a/view?usp=sharing'
+        />
         <meta property='og:image:alt' content='WorkStats' />
         <meta property='og:image:type' content='image/png' />
         <meta property='og:site_name' content='WorkStats' />
@@ -28,6 +31,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name='twitter:title' content='WorkStats' />
         <meta name='twitter:site' content='@workstatsdev' />
         <meta name='twitter:creator' content='@workstatsdev' />
+        <meta
+          name='twitter:image'
+          content='https://drive.google.com/file/d/1oP-avBzGd6YCISYUia0XvklWuV3mOg3a/view?usp=sharing'
+        />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/icononly_transparent_nobuffer.ico' />
       </Head>
