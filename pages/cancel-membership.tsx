@@ -32,7 +32,6 @@ const useCancelMembership = ({ uid }: CancelMembershipTypes) => {
           name='description'
           content='This is the page where users can unsubscribe from WorkStats. Users can leave by answering a questionnaire about the reason for leaving.'
         />
-        <link rel='icon' href='/icononly_transparent_nobuffer.ico' />
       </Head>
       <main className='px-5'>
         <h1 className='text-3xl py-4'>Cancel Membership</h1>

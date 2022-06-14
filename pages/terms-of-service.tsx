@@ -12,7 +12,6 @@ export default function TermsOfService() {
           name='description'
           content='This is the WorkStats Terms of Service page'
         />
-        <link rel='icon' href='/icononly_transparent_nobuffer.ico' />
       </Head>
       <main className='px-5'>
         <h1 className='text-3xl py-4'>Terms and Conditions</h1>

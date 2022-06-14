@@ -5,8 +5,10 @@ const userList = () => {
   return (
     <Head>
       <title>User List - WorkStats</title>
-      <meta name='description' content='WorkStats' />
-      <link rel='icon' href='/icononly_transparent_nobuffer.ico' />
+      <meta
+        name='description'
+        content='WorkStats User Listing Page. You will see a list of other users you have connected to. Clicking on a user will take you to that users dashboard.'
+      />
     </Head>
   );
 };
