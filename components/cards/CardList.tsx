@@ -121,7 +121,9 @@ const CardList = ({
         <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3'>
           <NumberOfCloseTasks number={numberOfTasks.numberOfClosed} />
           <NumberOfOpenTasks number={numberOfTasks.numberOfOpened} />
-          <VelocityOfTaskClose number={numberOfTasks.velocityPerWeeks} />
+          <VelocityOfTaskClose
+            number={numberOfTasks.velocityPerWeeks.toFixed(1)} // If the first decimal place is 0, it is converted to a string to keep the 0
+          />
           <EstimatedDateOfCompletion
             date={numberOfTasks.estimatedCompletionDate}
           />
