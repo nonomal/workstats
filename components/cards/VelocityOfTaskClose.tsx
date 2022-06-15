@@ -1,5 +1,5 @@
 interface PropTypes {
-  number: number;
+  number: string;
 }
 
 const VelocityOfTaskClose = ({ number }: PropTypes) => {

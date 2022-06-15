@@ -83,7 +83,7 @@ const handleSubmitSourceCode = async (
 const handleSubmitAsanaAccessToken = async (
   docId: string,
   accessToken: string,
-  userId: string,
+  userId?: string,
   refreshToken?: string
 ) => {
   const docRef = doc(db, 'users', docId);
@@ -91,8 +91,7 @@ const handleSubmitAsanaAccessToken = async (
     !refreshToken && refreshToken !== ''
       ? {
           asana: {
-            accessToken: accessToken,
-            userId: userId
+            accessToken: accessToken
           }
         }
       : {

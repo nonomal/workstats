@@ -80,7 +80,7 @@ const refreshAccessToken = async (
     headers: headers,
     body: JSON.stringify(body)
   });
-  const output = response.json();
+  const output = await response.json();
   return output;
 };
 
@@ -119,11 +119,7 @@ const useNumberOfTasks = (
         if (res.status === 401 && asanaRefreshToken && uid) {
           refreshAccessToken(asanaRefreshToken)
             .then(async (res) => {
-              await handleSubmitAsanaAccessToken(
-                uid,
-                res.access_token,
-                res.data.gid
-              );
+              await handleSubmitAsanaAccessToken(uid, res.access_token);
               myHeaders.set('Authorization', 'Bearer ' + res.access_token);
             })
             .then(async () => {
