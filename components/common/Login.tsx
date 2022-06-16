@@ -173,7 +173,7 @@ const Login = () => {
             Login with GitHub
           </button>
           <p className='text-lg md:text-xl text-slate-900'>
-            Upvote me on Product Hunt!
+            Learn more on Product Hunt
           </p>
           <ProductHunt />
         </div>
