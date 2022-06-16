@@ -32,7 +32,7 @@ const EstimatedDateOfCompletion = ({ date }: PropTypes) => {
           <div className='text-gray-400 text-sm md:text-base'>
             Est. cmpl. date
           </div>
-          <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
+          <div className='hidden md:contents md:text-2xl whitespace-nowrap md:font-bold md:text-gray-900'>
             {date ? date : '--'}
           </div>
         </div>
