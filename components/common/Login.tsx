@@ -26,8 +26,8 @@ import ProductHunt from '../buttons/ProductHunt';
 import Head from 'next/head';
 
 // Scopes in detail: https://developers.google.com/identity/protocols/oauth2/scopes#calendar
-const scopes = 'https://www.googleapis.com/auth/calendar.readonly	';
-googleProvider.addScope(scopes);
+// const scopes = 'https://www.googleapis.com/auth/calendar.readonly	';
+// googleProvider.addScope(scopes);
 
 const Login = () => {
   // google login handler
