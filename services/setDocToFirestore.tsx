@@ -19,6 +19,7 @@ const handleSubmitBasicInfo = async (
   const docData: UserType = {
     assessor: event.currentTarget.assessor.value,
     assignedPj: event.currentTarget.assignedPj.value,
+    companyName: event.currentTarget.companyName.value,
     department: event.currentTarget.department.value,
     firstName: event.currentTarget.firstName.value,
     lastName: event.currentTarget.lastName.value,
@@ -134,6 +135,29 @@ const handleSubmitTaskTicket = async (
   return;
 };
 
+const handleSubmitSlackAccessToken = async (
+  docId: string,
+  accessToken: string,
+  userId: string,
+  workspaceName: string
+) => {
+  const docRef = doc(db, 'users', docId);
+  const docData: UserType = {
+    slack: {
+      workspace: [
+        {
+          accessToken: accessToken,
+          memberId: userId,
+          workspaceName: workspaceName
+        }
+      ]
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 const handleSubmitCommunicationActivity = async (
   event: React.FormEvent<HTMLFormElement>,
   docId: string
@@ -145,15 +169,11 @@ const handleSubmitCommunicationActivity = async (
       workspace: [
         {
           workspaceName: event.currentTarget.slackWorkspaceName1.value,
-          memberId: event.currentTarget.slackWorkspaceMemberId1.value,
-          userToken: event.currentTarget.slackWorkspaceUserToken1.value,
-          botToken: event.currentTarget.slackWorkspaceBotToken1.value
+          memberId: event.currentTarget.slackWorkspaceMemberId1.value
         },
         {
           workspaceName: event.currentTarget.slackWorkspaceName2.value,
-          memberId: event.currentTarget.slackWorkspaceMemberId2.value,
-          userToken: event.currentTarget.slackWorkspaceUserToken2.value,
-          botToken: event.currentTarget.slackWorkspaceBotToken2.value
+          memberId: event.currentTarget.slackWorkspaceMemberId2.value
         }
       ]
     }
@@ -197,6 +217,7 @@ export {
   handleSubmitSourceCode,
   handleSubmitAsanaAccessToken,
   handleSubmitTaskTicket,
+  handleSubmitSlackAccessToken,
   handleSubmitCommunicationActivity,
   handleSubmitSurveyWhyYouLeave
 };
