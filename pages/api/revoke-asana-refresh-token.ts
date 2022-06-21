@@ -11,7 +11,7 @@ interface bodyType {
   [key: string]: string; // To avoid type error ts(7053) in params[key]
 }
 
-// Exchange a code for an GitHub access token
+// Revoke an Asana refresh token
 // See 'Token Deauthorization Endpoint' chapter in https://developers.asana.com/docs/oauth
 const RevokeAsanaRefreshToken = async (
   req: NextApiRequest,

@@ -5,36 +5,24 @@ interface UserType extends Record<string, unknown> {
     userId?: string;
     accessToken?: string;
     refreshToken?: string;
-    workspace: [
-      {
-        workspaceId: string;
-        workspaceName: string;
-      },
-      {
-        workspaceId: string;
-        workspaceName: string;
-      }
-    ];
+    workspace?: Array<{
+      workspaceId?: string;
+      workspaceName?: string;
+    }>;
   };
   assessor?: string;
   assignedPj?: string;
   avatarUrl?: string;
   birth?: Timestamp | number; // DB has Timestamp type but birth could be converted to number
+  companyName?: string;
   department?: string;
   firstName?: string;
   github?: {
-    repositories: [
-      {
-        owner: string;
-        repo: string;
-        visibility: string;
-      },
-      {
-        owner: string;
-        repo: string;
-        visibility: string;
-      }
-    ];
+    repositories?: Array<{
+      owner?: string;
+      repo?: string;
+      visibility?: string;
+    }>;
     userId?: number;
     userName?: string;
     accessToken?: string;
@@ -45,20 +33,11 @@ interface UserType extends Record<string, unknown> {
   rank?: string;
   role?: string;
   slack?: {
-    workspace: [
-      {
-        botToken: string;
-        memberId: string;
-        userToken: string;
-        workspaceName: string;
-      },
-      {
-        botToken: string;
-        memberId: string;
-        userToken: string;
-        workspaceName: string;
-      }
-    ];
+    workspace?: Array<{
+      accessToken?: string;
+      memberId?: string;
+      workspaceName?: string;
+    }>;
   };
   supervisor?: string;
 }

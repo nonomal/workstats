@@ -155,7 +155,7 @@ export const getServerSideProps: GetServerSideProps = async (
     // Parameters for slack
     const searchQuery: string | undefined =
       userDoc?.slack?.workspace?.[0]?.memberId;
-    const slackUserToken = `Bearer ${userDoc?.slack?.workspace?.[0]?.userToken}`;
+    const slackUserToken = `Bearer ${userDoc?.slack?.workspace?.[0]?.accessToken}`;
 
     // Tabulate number of times a user has been mentioned in all slack public channels
     const numberOfMentioned = await slackSearchFromServer(

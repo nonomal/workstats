@@ -24,7 +24,7 @@ interface bodyType {
   [key: string]: string; // To avoid type error ts(7053) in params[key]
 }
 
-// Exchange a code for an GitHub access token
+// Exchange a code for an Asana access token
 // See chapter 'Token Exchange Endpoint' in https://developers.asana.com/docs/oauth
 const GetAsanaAccessToken = async (
   req: NextApiRequest,
