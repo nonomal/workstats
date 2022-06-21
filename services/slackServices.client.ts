@@ -22,7 +22,8 @@ const requestSlackUserIdentity = () => {
   const params: PramsTypes = {
     user_scope: user_scope,
     client_id: process.env.NEXT_PUBLIC_SLACK_CLIENT_ID || '',
-    redirect_uri: process.env.NEXT_PUBLIC_SLACK_REDIRECT_URI || '',
+    redirect_uri:
+      `${process.env.NEXT_PUBLIC_ORIGIN}/user-settings?slack=true` || '',
     state: unguessableRandomString(16)
   };
   const queryString = Object.keys(params)

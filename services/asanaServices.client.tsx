@@ -36,7 +36,8 @@ const requestAsanaUserIdentity = () => {
   }
   const params: PramsTypes = {
     client_id: process.env.NEXT_PUBLIC_ASANA_CLIENT_ID || '',
-    redirect_uri: process.env.NEXT_PUBLIC_ASANA_REDIRECT_URI || '',
+    redirect_uri:
+      `${process.env.NEXT_PUBLIC_ORIGIN}/user-settings?asana=true` || '',
     response_type: 'code',
     state: unguessableRandomString(16),
     // code_challenge_method: 'S256',

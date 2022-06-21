@@ -34,7 +34,8 @@ const GetAsanaAccessToken = async (
     grant_type: req.body.grant_type,
     client_id: process.env.NEXT_PUBLIC_ASANA_CLIENT_ID || '',
     client_secret: process.env.ASANA_CLIENT_SECRET || '',
-    redirect_uri: process.env.NEXT_PUBLIC_ASANA_REDIRECT_URI || '',
+    redirect_uri:
+      `${process.env.NEXT_PUBLIC_ORIGIN}/user-settings?asana=true` || '',
     code: req.body.code,
     refresh_token: req.body.refresh_token || ''
   };

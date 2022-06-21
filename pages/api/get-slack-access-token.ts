@@ -49,7 +49,8 @@ const GetSlackAccessToken = async (
     client_secret: process.env.SLACK_CLIENT_SECRET || '',
     code: req.body.code,
     grant_type: req.body.grant_type,
-    redirect_uri: process.env.NEXT_PUBLIC_SLACK_REDIRECT_URI || ''
+    redirect_uri:
+      `${process.env.NEXT_PUBLIC_ORIGIN}/user-settings?slack=true` || ''
     // refresh_token: req.body.refresh_token || ''
   };
   const bodyString = Object.keys(body)
