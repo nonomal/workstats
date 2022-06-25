@@ -525,7 +525,7 @@ const useUserSettings = ({
         <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
           Communication Activity / Slack
         </h2>
-        {/* <QuestionMark mt={9} mb={1} href='/help/how-to-get-slack-info' /> */}
+        <QuestionMark mt={9} mb={1} href='/help/how-to-get-slack-info' />
         {isSlackAuthenticatedState ? (
           <DisconnectWithSlackButton
             label='Disconnect with Slack'

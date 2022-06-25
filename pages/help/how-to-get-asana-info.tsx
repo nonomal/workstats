@@ -5,7 +5,6 @@ import React from 'react';
 
 // Images
 import AsanaIcon from '../../public/asana-svgrepo-com.svg';
-// import NoImage from '../../public/noImageWith16-9.png';
 import Top_Login from '../../public/help/Top_Login.png';
 import DashboardWithInitialState from '../../public/help/Dashboard_GitHub_InitialState.png';
 import DashboardWithGoToSettings from '../../public/help/Dashboard_GoToUserSettings_Asana.png';
