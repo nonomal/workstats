@@ -98,7 +98,7 @@ const Login = () => {
         />
       </Head>
       <div className='h-screen md:flex'>
-        <div className='grid gap-4 md:gap-6 md:w-1/2 h-1/2 md:h-screen bg-slate-800 content-center justify-center justify-items-center'>
+        <div className='grid gap-4 md:gap-6 md:w-1/2 h-3/5 md:h-screen bg-slate-800 content-center justify-center justify-items-center'>
           <div className='grid gap-0.5 md:gap-2 place-items-center'>
             <h1 className='text-white text-3xl md:text-5xl text-center'>
               Welcome to &quot;WorkStats&quot;
@@ -154,7 +154,7 @@ const Login = () => {
             />
           </div>
         </div>
-        <div className='grid gap-4 md:w-1/2 h-1/2 md:h-screen bg-white content-center justify-center justify-items-center'>
+        <div className='grid gap-4 md:w-1/2 h-2/5 md:h-screen bg-white content-center justify-center justify-items-center'>
           <p className='text-lg md:text-xl text-slate-900'>
             Log in with OAuth provider
           </p>
@@ -172,10 +172,10 @@ const Login = () => {
             <GitHubIcon className='text-white mr-2' />
             Login with GitHub
           </button>
-          <p className='text-lg md:text-xl text-slate-900'>
+          {/* <p className='text-lg md:text-xl text-slate-900'>
             Learn more on Product Hunt
           </p>
-          <ProductHunt />
+          <ProductHunt /> */}
         </div>
         {/* <span className='text-sm md:text-base'>
         Copyright {year} Suchica, Inc. All rights reserved.
