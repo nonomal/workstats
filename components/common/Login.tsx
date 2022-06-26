@@ -22,7 +22,6 @@ import GitHubIcon2 from '../../public/github-svgrepo-com.svg';
 
 // Next related and Custom services
 import { createUserDoc } from '../../services/setDocToFirestore';
-import ProductHunt from '../buttons/ProductHunt';
 import Head from 'next/head';
 
 // Scopes in detail: https://developers.google.com/identity/protocols/oauth2/scopes#calendar
