@@ -44,23 +44,25 @@ const requestSlackUserIdentity = () => {
   window.location.href = url;
 };
 
-interface NumberOfMentionedTypes {
-  searchQuery: string;
+// Aggregate how many times a user is mentioned or a user replied in a workspace
+// Slack API must be used in a server-side, so we call this method in a browser first then call Next.js API which wraps Slack API
+interface SlackSearchTypes {
+  slackMemberId: string;
   slackAccessToken: string;
+  searchMode: 'mentioned' | 'sent';
 }
 
-// Aggregate how many times a user is mentioned in a workspace
-// Slack API must be used in a server-side, so we call this method in a browser first then call Next.js API which wraps Slack API
-const useNumberOfMentioned = ({
-  searchQuery,
-  slackAccessToken
-}: NumberOfMentionedTypes) => {
-  const apiEndPoint = '/api/search-slack';
+const useSlackSearch = ({
+  slackMemberId,
+  slackAccessToken,
+  searchMode
+}: SlackSearchTypes) => {
+  const apiEndPoint = `/api/search-slack-${searchMode}`;
   const headers = new Headers();
   headers.append('Accept', 'application/json');
   headers.append('Content-Type', 'application/json');
   const body = {
-    searchQuery,
+    slackMemberId,
     slackAccessToken
   };
   const fetchOptions = {
@@ -84,4 +86,81 @@ const useNumberOfMentioned = ({
   }
 };
 
-export { useNumberOfMentioned, requestSlackUserIdentity };
+// Get a Slack channel list in a workspace
+// Slack API must be used in a server-side, so we call this method in a browser first then call Next.js API which wraps Slack API
+interface SlackChannelListTypes {
+  slackAccessToken: string;
+}
+
+const useSlackChannelList = ({ slackAccessToken }: SlackChannelListTypes) => {
+  const apiEndPoint = '/api/get-slack-channel-list';
+  const headers = new Headers();
+  headers.append('Accept', 'application/json');
+  headers.append('Content-Type', 'application/json');
+  const body = {
+    slackAccessToken
+  };
+  const fetchOptions = {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body)
+  };
+  const fetcher = async (url: string) => {
+    const response = await fetch(url, fetchOptions);
+    const json: string[] = await response.json();
+    return json;
+  };
+  const { data, error } = useSWR(apiEndPoint, fetcher, options);
+  if (error) {
+    return [];
+  } else if (!data) {
+    return [];
+  } else {
+    return data;
+  }
+};
+
+// Aggregate how many times a user sent new messages in a workspace
+// Slack API must be used in a server-side, so we call this method in a browser first then call Next.js API which wraps Slack API
+interface SlackNumberOfNewSentTypes {
+  channelId: string;
+  latest: number; // Unix timestamp, seconds
+  oldest: number; // Unix timestamp, seconds
+  slackMemberId: string;
+  slackAccessToken: string;
+}
+
+const getSlackNumberOfNewSent = async ({
+  channelId,
+  latest,
+  oldest,
+  slackMemberId,
+  slackAccessToken
+}: SlackNumberOfNewSentTypes) => {
+  const apiEndPoint = '/api/get-slack-number-of-new-sent';
+  const headers = new Headers();
+  headers.append('Accept', 'application/json');
+  headers.append('Content-Type', 'application/json');
+  const body = {
+    channelId,
+    latest,
+    oldest,
+    slackMemberId,
+    slackAccessToken
+  };
+  const fetchOptions = {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body)
+  };
+  const response = await fetch(apiEndPoint, fetchOptions);
+  const json: number = await response.json();
+  return json;
+};
+
+export {
+  getSlackNumberOfNewSent,
+  useSlackChannelList,
+  useSlackSearch,
+  requestSlackUserIdentity
+};

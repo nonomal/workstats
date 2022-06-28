@@ -8,18 +8,20 @@
 
 ## Evidence
 
-For mobile screen;
+For mobile screens;
 
 |Before|After|
 |---|---|
 |---|---|
 
-For desktop screen;
+For desktop screens;
 
 |Before|
 |---|
 |---|
+
 |After|
+|---|
 |---|
 
 ### Environment Variables Setting
