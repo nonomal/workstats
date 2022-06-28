@@ -15,17 +15,9 @@ import ButtonList from '../components/buttons/ButtonList';
 import SpecifyPeriodFromTo from '../components/buttons/SpecifyPeriodFromTo';
 
 // Services
-import {
-  countRepliesInSlack,
-  listTimestampInSlack,
-  slackConversationHistory,
-  slackConversationList
-} from '../services/slackServices.server';
 import getAUserDoc from '../services/getAUserDocFromFirebase';
 
 interface PropTypes {
-  numberOfNewSent: number;
-  numberOfReplies: number;
   asanaWorkspaceId: string;
   asanaUserId: string;
   asanaOAuthAccessToken: string;
@@ -37,13 +29,11 @@ interface PropTypes {
   githubAccessToken: string;
   profileList: UserType;
   slackAccessToken: string;
-  searchQuery: string;
+  slackMemberId: string;
   uid: string;
 }
 
 export default function Home({
-  numberOfNewSent,
-  numberOfReplies,
   asanaWorkspaceId,
   asanaUserId,
   asanaOAuthAccessToken,
@@ -55,7 +45,7 @@ export default function Home({
   githubAccessToken,
   profileList,
   slackAccessToken,
-  searchQuery,
+  slackMemberId,
   uid
 }: PropTypes) {
   const contentLong =
@@ -76,8 +66,6 @@ export default function Home({
             <ButtonList />
             <SpecifyPeriodFromTo />
             <CardList
-              numberOfNewSent={numberOfNewSent}
-              numberOfReplies={numberOfReplies}
               asanaWorkspaceId={asanaWorkspaceId}
               asanaUserId={asanaUserId}
               asanaOAuthAccessToken={asanaOAuthAccessToken}
@@ -88,7 +76,7 @@ export default function Home({
               githubUserName={githubUserName}
               githubAccessToken={githubAccessToken}
               slackAccessToken={slackAccessToken}
-              searchQuery={searchQuery}
+              slackMemberId={slackMemberId}
               uid={uid}
             />
             <div className='h-20'></div>
@@ -155,69 +143,13 @@ export const getServerSideProps: GetServerSideProps = async (
       : null;
 
     // Parameters for slack
-    const searchQuery: string | undefined =
+    const slackMemberId: string | undefined =
       userDoc?.slack?.workspace?.[0]?.memberId;
     const slackAccessToken = `Bearer ${userDoc?.slack?.workspace?.[0]?.accessToken}`;
-
-    // Tabulate number of times a user has newly sent messages in all slack public channels
-    const channelList = await slackConversationList(slackAccessToken);
-    let numberOfNewSent = 0;
-    const numberOfNewSentPromises = [];
-    for (let x in channelList) {
-      let channel = channelList[x];
-      numberOfNewSentPromises.push(
-        slackConversationHistory(
-          channel,
-          // @ts-ignore
-          searchQuery,
-          slackAccessToken
-        )
-      );
-    }
-    (await Promise.all(numberOfNewSentPromises)).map(
-      (n) => (numberOfNewSent += n)
-    );
-
-    // Tabulate number of times a user has replied in all slack public channels
-    let numberOfReplies = 0;
-    const numberOfRepliesPromises: any = [];
-    const listTimestampInSlackPromises: any = [];
-
-    channelList.map((channel: string) => {
-      listTimestampInSlackPromises.push(
-        listTimestampInSlack(channel, slackAccessToken)
-      );
-    });
-
-    (await Promise.all(listTimestampInSlackPromises)).map(
-      // @ts-ignore
-      ({ channel, result }) => {
-        const timestampList: [] = result;
-        timestampList.map((timestamp: number) => {
-          numberOfRepliesPromises.push(
-            countRepliesInSlack(
-              channel,
-              timestamp,
-              // @ts-ignore
-              searchQuery,
-              slackAccessToken
-            )
-          );
-        });
-      }
-    );
-
-    (await Promise.all(numberOfRepliesPromises)).map(
-      // n must be a number but type error is thrown
-      // @ts-ignore
-      (n) => (numberOfReplies += n)
-    );
 
     // Pass data to the page via props
     return {
       props: {
-        numberOfNewSent,
-        numberOfReplies,
         asanaUserId,
         asanaWorkspaceId,
         asanaOAuthAccessToken,
@@ -229,7 +161,7 @@ export const getServerSideProps: GetServerSideProps = async (
         githubAccessToken,
         profileList,
         slackAccessToken,
-        searchQuery,
+        slackMemberId,
         uid
       }
     };

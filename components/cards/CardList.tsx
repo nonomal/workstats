@@ -1,4 +1,5 @@
 // import custom nextjs components
+import { useEffect, useState } from 'react';
 // import Script from 'next/script';
 
 // import card components
@@ -20,11 +21,13 @@ import VelocityOfTaskClose from './VelocityOfTaskClose';
 import GearIconLink from '../common/GearIcon';
 import { useNumberOfTasks } from '../../services/asanaServices.client';
 import EstimatedDateOfCompletion from './EstimatedDateOfTaskEnd';
-import { useNumberOfMentioned } from '../../services/slackServices.client';
+import {
+  useSlackSearch,
+  useSlackChannelList,
+  getSlackNumberOfNewSent
+} from '../../services/slackServices.client';
 
 interface PropTypes {
-  numberOfNewSent: number;
-  numberOfReplies: number;
   asanaWorkspaceId: string;
   asanaUserId: string;
   asanaOAuthAccessToken: string;
@@ -35,14 +38,11 @@ interface PropTypes {
   githubUserName: string;
   githubAccessToken: string;
   slackAccessToken: string;
-  searchQuery: string;
+  slackMemberId: string;
   uid: string;
 }
 
-// @ts-ignore
 const CardList = ({
-  numberOfNewSent,
-  numberOfReplies,
   asanaWorkspaceId,
   asanaUserId,
   asanaOAuthAccessToken,
@@ -53,7 +53,7 @@ const CardList = ({
   githubUserName,
   githubAccessToken,
   slackAccessToken,
-  searchQuery,
+  slackMemberId,
   uid
 }: PropTypes) => {
   // const numberOfMeetings = 0;
@@ -64,10 +64,49 @@ const CardList = ({
     asanaRefreshToken,
     uid
   );
-  const numberOfMentioned = useNumberOfMentioned({
-    searchQuery,
-    slackAccessToken
+  const numberOfTotalSent = useSlackSearch({
+    slackMemberId,
+    slackAccessToken,
+    searchMode: 'sent'
   });
+  const numberOfMentioned = useSlackSearch({
+    slackMemberId,
+    slackAccessToken,
+    searchMode: 'mentioned'
+  });
+  const slackChannelList = useSlackChannelList({ slackAccessToken });
+  const [numberOfNewSent, setNumberOfNewSent] = useState(0);
+  const [numberOfReplies, setNumberOfReplies] = useState(0);
+  useEffect(() => {
+    // Since this is an unnamed asynchronous function, it is enclosed in parentheses for immediate execution upon declaration
+    (async () => {
+      // Throwing the return value of getSlackNumberOfNewSent into an array of numberOfNewSentPromises without intentionally resolving the promise.
+      const numberOfNewSentPromises: Promise<number>[] = [];
+      const nowDate = new Date();
+      const nowUnixtime = nowDate.valueOf() / 1000; // seconds
+      for (const i in slackChannelList) {
+        numberOfNewSentPromises.push(
+          getSlackNumberOfNewSent({
+            channelId: slackChannelList[i],
+            latest: nowUnixtime,
+            oldest: 0,
+            slackMemberId,
+            slackAccessToken
+          })
+        );
+      }
+      // Wait for all the promises in the numberOfNewSentPromises array to be resolved, then add them all together.
+      const numberOfNewSentCalc = (
+        await Promise.all(numberOfNewSentPromises)
+      ).reduce((acc, curr) => {
+        return acc + curr;
+      }, 0);
+      setNumberOfNewSent(numberOfNewSentCalc);
+      if (numberOfTotalSent > 0) {
+        setNumberOfReplies(numberOfTotalSent - numberOfNewSentCalc);
+      }
+    })();
+  }, [slackMemberId, slackAccessToken, slackChannelList, numberOfTotalSent]);
 
   return (
     <>
