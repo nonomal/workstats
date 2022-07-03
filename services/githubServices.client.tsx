@@ -206,7 +206,7 @@ const useNumberOfReviews = (
 ): number => {
   const params = {
     q: `is:pr repo:${owner}/${repo} reviewed-by:${githubUserName}`,
-    per_page: '10', // max = 100
+    per_page: '100', // max = 100
     page: '1'
   };
   const query = new URLSearchParams(params);

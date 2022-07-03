@@ -31,7 +31,11 @@ import {
   useSlackChannelList,
   getSlackNumberOfNewSent
 } from '../../services/slackServices.client';
-import { UpdInsGithubNumbers } from '../../services/setDocToFirestore';
+import {
+  UpdInsAsanaNumbers,
+  UpdInsGithubNumbers,
+  UpdInsSlackNumbers
+} from '../../services/setDocToFirestore';
 import { NumbersType } from '../../config/firebaseTypes';
 
 interface PropTypes {
@@ -67,13 +71,13 @@ const CardList = ({
 }: PropTypes) => {
   // const numberOfMeetings = 0;
   const [numberOfCommits, setNumberOfCommits] = useState(
-    numbersDoc.github.numberOfCommits.allPeriods
+    numbersDoc.github?.numberOfCommits.allPeriods || 0
   );
   const [numberOfPullRequests, setNumberOfPullRequests] = useState(
-    numbersDoc.github.numberOfPullRequests.allPeriods
+    numbersDoc.github?.numberOfPullRequests.allPeriods || 0
   );
   const [numberOfReviews, setNumberOfReviews] = useState(
-    numbersDoc.github.numberOfReviews.allPeriods
+    numbersDoc.github?.numberOfReviews.allPeriods || 0
   );
   const numberOfCommitsCalc = useNumberOfCommits(
     githubOwnerName,
@@ -99,32 +103,97 @@ const CardList = ({
     setNumberOfReviews(numberOfReviewsCalc);
   }, [numberOfCommitsCalc, numberOfPullRequestsCalc, numberOfReviewsCalc]);
   // Store GitHub numbers in Firestore without awaiting
-  UpdInsGithubNumbers({
-    docId: uid,
-    numberOfCommitsAllPeriods: numberOfCommits,
-    numberOfPullRequestsAllPeriods: numberOfPullRequests,
-    numberOfReviewsAllPeriods: numberOfReviews
-  });
-  const numberOfTasks = useNumberOfTasks(
+  useEffect(() => {
+    UpdInsGithubNumbers({
+      docId: uid,
+      numberOfCommitsAllPeriods: numberOfCommits,
+      numberOfPullRequestsAllPeriods: numberOfPullRequests,
+      numberOfReviewsAllPeriods: numberOfReviews
+    });
+  }, [numberOfCommits, numberOfPullRequests, numberOfReviews, uid]);
+
+  // Aggregate numbers from Asana
+  const [numberOfTasks, setNumberOfTasks] = useState(
+    numbersDoc.asana?.numberOfTasks.allPeriods || 0
+  );
+  const [numberOfTasksClosed, setNumberOfTasksClosed] = useState(
+    numbersDoc.asana?.numberOfTasksClosed.allPeriods || 0
+  );
+  const [numberOfTasksOpen, setNumberOfTasksOpen] = useState(
+    numbersDoc.asana?.numberOfTasksOpen.allPeriods || 0
+  );
+  const [velocityPerDay, setVelocityPerDay] = useState(
+    numbersDoc.asana?.velocityPerDay.allPeriods || 0
+  );
+  const [velocityPerWeek, setVelocityPerWeek] = useState(
+    numbersDoc.asana?.velocityPerWeek.allPeriods || 0
+  );
+  const [estimatedCompletionDate, setEstimatedCompletionDate] = useState(
+    numbersDoc.asana?.estimatedCompletionDate.allPeriods || '--'
+  );
+  const numberOfTasksCalc = useNumberOfTasks(
     asanaOAuthAccessToken,
     asanaWorkspaceId,
     asanaUserId,
     asanaRefreshToken,
     uid
   );
-  const numberOfTotalSent = useSlackSearch({
+  useEffect(() => {
+    setNumberOfTasks(numberOfTasksCalc.numberOfAll);
+    setNumberOfTasksClosed(numberOfTasksCalc.numberOfClosed);
+    setNumberOfTasksOpen(numberOfTasksCalc.numberOfOpened);
+    setVelocityPerDay(numberOfTasksCalc.velocityPerDays);
+    setVelocityPerWeek(numberOfTasksCalc.velocityPerWeeks);
+    setEstimatedCompletionDate(numberOfTasksCalc.estimatedCompletionDate);
+  }, [numberOfTasksCalc]);
+  useEffect(() => {
+    UpdInsAsanaNumbers({
+      docId: uid,
+      numberOfTasksAllPeriods: numberOfTasks,
+      numberOfTasksClosedAllPeriods: numberOfTasksClosed,
+      numberOfTasksOpenAllPeriods: numberOfTasksOpen,
+      velocityPerDayAllPeriods: velocityPerDay,
+      velocityPerWeekAllPeriods: velocityPerWeek,
+      estimatedCompletionDateAllPeriods: estimatedCompletionDate
+    });
+  }, [
+    numberOfTasks,
+    numberOfTasksClosed,
+    numberOfTasksOpen,
+    velocityPerDay,
+    velocityPerWeek,
+    estimatedCompletionDate,
+    uid
+  ]);
+
+  // Aggregate numbers from Slack
+  const [numberOfMentioned, setNumberOfMentioned] = useState(
+    numbersDoc.slack?.numberOfMentioned.allPeriods || 0
+  );
+  const [numberOfTotalSent, setNumberOfTotalSent] = useState(
+    numbersDoc.slack?.numberOfTotalSent.allPeriods || 0
+  );
+  const numberOfTotalSentCalc = useSlackSearch({
     slackMemberId,
     slackAccessToken,
     searchMode: 'sent'
   });
-  const numberOfMentioned = useSlackSearch({
+  const numberOfMentionedCalc = useSlackSearch({
     slackMemberId,
     slackAccessToken,
     searchMode: 'mentioned'
   });
+  useEffect(() => {
+    setNumberOfMentioned(numberOfMentionedCalc);
+    setNumberOfTotalSent(numberOfTotalSentCalc);
+  }, [numberOfMentionedCalc, numberOfTotalSentCalc]);
   const slackChannelList = useSlackChannelList({ slackAccessToken });
-  const [numberOfNewSent, setNumberOfNewSent] = useState(0);
-  const [numberOfReplies, setNumberOfReplies] = useState(0);
+  const [numberOfNewSent, setNumberOfNewSent] = useState(
+    numbersDoc.slack?.numberOfNewSent.allPeriods || 0
+  );
+  const [numberOfReplies, setNumberOfReplies] = useState(
+    numbersDoc.slack?.numberOfReplies.allPeriods || 0
+  );
   useEffect(() => {
     // Since this is an unnamed asynchronous function, it is enclosed in parentheses for immediate execution upon declaration
     (async () => {
@@ -150,11 +219,32 @@ const CardList = ({
         return acc + curr;
       }, 0);
       setNumberOfNewSent(numberOfNewSentCalc);
-      if (numberOfTotalSent > 0) {
-        setNumberOfReplies(numberOfTotalSent - numberOfNewSentCalc);
+      if (numberOfTotalSentCalc && numberOfNewSentCalc) {
+        setNumberOfReplies(numberOfTotalSentCalc - numberOfNewSentCalc);
       }
     })();
-  }, [slackMemberId, slackAccessToken, slackChannelList, numberOfTotalSent]);
+  }, [
+    slackMemberId,
+    slackAccessToken,
+    slackChannelList,
+    numberOfNewSent,
+    numberOfTotalSentCalc
+  ]);
+  useEffect(() => {
+    UpdInsSlackNumbers({
+      docId: uid,
+      numberOfMentionedAllPeriods: numberOfMentioned,
+      numberOfTotalSentAllPeriods: numberOfTotalSent,
+      numberOfNewSentAllPeriods: numberOfNewSent,
+      numberOfRepliesAllPeriods: numberOfReplies
+    });
+  }, [
+    numberOfMentioned,
+    numberOfTotalSent,
+    numberOfNewSent,
+    numberOfReplies,
+    uid
+  ]);
 
   return (
     <>
@@ -198,14 +288,12 @@ const CardList = ({
           />
         </div>
         <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3'>
-          <NumberOfCloseTasks number={numberOfTasks.numberOfClosed} />
-          <NumberOfOpenTasks number={numberOfTasks.numberOfOpened} />
+          <NumberOfCloseTasks number={numberOfTasksClosed} />
+          <NumberOfOpenTasks number={numberOfTasksOpen} />
           <VelocityOfTaskClose
-            number={numberOfTasks.velocityPerWeeks.toFixed(1)} // If the first decimal place is 0, it is converted to a string to keep the 0
+            number={velocityPerWeek.toFixed(1)} // If the first decimal place is 0, it is converted to a string to keep the 0
           />
-          <EstimatedDateOfCompletion
-            date={numberOfTasks.estimatedCompletionDate}
-          />
+          <EstimatedDateOfCompletion date={estimatedCompletionDate} />
         </div>
         <div className='flex'>
           <h2 className='text-xl mt-4 mb-2'>Communication - Slack</h2>

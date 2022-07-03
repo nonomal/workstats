@@ -26,7 +26,7 @@ For desktop screens;
 
 ### Environment Variables Setting
 
-Do you require registration to the following console screens other than the source code? If so, please attach evidence of registration to each of the console screens below.
+Do you require registration for the following console screens beside the source code? If so, please attach evidence of registration to each of the console screens below.
 
 - GitHub Actions: 
 - Vercel Hosting: 
@@ -37,8 +37,10 @@ Do you require registration to the following console screens other than the sour
 
 ## Performance
 
-For desktop screen, DOM Content Loaded Speed;
-Changed x.xx (s) --> x.xx (s), improved about x.x seconds.
+For desktop screen,
+
+- DOM Content Loaded Speed: x.xx (s) --> x.xx (s), -xxx (ms)
+- Finish: x.xx (s) --> x.xx (s), -xxx (ms)
 
 |Chrome Developer Console Network Tab (Before)|
 |---|

@@ -241,6 +241,88 @@ const UpdInsGithubNumbers = async ({
   return;
 };
 
+interface UpdInsAsanaNumbersProps {
+  docId: string;
+  numberOfTasksAllPeriods: number;
+  numberOfTasksClosedAllPeriods: number;
+  numberOfTasksOpenAllPeriods: number;
+  velocityPerDayAllPeriods: number;
+  velocityPerWeekAllPeriods: number;
+  estimatedCompletionDateAllPeriods: string;
+}
+const UpdInsAsanaNumbers = async ({
+  docId,
+  numberOfTasksAllPeriods,
+  numberOfTasksClosedAllPeriods,
+  numberOfTasksOpenAllPeriods,
+  velocityPerDayAllPeriods,
+  velocityPerWeekAllPeriods,
+  estimatedCompletionDateAllPeriods
+}: UpdInsAsanaNumbersProps) => {
+  const docRef = doc(db, 'numbers', docId);
+  const docData: NumbersType = {
+    asana: {
+      numberOfTasks: {
+        allPeriods: numberOfTasksAllPeriods
+      },
+      numberOfTasksClosed: {
+        allPeriods: numberOfTasksClosedAllPeriods
+      },
+      numberOfTasksOpen: {
+        allPeriods: numberOfTasksOpenAllPeriods
+      },
+      velocityPerDay: {
+        allPeriods: velocityPerDayAllPeriods
+      },
+      velocityPerWeek: {
+        allPeriods: velocityPerWeekAllPeriods
+      },
+      estimatedCompletionDate: {
+        allPeriods: estimatedCompletionDateAllPeriods
+      }
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+interface UpdInsSlackNumbersProps {
+  docId: string;
+  numberOfMentionedAllPeriods: number;
+  numberOfNewSentAllPeriods: number;
+  numberOfTotalSentAllPeriods: number;
+  numberOfRepliesAllPeriods: number;
+}
+const UpdInsSlackNumbers = async ({
+  docId,
+  numberOfMentionedAllPeriods,
+  numberOfNewSentAllPeriods,
+  numberOfTotalSentAllPeriods,
+  numberOfRepliesAllPeriods
+}: UpdInsSlackNumbersProps) => {
+  const docRef = doc(db, 'numbers', docId);
+  const docData: NumbersType = {
+    slack: {
+      numberOfMentioned: {
+        allPeriods: numberOfMentionedAllPeriods
+      },
+      numberOfNewSent: {
+        allPeriods: numberOfNewSentAllPeriods
+      },
+      numberOfTotalSent: {
+        allPeriods: numberOfTotalSentAllPeriods
+      },
+      numberOfReplies: {
+        allPeriods: numberOfRepliesAllPeriods
+      }
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 export {
   createUserDoc,
   handleSubmitBasicInfo,
@@ -251,5 +333,7 @@ export {
   handleSubmitSlackAccessToken,
   handleSubmitCommunicationActivity,
   handleSubmitSurveyWhyYouLeave,
-  UpdInsGithubNumbers
+  UpdInsAsanaNumbers,
+  UpdInsGithubNumbers,
+  UpdInsSlackNumbers
 };
