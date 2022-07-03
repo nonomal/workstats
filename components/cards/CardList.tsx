@@ -19,6 +19,11 @@ import VelocityOfTaskClose from './VelocityOfTaskClose';
 // import { handleClientLoad } from '../../services/googleCalendar.client';
 // import GoogleAuthButton from './Auth&SignInButton';
 import GearIconLink from '../common/GearIcon';
+import {
+  useNumberOfCommits,
+  useNumberOfPullRequests,
+  useNumberOfReviews
+} from '../../services/githubServices.client';
 import { useNumberOfTasks } from '../../services/asanaServices.client';
 import EstimatedDateOfCompletion from './EstimatedDateOfTaskEnd';
 import {
@@ -26,6 +31,8 @@ import {
   useSlackChannelList,
   getSlackNumberOfNewSent
 } from '../../services/slackServices.client';
+import { UpdInsGithubNumbers } from '../../services/setDocToFirestore';
+import { NumbersType } from '../../config/firebaseTypes';
 
 interface PropTypes {
   asanaWorkspaceId: string;
@@ -37,6 +44,7 @@ interface PropTypes {
   githubUserId: number;
   githubUserName: string;
   githubAccessToken: string;
+  numbersDoc: NumbersType;
   slackAccessToken: string;
   slackMemberId: string;
   uid: string;
@@ -52,11 +60,51 @@ const CardList = ({
   githubUserId,
   githubUserName,
   githubAccessToken,
+  numbersDoc,
   slackAccessToken,
   slackMemberId,
   uid
 }: PropTypes) => {
   // const numberOfMeetings = 0;
+  const [numberOfCommits, setNumberOfCommits] = useState(
+    numbersDoc.github.numberOfCommits.allPeriods
+  );
+  const [numberOfPullRequests, setNumberOfPullRequests] = useState(
+    numbersDoc.github.numberOfPullRequests.allPeriods
+  );
+  const [numberOfReviews, setNumberOfReviews] = useState(
+    numbersDoc.github.numberOfReviews.allPeriods
+  );
+  const numberOfCommitsCalc = useNumberOfCommits(
+    githubOwnerName,
+    githubRepoName,
+    githubUserId,
+    githubAccessToken
+  );
+  const numberOfPullRequestsCalc = useNumberOfPullRequests({
+    owner: githubOwnerName,
+    repo: githubRepoName,
+    githubUserId,
+    accessToken: githubAccessToken
+  });
+  const numberOfReviewsCalc = useNumberOfReviews(
+    githubOwnerName,
+    githubRepoName,
+    githubUserName,
+    githubAccessToken
+  );
+  useEffect(() => {
+    setNumberOfCommits(numberOfCommitsCalc);
+    setNumberOfPullRequests(numberOfPullRequestsCalc);
+    setNumberOfReviews(numberOfReviewsCalc);
+  }, [numberOfCommitsCalc, numberOfPullRequestsCalc, numberOfReviewsCalc]);
+  // Store GitHub numbers in Firestore without awaiting
+  UpdInsGithubNumbers({
+    docId: uid,
+    numberOfCommitsAllPeriods: numberOfCommits,
+    numberOfPullRequestsAllPeriods: numberOfPullRequests,
+    numberOfReviewsAllPeriods: numberOfReviews
+  });
   const numberOfTasks = useNumberOfTasks(
     asanaOAuthAccessToken,
     asanaWorkspaceId,
@@ -136,24 +184,9 @@ const CardList = ({
           />
         </div>
         <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3'>
-          <NumberOfCommits
-            githubOwnerName={githubOwnerName}
-            githubRepoName={githubRepoName}
-            githubUserId={githubUserId}
-            githubAccessToken={githubAccessToken}
-          />
-          <NumberOfPullRequests
-            githubOwnerName={githubOwnerName}
-            githubRepoName={githubRepoName}
-            githubUserId={githubUserId}
-            githubAccessToken={githubAccessToken}
-          />
-          <NumberOfReviews
-            githubOwnerName={githubOwnerName}
-            githubRepoName={githubRepoName}
-            githubUserName={githubUserName}
-            githubAccessToken={githubAccessToken}
-          />
+          <NumberOfCommits data={numberOfCommits} />
+          <NumberOfPullRequests data={numberOfPullRequests} />
+          <NumberOfReviews data={numberOfReviews} />
         </div>
         <div className='flex'>
           <h2 className='text-xl mt-4 mb-2'>Tasks - Asana</h2>

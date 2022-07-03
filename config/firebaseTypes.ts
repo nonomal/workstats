@@ -42,4 +42,18 @@ interface UserType extends Record<string, unknown> {
   supervisor?: string;
 }
 
-export type { UserType };
+interface NumbersType extends Record<string, unknown> {
+  github: {
+    numberOfCommits: {
+      allPeriods: number;
+    };
+    numberOfPullRequests: {
+      allPeriods: number;
+    };
+    numberOfReviews: {
+      allPeriods: number;
+    };
+  };
+}
+
+export type { UserType, NumbersType };

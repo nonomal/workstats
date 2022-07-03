@@ -5,7 +5,7 @@ import nookies from 'nookies';
 
 // Config
 import { verifyIdToken } from '../firebaseAdmin';
-import { UserType } from '../config/firebaseTypes';
+import { NumbersType, UserType } from '../config/firebaseTypes';
 
 // Components
 import ProfileList from '../components/common/ProfileList';
@@ -15,7 +15,7 @@ import ButtonList from '../components/buttons/ButtonList';
 import SpecifyPeriodFromTo from '../components/buttons/SpecifyPeriodFromTo';
 
 // Services
-import getAUserDoc from '../services/getAUserDocFromFirebase';
+import { getAUserDoc, getANumbersDoc } from '../services/getDocFromFirestore';
 
 interface PropTypes {
   asanaWorkspaceId: string;
@@ -27,6 +27,7 @@ interface PropTypes {
   githubUserId: number;
   githubUserName: string;
   githubAccessToken: string;
+  numbersDoc: NumbersType;
   profileList: UserType;
   slackAccessToken: string;
   slackMemberId: string;
@@ -43,6 +44,7 @@ export default function Home({
   githubUserId,
   githubUserName,
   githubAccessToken,
+  numbersDoc,
   profileList,
   slackAccessToken,
   slackMemberId,
@@ -75,6 +77,7 @@ export default function Home({
               githubUserId={githubUserId}
               githubUserName={githubUserName}
               githubAccessToken={githubAccessToken}
+              numbersDoc={numbersDoc}
               slackAccessToken={slackAccessToken}
               slackMemberId={slackMemberId}
               uid={uid}
@@ -100,6 +103,7 @@ export const getServerSideProps: GetServerSideProps = async (
     // the user is authenticated!
     const { uid } = token;
     const userDoc = await getAUserDoc(uid);
+    const numbersDoc = await getANumbersDoc(uid);
 
     // Profile list to be displayed on the left side
     const profileList = {
@@ -159,6 +163,7 @@ export const getServerSideProps: GetServerSideProps = async (
         githubUserId,
         githubUserName,
         githubAccessToken,
+        numbersDoc,
         profileList,
         slackAccessToken,
         slackMemberId,

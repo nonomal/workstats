@@ -12,7 +12,7 @@ import InputBox from '../components/boxes/InputBox';
 import SubmitButton from '../components/buttons/SubmitButton';
 import { UserType } from '../config/firebaseTypes';
 import { verifyIdToken } from '../firebaseAdmin';
-import getAUserDoc from '../services/getAUserDocFromFirebase';
+import { getAUserDoc } from '../services/getDocFromFirestore';
 import {
   handleSubmitAsanaAccessToken,
   handleSubmitBasicInfo,

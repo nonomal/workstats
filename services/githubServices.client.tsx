@@ -1,10 +1,11 @@
 import useSWR from 'swr';
 
 // HTTP endpoint v3 (REST API)
-const base = 'https://api.github.com';
+const baseURL = 'https://api.github.com';
 const options = {
-  shouldRetryOnError: false, // Default is true
+  shouldRetryOnError: false, // Default is true. Set to false due to small rate limit
   revalidateIfStale: false, // Default is true
+  // revalidateOnMount: false,
   revalidateOnFocus: false, // Default is true
   revalidateOnReconnect: false // Default is true
 };
@@ -43,18 +44,14 @@ const requestGithubUserIdentity = () => {
 };
 
 // Get a number of commits for a specific user
-// The official document is here https://docs.github.com/en/rest/reference/metrics#get-all-contributor-commit-activity
+// The official document is here https://docs.github.com/en/rest/metrics/statistics#get-all-contributor-commit-activity
 const useNumberOfCommits = (
   owner: string,
   repo: string,
   githubUserId: number,
-  accessToken?: string
+  accessToken?: string // Unnecessary for public repositories and necessarily for private repositories
 ) => {
-  // console.log(`githubUserId is: ${githubUserId}`);
-  const url = `${base}/repos/${owner}/${repo}/stats/contributors`;
-  if (owner === null || repo === null || githubUserId === 0) {
-    return 0;
-  }
+  const url = `${baseURL}/repos/${owner}/${repo}/stats/contributors`;
   const headers = new Headers();
   headers.append('Accept', 'application/vnd.github.v3+json');
   accessToken && accessToken !== ''
@@ -64,21 +61,33 @@ const useNumberOfCommits = (
     const response = await fetch(url, {
       headers: headers
     }).then((res) => res.json());
-    // @ts-ignore
-    const filteredResponse = response.filter((item) => {
+
+    interface ItemTypes {
+      author: {
+        login: string;
+        id: number;
+        type: string;
+        site_admin: boolean;
+      };
+      total: number;
+      weeks: Array<{
+        w: number; // Start of the week, given as a Unix timestamp seconds
+        a: number; // number of additions
+        d: number; // number of deletions
+        c: number; // number of commits
+      }>;
+    }
+    const filteredResponse = response.filter((item: ItemTypes) => {
       return item.author.id === githubUserId;
     });
     const output: number = filteredResponse[0].total;
     return output;
   };
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, error } = useSWR(url, fetcher, options);
 
   if (error) {
-    // console.log(`Failed to load number of commits: ${error}`);
     return 0;
   } else if (!data) {
-    // console.log('Loading number of commits...');
     return 0;
   } else {
     return data;
@@ -87,22 +96,49 @@ const useNumberOfCommits = (
 
 // List pull requests
 // The official document is here https://docs.github.com/en/rest/reference/pulls#list-pull-requests
-const useNumberOfPullRequests = (
-  owner: string,
-  repo: string,
-  githubUserId: number,
-  accessToken?: string
-) => {
-  const params = {
-    state: 'closed', // or "open", "all"
-    per_page: '10', // max = 100
-    page: '1'
-  };
-  let query = new URLSearchParams(params);
-  const url = `${base}/repos/${owner}/${repo}/pulls?${query}`;
-  if (owner === null || repo === null || githubUserId === 0) {
-    return 0;
+interface NumberOfPullRequestsTypes {
+  owner: string;
+  repo: string;
+  githubUserId: number;
+  state?: 'open' | 'closed' | 'all'; // Default is 'open'
+  // head?: string;
+  // base?: string;
+  sort?: 'created' | 'updated' | 'popularity' | 'long-running'; // Default is 'created'
+  direction?: 'asc' | 'desc'; // Default is 'desc'
+  per_page?: number; // Default is 30, max is 100
+  page?: number; // Default is 1
+  accessToken?: string;
+}
+const useNumberOfPullRequests = ({
+  owner,
+  repo,
+  githubUserId,
+  state = 'closed', // Default is 'open'
+  sort = 'created', // Default is 'created'
+  direction = 'desc', // Default is 'desc'
+  per_page = 100, // Default is 30, max is 100
+  page = 1,
+  accessToken
+}: NumberOfPullRequestsTypes) => {
+  interface PramsTypes {
+    state: string;
+    sort: string;
+    direction: string;
+    per_page: number;
+    page: number;
+    [key: string]: string | number; // To avoid type error ts(7053) in params[key]
   }
+  const params: PramsTypes = {
+    state,
+    sort,
+    direction,
+    per_page,
+    page
+  };
+  let query = Object.keys(params)
+    .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+    .join('&');
+  const url = `${baseURL}/repos/${owner}/${repo}/pulls?${query}`;
 
   // use useSWR function in Next.js
   // The official document is here: https://swr.vercel.app/docs/data-fetching
@@ -119,31 +155,43 @@ const useNumberOfPullRequests = (
       const response = await fetch(url, {
         headers: headers
       }).then((res) => res.json());
-      // @ts-ignore
-      const filteredResponse = response.filter((item) => {
+      interface ItemTypes {
+        id: number;
+        number: number;
+        state: string;
+        user: {
+          login: string;
+          id: number;
+          type: string;
+          site_admin: boolean;
+        };
+        created_at: string;
+        updated_at: string;
+        closed_at: string;
+        merged_at: string;
+      }
+      const filteredResponse = response.filter((item: ItemTypes) => {
         return item.user.id === githubUserId;
       });
       count = filteredResponse.length;
       totalCount += count;
       pageCount++;
-      params.page = pageCount.toString();
-      query = new URLSearchParams(params);
-      url = `${base}/repos/${owner}/${repo}/pulls?${query}`;
+      params.page = pageCount;
+      query = Object.keys(params)
+        .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+        .join('&');
+      url = `${baseURL}/repos/${owner}/${repo}/pulls?${query}`;
     } while (count > 0);
     return totalCount;
   };
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, error } = useSWR(url, fetcher, options);
 
   if (error) {
-    // console.log(`Failed to load number of pull requests: ${error}`);
     return 0;
   } else if (!data) {
-    // console.log('Loading number of pull requests...');
     return 0;
   } else {
-    // console.log(data);
     return data;
   }
 };
@@ -162,7 +210,7 @@ const useNumberOfReviews = (
     page: '1'
   };
   const query = new URLSearchParams(params);
-  const url = `${base}/search/issues?${query}`;
+  const url = `${baseURL}/search/issues?${query}`;
   // console.log(url);
 
   const headers = new Headers();

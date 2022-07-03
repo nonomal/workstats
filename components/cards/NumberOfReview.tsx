@@ -1,25 +1,8 @@
-import { useNumberOfReviews } from '../../services/githubServices.client';
-
 interface PropTypes {
-  githubOwnerName: string;
-  githubRepoName: string;
-  githubUserName: string;
-  githubAccessToken: string;
+  data: number;
 }
 
-const NumberOfReviews = ({
-  githubOwnerName,
-  githubRepoName,
-  githubUserName,
-  githubAccessToken
-}: PropTypes) => {
-  const data = useNumberOfReviews(
-    githubOwnerName,
-    githubRepoName,
-    githubUserName,
-    githubAccessToken
-  );
-  // console.log(`data is: ${data}`);
+const NumberOfReviews = ({ data }: PropTypes) => {
   return (
     <div className='bg-white shadow rounded-lg p-3 md:p-4 hover:bg-slate-200'>
       <div className='flex space-x-4 items-center'>

@@ -35,6 +35,19 @@ Do you require registration to the following console screens other than the sour
 - Asana Developer Console: 
 - Slack Developer Console: 
 
+## Performance
+
+For desktop screen, DOM Content Loaded Speed;
+Changed x.xx (s) --> x.xx (s), improved about x.x seconds.
+
+|Chrome Developer Console Network Tab (Before)|
+|---|
+|---|
+
+|Chrome Developer Console Network Tab (After)|
+|---|
+|---|
+
 ## Caveats
 
 
