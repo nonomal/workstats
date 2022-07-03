@@ -11,13 +11,28 @@ const getAUserDoc = async (docId: string) => {
       ...docSnap.data(),
       documentId: docSnap.id
     };
-    // console.log("Document data:", result);
     return result;
   } else {
-    // doc.data() will be undefined in this case
     console.log('No such document!');
     return;
   }
 };
 
-export default getAUserDoc;
+const getANumbersDoc = async (docId: string) => {
+  const docRef = doc(db, 'numbers', docId);
+  const docSnap = await getDoc(docRef);
+  return docSnap.data();
+
+  if (docSnap.exists()) {
+    const result: UserType = {
+      ...docSnap.data(),
+      documentId: docSnap.id
+    };
+    return result;
+  } else {
+    console.log('No such document!');
+    return;
+  }
+};
+
+export { getANumbersDoc, getAUserDoc };

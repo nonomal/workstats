@@ -1,24 +1,8 @@
-import { useNumberOfPullRequests } from '../../services/githubServices.client';
-
 interface PropTypes {
-  githubOwnerName: string;
-  githubRepoName: string;
-  githubUserId: number;
-  githubAccessToken: string;
+  data: number;
 }
 
-const NumberOfPullRequests = ({
-  githubOwnerName,
-  githubRepoName,
-  githubUserId,
-  githubAccessToken
-}: PropTypes) => {
-  const data = useNumberOfPullRequests(
-    githubOwnerName,
-    githubRepoName,
-    githubUserId,
-    githubAccessToken
-  );
+const NumberOfPullRequests = ({ data }: PropTypes) => {
   return (
     <div className='bg-white shadow rounded-lg p-3 md:p-4 hover:bg-slate-200'>
       <div className='flex space-x-4 items-center'>

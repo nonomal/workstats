@@ -6,7 +6,7 @@ import Head from 'next/head';
 
 // Firebase related
 import { verifyIdToken } from '../firebaseAdmin';
-import getAUserDoc from '../services/getAUserDocFromFirebase';
+import { getAUserDoc } from '../services/getDocFromFirestore';
 import { UserType } from '../config/firebaseTypes';
 
 // Components and Services

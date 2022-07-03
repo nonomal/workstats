@@ -1,6 +1,6 @@
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseClient';
-import { UserType } from '../config/firebaseTypes';
+import { NumbersType, UserType } from '../config/firebaseTypes';
 
 const createUserDoc = async (docId: string) => {
   const docRef = doc(db, 'users', docId);
@@ -210,6 +210,119 @@ const handleSubmitSurveyWhyYouLeave = async (
   return;
 };
 
+interface UpdInsGithubNumbersProps {
+  docId: string;
+  numberOfCommitsAllPeriods: number;
+  numberOfPullRequestsAllPeriods: number;
+  numberOfReviewsAllPeriods: number;
+}
+const UpdInsGithubNumbers = async ({
+  docId,
+  numberOfCommitsAllPeriods,
+  numberOfPullRequestsAllPeriods,
+  numberOfReviewsAllPeriods
+}: UpdInsGithubNumbersProps) => {
+  const docRef = doc(db, 'numbers', docId);
+  const docData: NumbersType = {
+    github: {
+      numberOfCommits: {
+        allPeriods: numberOfCommitsAllPeriods
+      },
+      numberOfPullRequests: {
+        allPeriods: numberOfPullRequestsAllPeriods
+      },
+      numberOfReviews: {
+        allPeriods: numberOfReviewsAllPeriods
+      }
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+interface UpdInsAsanaNumbersProps {
+  docId: string;
+  numberOfTasksAllPeriods: number;
+  numberOfTasksClosedAllPeriods: number;
+  numberOfTasksOpenAllPeriods: number;
+  velocityPerDayAllPeriods: number;
+  velocityPerWeekAllPeriods: number;
+  estimatedCompletionDateAllPeriods: string;
+}
+const UpdInsAsanaNumbers = async ({
+  docId,
+  numberOfTasksAllPeriods,
+  numberOfTasksClosedAllPeriods,
+  numberOfTasksOpenAllPeriods,
+  velocityPerDayAllPeriods,
+  velocityPerWeekAllPeriods,
+  estimatedCompletionDateAllPeriods
+}: UpdInsAsanaNumbersProps) => {
+  const docRef = doc(db, 'numbers', docId);
+  const docData: NumbersType = {
+    asana: {
+      numberOfTasks: {
+        allPeriods: numberOfTasksAllPeriods
+      },
+      numberOfTasksClosed: {
+        allPeriods: numberOfTasksClosedAllPeriods
+      },
+      numberOfTasksOpen: {
+        allPeriods: numberOfTasksOpenAllPeriods
+      },
+      velocityPerDay: {
+        allPeriods: velocityPerDayAllPeriods
+      },
+      velocityPerWeek: {
+        allPeriods: velocityPerWeekAllPeriods
+      },
+      estimatedCompletionDate: {
+        allPeriods: estimatedCompletionDateAllPeriods
+      }
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+interface UpdInsSlackNumbersProps {
+  docId: string;
+  numberOfMentionedAllPeriods: number;
+  numberOfNewSentAllPeriods: number;
+  numberOfTotalSentAllPeriods: number;
+  numberOfRepliesAllPeriods: number;
+}
+const UpdInsSlackNumbers = async ({
+  docId,
+  numberOfMentionedAllPeriods,
+  numberOfNewSentAllPeriods,
+  numberOfTotalSentAllPeriods,
+  numberOfRepliesAllPeriods
+}: UpdInsSlackNumbersProps) => {
+  const docRef = doc(db, 'numbers', docId);
+  const docData: NumbersType = {
+    slack: {
+      numberOfMentioned: {
+        allPeriods: numberOfMentionedAllPeriods
+      },
+      numberOfNewSent: {
+        allPeriods: numberOfNewSentAllPeriods
+      },
+      numberOfTotalSent: {
+        allPeriods: numberOfTotalSentAllPeriods
+      },
+      numberOfReplies: {
+        allPeriods: numberOfRepliesAllPeriods
+      }
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 export {
   createUserDoc,
   handleSubmitBasicInfo,
@@ -219,5 +332,8 @@ export {
   handleSubmitTaskTicket,
   handleSubmitSlackAccessToken,
   handleSubmitCommunicationActivity,
-  handleSubmitSurveyWhyYouLeave
+  handleSubmitSurveyWhyYouLeave,
+  UpdInsAsanaNumbers,
+  UpdInsGithubNumbers,
+  UpdInsSlackNumbers
 };

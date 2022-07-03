@@ -42,4 +42,52 @@ interface UserType extends Record<string, unknown> {
   supervisor?: string;
 }
 
-export type { UserType };
+interface NumbersType extends Record<string, unknown> {
+  asana?: {
+    numberOfTasks: {
+      allPeriods: number;
+    };
+    numberOfTasksClosed: {
+      allPeriods: number;
+    };
+    numberOfTasksOpen: {
+      allPeriods: number;
+    };
+    velocityPerDay: {
+      allPeriods: number;
+    };
+    velocityPerWeek: {
+      allPeriods: number;
+    };
+    estimatedCompletionDate: {
+      allPeriods: string;
+    };
+  };
+  github?: {
+    numberOfCommits: {
+      allPeriods: number;
+    };
+    numberOfPullRequests: {
+      allPeriods: number;
+    };
+    numberOfReviews: {
+      allPeriods: number;
+    };
+  };
+  slack?: {
+    numberOfMentioned: {
+      allPeriods: number;
+    };
+    numberOfNewSent: {
+      allPeriods: number;
+    };
+    numberOfTotalSent: {
+      allPeriods: number;
+    };
+    numberOfReplies: {
+      allPeriods: number;
+    };
+  };
+}
+
+export type { UserType, NumbersType };
