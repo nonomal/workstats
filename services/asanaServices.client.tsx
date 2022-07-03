@@ -93,6 +93,7 @@ const useNumberOfTasks = (
   uid?: string
 ) => {
   const token = asanaAccessToken;
+  let newAsanaAccessToken = '';
   const myHeaders = new Headers();
   myHeaders.append('Accept', 'application/json');
   myHeaders.append('Authorization', 'Bearer ' + token);
@@ -115,16 +116,17 @@ const useNumberOfTasks = (
     const response = await fetch(url, {
       headers: myHeaders
     })
-      .then((res) => {
+      .then(async (res) => {
         // if res.status is 401, which means Unauthorized, then refresh the access token and try again
         if (res.status === 401 && asanaRefreshToken && uid) {
-          refreshAccessToken(asanaRefreshToken)
+          return refreshAccessToken(asanaRefreshToken)
             .then(async (res) => {
+              newAsanaAccessToken = res.access_token;
               await handleSubmitAsanaAccessToken(uid, res.access_token);
               myHeaders.set('Authorization', 'Bearer ' + res.access_token);
             })
             .then(async () => {
-              await fetch(url, {
+              return await fetch(url, {
                 headers: myHeaders
               }).then((res) => res.json());
             });
@@ -167,6 +169,9 @@ const useNumberOfTasks = (
       .format('MMM D YYYY');
 
     const output = {
+      asanaAccessToken: newAsanaAccessToken
+        ? newAsanaAccessToken
+        : asanaAccessToken,
       numberOfAll: numberOfAll,
       numberOfClosed: numberOfClosed ? numberOfClosed : 0,
       numberOfOpened: numberOfOpened ? numberOfOpened : 0,
@@ -188,6 +193,7 @@ const useNumberOfTasks = (
   });
 
   const noResults = {
+    asanaAccessToken,
     numberOfAll: 0,
     numberOfClosed: 0,
     numberOfOpened: 0,
