@@ -131,8 +131,11 @@ const CardList = ({
   const [estimatedCompletionDate, setEstimatedCompletionDate] = useState(
     numbersDoc.asana?.estimatedCompletionDate.allPeriods || '--'
   );
+  const [asanaAccessToken, setAsanaAccessToken] = useState(
+    asanaOAuthAccessToken
+  );
   const numberOfTasksCalc = useNumberOfTasks(
-    asanaOAuthAccessToken,
+    asanaAccessToken,
     asanaWorkspaceId,
     asanaUserId,
     asanaRefreshToken,
@@ -145,6 +148,7 @@ const CardList = ({
     setVelocityPerDay(numberOfTasksCalc.velocityPerDays);
     setVelocityPerWeek(numberOfTasksCalc.velocityPerWeeks);
     setEstimatedCompletionDate(numberOfTasksCalc.estimatedCompletionDate);
+    setAsanaAccessToken(numberOfTasksCalc.asanaAccessToken);
   }, [numberOfTasksCalc]);
   useEffect(() => {
     UpdInsAsanaNumbers({
