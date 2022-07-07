@@ -123,7 +123,11 @@ const useNumberOfEvents = async (
           return refreshAccessToken(googleRefreshToken)
             .then(async (res) => {
               newGoogleAccessToken = res.access_token;
-              await handleSubmitGoogleAccessToken(uid, res.access_token);
+              await handleSubmitGoogleAccessToken(
+                uid,
+                res.access_token,
+                googleRefreshToken // Originally no update is required, but if not set, it will disappear due to the setDoc specification.
+              );
               body.googleAccessToken = res.access_token;
               fetchOptions.body = JSON.stringify(body);
             })

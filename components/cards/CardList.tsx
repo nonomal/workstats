@@ -12,7 +12,7 @@ import NumberOfPullRequests from './NumberOfPullRequests';
 import NumberOfReplies from './NumberOfReplies';
 import NumberOfReviews from './NumberOfReview';
 import VelocityOfTaskClose from './VelocityOfTaskClose';
-import TotalTimeOfMeetings from './TotalTimeOfMtgs';
+// import TotalTimeOfMeetings from './TotalTimeOfMtgs';
 
 // import services
 import GearIconLink from '../common/GearIcon';
@@ -337,7 +337,7 @@ const CardList = ({
           <NumberOfReplies data={numberOfReplies} />
           <NumberOfNewSent data={numberOfNewSent} />
           <NumberOfMeetings data={numberOfEvents} />
-          <TotalTimeOfMeetings data={TotalTimeOfEvents} />
+          {/* <TotalTimeOfMeetings data={TotalTimeOfEvents} /> */}
         </div>
       </div>
     </>
