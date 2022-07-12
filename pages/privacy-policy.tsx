@@ -97,14 +97,39 @@ export default function PrivacyPolicy() {
         </h3>
 
         <p className='py-1'>
-          For example, with regard to the ability to link data with Google
-          Calendar to display aggregated user data, the number of meetings,
-          total time, etc. are only aggregated, and other data obtained in the
-          interaction with the Google Calendar API is not stored, but discarded
-          The other data retrieved during the interaction with the Google
-          Calendar API is not stored and is discarded. Only the number of
-          meetings and their total time are stored in WorkStats as aggregate
-          results.
+          For example, regarding data integration with the Google Calendar API,
+          only if the user presses the "Connect with Google" button and passes
+          the subsequent approval process, you will get calendar data associated
+          with the Google login account you have chosen.
+        </p>
+        <p className='py-1'>
+          At this time, a variety of data (see{' '}
+          <a
+            className='py-1 text-blue-600'
+            href='https://developers.google.com/calendar/api/v3/reference/events/list#response'
+          >
+            Response data types for Google Calendar Event List API{' '}
+          </a>
+          for details) is returned. Using this return value, we will only
+          aggregate the number of meetings and their total time in a given
+          period and display it on your dashboard. We will also store them in
+          our database as per-user data and reuse them for initial display to
+          speed up the display of your dashboard from time to time.
+        </p>
+        <p className='py-1'>
+          The API endpoint we are using is{' '}
+          <a
+            className='py-1 text-blue-600'
+            href='https://developers.google.com/calendar/api/v3/reference/events/list'
+          >
+            Events: list{' '}
+          </a>
+          and the scope is read-only access to Events
+          (https://www.googleapis.com/auth/calendar.events.readonly). Note that
+          any meetings you have deleted or cancelled in advance are not included
+          at the time of the API return value. Also, even if the retrieval
+          period is set to the full period, the data will only be aggregated for
+          a maximum of two years.
         </p>
 
         <h2 className='text-2xl py-4'>4. Log Files</h2>
