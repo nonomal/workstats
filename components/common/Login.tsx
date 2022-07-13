@@ -176,6 +176,9 @@ const Login = () => {
             <GitHubIcon className='text-white mr-2' />
             Login with GitHub
           </button>
+          <p className='text-lg md:text-xl text-slate-900'>
+            You can also sign up above.
+          </p>
           {/* <p className='text-lg md:text-xl text-slate-900'>
             Learn more on Product Hunt
           </p>
