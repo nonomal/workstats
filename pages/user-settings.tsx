@@ -34,6 +34,7 @@ import { requestSlackUserIdentity } from '../services/slackServices.client';
 import DisconnectWithSlackButton from '../components/buttons/DisconnectWithSlackButton';
 import DisconnectWithGoogleButton from '../components/buttons/DisconnectWithGoogleButton';
 import { requestGoogleUserIdentity } from '../services/googleCalendar.client';
+import RequestGoogleOAuthButton from '../components/buttons/RequestGoogleOAuthButton';
 
 interface UserSettingsProps {
   uid: string;
@@ -680,7 +681,7 @@ const useUserSettings = ({
             accessToken={userDoc?.google?.workspace?.[0]?.accessToken}
           />
         ) : (
-          <RequestOAuthButton
+          <RequestGoogleOAuthButton
             label='Connect with Google'
             handleClick={requestGoogleUserIdentity}
           />
