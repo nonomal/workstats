@@ -20,7 +20,7 @@ const Sidebar = ({ handleClick }: SidebarProps) => {
         />
       </div>
       <nav>
-        <Link href='/'>
+        <Link href='/dashboard'>
           <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
             Home
           </a>
@@ -93,11 +93,6 @@ const Sidebar = ({ handleClick }: SidebarProps) => {
         >
           Contact Us
         </a>
-        {/* <Link href="/company">
-          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
-            Company
-          </a>
-        </Link> */}
       </nav>
     </div>
   );
