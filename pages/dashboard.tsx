@@ -103,92 +103,104 @@ Dashboard.requiresAuth = true;
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
+  // interface Cookies {
+  //   _ga: string;
+  //   token: string; // Firebase ID token. It starts with "eyJhbGciOiJS..."
+  //   _ga_45J7T193WF: string;
+  // }
   const cookies = nookies.get(ctx);
 
   if (cookies.token) {
-    const token = await verifyIdToken(cookies.token);
+    try {
+      const token = await verifyIdToken(cookies.token);
 
-    // the user is authenticated!
-    const { uid } = token;
-    const userDoc = await getAUserDoc(uid);
-    const numbersDoc = (await getANumbersDoc(uid)) || {};
+      // the user is authenticated!
+      const { uid } = token;
+      const userDoc = await getAUserDoc(uid);
+      const numbersDoc = (await getANumbersDoc(uid)) || {};
 
-    // Profile list to be displayed on the left side
-    const profileList = {
-      firstName: userDoc?.firstName ? userDoc.firstName : '',
-      middleName: userDoc?.middleName ? userDoc.middleName : '',
-      lastName: userDoc?.lastName ? userDoc.lastName : '',
-      department: userDoc?.department ? userDoc.department : '',
-      rank: userDoc?.rank ? userDoc.rank : '',
-      supervisor: userDoc?.supervisor ? userDoc.supervisor : '',
-      assessor: userDoc?.assessor ? userDoc.assessor : '',
-      assignedPj: userDoc?.assignedPj ? userDoc.assignedPj : '',
-      role: userDoc?.role ? userDoc.role : '',
-      avatarUrl: userDoc?.avatarUrl ? userDoc.avatarUrl : ''
-    };
+      // Profile list to be displayed on the left side
+      const profileList = {
+        firstName: userDoc?.firstName ? userDoc.firstName : '',
+        middleName: userDoc?.middleName ? userDoc.middleName : '',
+        lastName: userDoc?.lastName ? userDoc.lastName : '',
+        department: userDoc?.department ? userDoc.department : '',
+        rank: userDoc?.rank ? userDoc.rank : '',
+        supervisor: userDoc?.supervisor ? userDoc.supervisor : '',
+        assessor: userDoc?.assessor ? userDoc.assessor : '',
+        assignedPj: userDoc?.assignedPj ? userDoc.assignedPj : '',
+        role: userDoc?.role ? userDoc.role : '',
+        avatarUrl: userDoc?.avatarUrl ? userDoc.avatarUrl : ''
+      };
 
-    // Parameters for Asana
-    const asanaOAuthAccessToken = userDoc?.asana?.accessToken
-      ? userDoc.asana.accessToken
-      : null;
-    const asanaRefreshToken = userDoc?.asana?.refreshToken
-      ? userDoc.asana.refreshToken
-      : null;
-    const asanaUserId = userDoc?.asana?.userId ? userDoc.asana.userId : null;
-    const asanaWorkspaceId = userDoc?.asana?.workspace?.[0]?.workspaceId
-      ? userDoc.asana.workspace[0].workspaceId
-      : null;
+      // Parameters for Asana
+      const asanaOAuthAccessToken = userDoc?.asana?.accessToken
+        ? userDoc.asana.accessToken
+        : null;
+      const asanaRefreshToken = userDoc?.asana?.refreshToken
+        ? userDoc.asana.refreshToken
+        : null;
+      const asanaUserId = userDoc?.asana?.userId ? userDoc.asana.userId : null;
+      const asanaWorkspaceId = userDoc?.asana?.workspace?.[0]?.workspaceId
+        ? userDoc.asana.workspace[0].workspaceId
+        : null;
 
-    // Parameters for GitHub
-    const githubRepoName = userDoc?.github?.repositories?.[0]?.repo
-      ? userDoc.github.repositories[0].repo
-      : null;
-    const githubOwnerName = userDoc?.github?.repositories?.[0]?.owner
-      ? userDoc.github.repositories[0].owner
-      : null;
-    const githubUserId = userDoc?.github?.userId ? userDoc.github.userId : null;
-    const githubUserName = userDoc?.github?.userName
-      ? userDoc.github.userName
-      : null;
-    const githubAccessToken = userDoc?.github?.accessToken
-      ? userDoc.github.accessToken
-      : null;
+      // Parameters for GitHub
+      const githubRepoName = userDoc?.github?.repositories?.[0]?.repo
+        ? userDoc.github.repositories[0].repo
+        : null;
+      const githubOwnerName = userDoc?.github?.repositories?.[0]?.owner
+        ? userDoc.github.repositories[0].owner
+        : null;
+      const githubUserId = userDoc?.github?.userId
+        ? userDoc.github.userId
+        : null;
+      const githubUserName = userDoc?.github?.userName
+        ? userDoc.github.userName
+        : null;
+      const githubAccessToken = userDoc?.github?.accessToken
+        ? userDoc.github.accessToken
+        : null;
 
-    // Parameters for Slack
-    const slackMemberId = userDoc?.slack?.workspace?.[0]?.memberId
-      ? userDoc.slack.workspace[0].memberId
-      : null;
-    const slackAccessToken = `Bearer ${userDoc?.slack?.workspace?.[0]?.accessToken}`;
+      // Parameters for Slack
+      const slackMemberId = userDoc?.slack?.workspace?.[0]?.memberId
+        ? userDoc.slack.workspace[0].memberId
+        : null;
+      const slackAccessToken = `Bearer ${userDoc?.slack?.workspace?.[0]?.accessToken}`;
 
-    // Parameters for Google Calendar
-    const googleAccessToken = userDoc?.google?.workspace?.[0]?.accessToken
-      ? userDoc.google.workspace[0].accessToken
-      : null;
-    const googleRefreshToken = userDoc?.google?.workspace?.[0]?.refreshToken
-      ? userDoc.google.workspace[0].refreshToken
-      : null;
+      // Parameters for Google Calendar
+      const googleAccessToken = userDoc?.google?.workspace?.[0]?.accessToken
+        ? userDoc.google.workspace[0].accessToken
+        : null;
+      const googleRefreshToken = userDoc?.google?.workspace?.[0]?.refreshToken
+        ? userDoc.google.workspace[0].refreshToken
+        : null;
 
-    // Pass data to the page via props
-    return {
-      props: {
-        asanaUserId,
-        asanaWorkspaceId,
-        asanaOAuthAccessToken,
-        asanaRefreshToken,
-        githubRepoName,
-        githubOwnerName,
-        githubUserId,
-        githubUserName,
-        githubAccessToken,
-        googleAccessToken,
-        googleRefreshToken,
-        numbersDoc,
-        profileList,
-        slackAccessToken,
-        slackMemberId,
-        uid
-      }
-    };
+      // Pass data to the page via props
+      return {
+        props: {
+          asanaUserId,
+          asanaWorkspaceId,
+          asanaOAuthAccessToken,
+          asanaRefreshToken,
+          githubRepoName,
+          githubOwnerName,
+          githubUserId,
+          githubUserName,
+          githubAccessToken,
+          googleAccessToken,
+          googleRefreshToken,
+          numbersDoc,
+          profileList,
+          slackAccessToken,
+          slackMemberId,
+          uid
+        }
+      };
+    } catch (err) {
+      console.error(err);
+      return { props: {} };
+    }
   } else {
     return { props: {} as never };
   }

@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setLoading(false);
         return;
       } else {
-        const token = await user.getIdToken();
+        const token = await user.getIdToken(true); // forceRefresh = true
         nookies.set(undefined, 'token', token, {});
         setCurrentUser(user);
         setLoading(false);
