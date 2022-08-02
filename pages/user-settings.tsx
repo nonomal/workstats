@@ -777,38 +777,42 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   const cookies = nookies.get(ctx);
   if (cookies.token) {
-    const token = await verifyIdToken(cookies.token);
-    const { uid } = token;
-    const userDoc = (await getAUserDoc(uid)) ? await getAUserDoc(uid) : null;
-    const isGithubAuthenticated =
-      userDoc?.github?.accessToken && userDoc?.github?.accessToken !== ''
-        ? true
-        : false;
-    const isAsanaAuthenticated =
-      userDoc?.asana?.accessToken && userDoc?.asana?.accessToken !== ''
-        ? true
-        : false;
-    const isSlackAuthenticated =
-      userDoc?.slack?.workspace?.[0]?.accessToken &&
-      userDoc?.slack?.workspace?.[0]?.accessToken !== ''
-        ? true
-        : false;
-    const isGoogleAuthenticated =
-      userDoc?.google?.workspace?.[0]?.accessToken &&
-      userDoc?.google?.workspace?.[0]?.accessToken !== ''
-        ? true
-        : false;
+    try {
+      const token = await verifyIdToken(cookies.token);
+      const { uid } = token;
+      const userDoc = (await getAUserDoc(uid)) ? await getAUserDoc(uid) : null;
+      const isGithubAuthenticated =
+        userDoc?.github?.accessToken && userDoc?.github?.accessToken !== ''
+          ? true
+          : false;
+      const isAsanaAuthenticated =
+        userDoc?.asana?.accessToken && userDoc?.asana?.accessToken !== ''
+          ? true
+          : false;
+      const isSlackAuthenticated =
+        userDoc?.slack?.workspace?.[0]?.accessToken &&
+        userDoc?.slack?.workspace?.[0]?.accessToken !== ''
+          ? true
+          : false;
+      const isGoogleAuthenticated =
+        userDoc?.google?.workspace?.[0]?.accessToken &&
+        userDoc?.google?.workspace?.[0]?.accessToken !== ''
+          ? true
+          : false;
 
-    return {
-      props: {
-        uid,
-        userDoc,
-        isAsanaAuthenticated,
-        isGithubAuthenticated,
-        isGoogleAuthenticated,
-        isSlackAuthenticated
-      }
-    };
+      return {
+        props: {
+          uid,
+          userDoc,
+          isAsanaAuthenticated,
+          isGithubAuthenticated,
+          isGoogleAuthenticated,
+          isSlackAuthenticated
+        }
+      };
+    } catch (e) {
+      return { props: {} };
+    }
   } else {
     return { props: {} as never };
   }

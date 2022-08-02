@@ -139,12 +139,16 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   const cookies = nookies.get(ctx);
   if (cookies.token) {
-    const token = await verifyIdToken(cookies.token);
-    const { uid } = token;
-    const userDoc = (await getAUserDoc(uid)) ? await getAUserDoc(uid) : null;
-    return {
-      props: { uid, userDoc }
-    };
+    try {
+      const token = await verifyIdToken(cookies.token);
+      const { uid } = token;
+      const userDoc = (await getAUserDoc(uid)) ? await getAUserDoc(uid) : null;
+      return {
+        props: { uid, userDoc }
+      };
+    } catch (error) {
+      return { props: {} };
+    }
   } else {
     return { props: {} as never };
   }
