@@ -299,7 +299,7 @@ const CardList = ({
             alt='Gear icon links to user settings'
           />
         </div>
-        <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3'>
+        <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
           <NumberOfCommits data={numberOfCommits} />
           <NumberOfPullRequests data={numberOfPullRequests} />
           <NumberOfReviews data={numberOfReviews} />
@@ -313,7 +313,7 @@ const CardList = ({
             alt='Gear icon links to user settings'
           />
         </div>
-        <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3'>
+        <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
           <NumberOfCloseTasks number={numberOfTasksClosed} />
           <NumberOfOpenTasks number={numberOfTasksOpen} />
           <VelocityOfTaskClose
@@ -332,7 +332,7 @@ const CardList = ({
             alt='Gear icon links to user settings'
           />
         </div>
-        <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3'>
+        <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
           <NumberOfMentioned data={numberOfMentioned} />
           <NumberOfReplies data={numberOfReplies} />
           <NumberOfNewSent data={numberOfNewSent} />

@@ -29,7 +29,7 @@ const HelpPageHowToGetSlackInfo = () => {
           content='This help page explains the settings required to aggregate numbers from Slack in WorkStats and how to configure them'
         />
       </Head>
-      <main className='px-5'>
+      <main className='bg-slate-50 px-1 md:px-16'>
         <div className='flex py-4'>
           <h1 className='text-2xl md:text-3xl pr-2 md:pr-3'>
             How to get Slack info
@@ -353,3 +353,4 @@ const HelpPageHowToGetSlackInfo = () => {
 };
 
 export default HelpPageHowToGetSlackInfo;
+HelpPageHowToGetSlackInfo.requiresAuth = false;

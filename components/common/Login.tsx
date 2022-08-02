@@ -15,7 +15,7 @@ import {
 import GoogleIcon from '@mui/icons-material/Google';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Image from 'next/image';
-import AsanaIcon from '../../public/asana-svgrepo-com.svg';
+import AsanaIcon from '../../public/home-page/Asana-Official-Logo.png';
 import SlackIcon from '../../public/slack-svgrepo-com.svg';
 import GoogleCalendarIcon from '../../public/google-calendar-svgrepo-com.svg';
 import GitHubIcon2 from '../../public/github-svgrepo-com.svg';

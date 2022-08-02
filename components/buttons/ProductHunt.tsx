@@ -6,7 +6,7 @@ const ProductHunt = () => {
       href='https://www.producthunt.com/posts/workstats?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-workstats'
       target='_blank'
       rel='noopener noreferrer'
-      className='w-52'
+      className='flex w-56 md:w-72 place-content-center'
     >
       <Image
         src='https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=348419&theme=light'

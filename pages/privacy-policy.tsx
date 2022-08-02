@@ -333,3 +333,5 @@ export default function PrivacyPolicy() {
     </>
   );
 }
+
+PrivacyPolicy.requiresAuth = false;

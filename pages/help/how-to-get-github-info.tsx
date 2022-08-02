@@ -28,7 +28,7 @@ const HowToGetGitHubInfo = () => {
           content='This help page explains the settings required to aggregate numbers from GitHub in WorkStats and how to configure them'
         />
       </Head>
-      <main className='px-5'>
+      <main className='bg-slate-50 px-1 md:px-16'>
         <div className='flex'>
           <h1 className='text-3xl py-4 pr-2'>How to get GitHub info</h1>
           <Image
@@ -307,3 +307,4 @@ const HowToGetGitHubInfo = () => {
 };
 
 export default HowToGetGitHubInfo;
+HowToGetGitHubInfo.requiresAuth = false;

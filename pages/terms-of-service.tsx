@@ -14,13 +14,13 @@ export default function TermsOfService() {
         />
       </Head>
       <main className='px-5'>
-        <h1 className='text-3xl py-4'>Terms and Conditions</h1>
+        <h1 className='text-3xl py-4'>Terms of Service</h1>
 
         <p className='py-1'>Welcome to WorkStats!</p>
 
         <p className='py-1'>
-          These terms and conditions outline the rules and regulations for the
-          use of Suchica, Inc.'s Website, located at{' '}
+          These terms of service outline the rules and regulations for the use
+          of Suchica, Inc.'s Website, located at{' '}
           <a className='py-1 text-blue-600' href='https://workstats.dev'>
             here
           </a>
@@ -28,26 +28,26 @@ export default function TermsOfService() {
         </p>
 
         <p className='py-1'>
-          By accessing this website we assume you accept these terms and
-          conditions. Do not continue to use WorkStats if you do not agree to
-          take all of the terms and conditions stated on this page.
+          By accessing this website we assume you accept these terms of service.
+          Do not continue to use WorkStats if you do not agree to take all of
+          the terms of service stated on this page.
         </p>
 
         <p className='py-1'>
-          The following terminology applies to these Terms and Conditions,
-          Privacy Statement and Disclaimer Notice and all Agreements: "Client",
-          "You" and "Your" refers to you, the person log in this website and
-          compliant to the Company's terms and conditions. "The Company",
-          "Ourselves", "We", "Our" and "Us", refers to our Company. "Party",
-          "Parties", or "Us", refers to both the Client and ourselves. All terms
-          refer to the offer, acceptance and consideration of payment necessary
-          to undertake the process of our assistance to the Client in the most
-          appropriate manner for the express purpose of meeting the Client's
-          needs in respect of provision of the Company's stated services, in
-          accordance with and subject to, prevailing law of Japan. Any use of
-          the above terminology or other words in the singular, plural,
-          capitalization and/or he/she or they, are taken as interchangeable and
-          therefore as referring to same.
+          The following terminology applies to these Terms of Service, Privacy
+          Statement and Disclaimer Notice and all Agreements: "Client", "You"
+          and "Your" refers to you, the person log in this website and compliant
+          to the Company's terms of service. "The Company", "Ourselves", "We",
+          "Our" and "Us", refers to our Company. "Party", "Parties", or "Us",
+          refers to both the Client and ourselves. All terms refer to the offer,
+          acceptance and consideration of payment necessary to undertake the
+          process of our assistance to the Client in the most appropriate manner
+          for the express purpose of meeting the Client's needs in respect of
+          provision of the Company's stated services, in accordance with and
+          subject to, prevailing law of Japan. Any use of the above terminology
+          or other words in the singular, plural, capitalization and/or he/she
+          or they, are taken as interchangeable and therefore as referring to
+          same.
         </p>
 
         <h2 className='text-2xl py-4'>1. Cookies</h2>
@@ -72,7 +72,7 @@ export default function TermsOfService() {
           intellectual property rights for all material on WorkStats. All
           intellectual property rights are reserved. You may access this from
           WorkStats for your own personal use subjected to restrictions set in
-          these terms and conditions.
+          these terms of service.
         </p>
 
         <p className='py-1'>You must not:</p>
@@ -85,12 +85,12 @@ export default function TermsOfService() {
 
         <p className='py-1'>
           This Agreement shall begin on the date you created your account on
-          this site. Our Terms and Conditions were created with the help of the{' '}
+          this site. Our Terms of Service were created with the help of the{' '}
           <a
             className='py-1 text-blue-600'
             href='https://www.privacypolicies.com/blog/sample-terms-conditions-template/'
           >
-            Terms And Conditions Template
+            Terms of Service Template
           </a>
           .
         </p>
@@ -111,7 +111,7 @@ export default function TermsOfService() {
         <p className='py-1'>
           Suchica, Inc. reserves the right to monitor all Comments and to remove
           any Comments which can be considered inappropriate, offensive or
-          causes breach of these Terms and Conditions.
+          causes breach of these Terms of Service.
         </p>
 
         <p className='py-1'>You warrant and represent that:</p>
@@ -277,9 +277,9 @@ export default function TermsOfService() {
           We reserve the right to request that you remove all links or any
           particular link to our Website. You approve to immediately remove all
           links to our Website upon request. We also reserve the right to amen
-          these terms and conditions and it's linking policy at any time. By
+          these terms of service and it's linking policy at any time. By
           continuously linking to our Website, you agree to be bound to and
-          follow these linking terms and conditions.
+          follow these linking terms of service.
         </p>
 
         <h2 className='text-2xl py-4'>8. Removal of links from our website</h2>
@@ -342,3 +342,5 @@ export default function TermsOfService() {
     </>
   );
 }
+
+TermsOfService.requiresAuth = false;

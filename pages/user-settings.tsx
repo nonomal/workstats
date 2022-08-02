@@ -813,3 +813,5 @@ export const getServerSideProps: GetServerSideProps = async (
     return { props: {} as never };
   }
 };
+
+useUserSettings.requiresAuth = true;

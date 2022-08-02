@@ -132,6 +132,7 @@ const useCancelMembership = ({ uid }: CancelMembershipTypes) => {
 };
 
 export default useCancelMembership;
+useCancelMembership.requiresAuth = true;
 
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext

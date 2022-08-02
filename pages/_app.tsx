@@ -1,14 +1,15 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { AuthProvider } from '../auth';
+import Footer from '../components/common/Footer';
 import Layout from '../components/common/Layout';
+import Topbar from '../components/common/Topbar';
 import { GlobalContextProvider } from '../context/GlobalContextProvider';
 import '../styles/globals.css';
-// import Script from "next/script";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const contentLong =
-    'WorkStats is a dashboard tool for engineers and project managers engaged in system development to visualize their productivity and contributions in numbers. It aggregates various numbers from the platforms used by members and teams, such as GitHub for source control, Asana for task management, and Slack for communication tools.WorkStats';
+    'WorkStats is a dashboard tool for engineers and project managers engaged in system development to visualize their productivity and contributions in numbers. It aggregates various numbers from the platforms used by members and teams, such as GitHub for source control, Asana for task management, and Slack for communication tools.';
   const contentShort =
     'is a dashboard tool for engineers and PMs to quantify their productivity, aggregating various numbers from GitHub, Asana, Slack, etc.';
 
@@ -39,21 +40,22 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/icononly_transparent_nobuffer.ico' />
       </Head>
-      <AuthProvider>
-        <GlobalContextProvider>
-          <Layout>
-            {/* <Script
-          src="https://unpkg.com/flowbite@1.3.3/dist/flowbite.js"
-          strategy="beforeInteractive"
-        />
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/flowbite@1.3.3/dist/flowbite.min.css"
-        /> */}
-            <Component {...pageProps} />
-          </Layout>
-        </GlobalContextProvider>
-      </AuthProvider>
+      {/* @ts-ignore */}
+      {Component.requiresAuth ? (
+        <AuthProvider>
+          <GlobalContextProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </GlobalContextProvider>
+        </AuthProvider>
+      ) : (
+        <>
+          <Topbar />
+          <Component {...pageProps} />
+          <Footer />
+        </>
+      )}
     </>
   );
 }

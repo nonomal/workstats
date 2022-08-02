@@ -14,3 +14,5 @@ const userList = () => {
 };
 
 export default userList;
+
+userList.requiresAuth = true;
