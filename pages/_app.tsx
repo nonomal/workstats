@@ -12,6 +12,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     'WorkStats is a dashboard tool for engineers and project managers engaged in system development to visualize their productivity and contributions in numbers. It aggregates various numbers from the platforms used by members and teams, such as GitHub for source control, Asana for task management, and Slack for communication tools.';
   const contentShort =
     'is a dashboard tool for engineers and PMs to quantify their productivity, aggregating various numbers from GitHub, Asana, Slack, etc.';
+  const imageURL =
+    'https://drive.google.com/uc?export=download&id=1oP-avBzGd6YCISYUia0XvklWuV3mOg3a';
 
   return (
     <>
@@ -21,10 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta property='og:description' content={contentShort} />
         <meta property='og:type' content='website' />
         <meta property='og:url' content='https://workstats.dev' />
-        <meta
-          property='og:image'
-          content='https://drive.google.com/file/d/1oP-avBzGd6YCISYUia0XvklWuV3mOg3a/view?usp=sharing'
-        />
+        <meta property='og:image' content={imageURL} />
         <meta property='og:image:alt' content='WorkStats' />
         <meta property='og:image:type' content='image/png' />
         <meta property='og:site_name' content='WorkStats' />
@@ -33,10 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name='twitter:title' content='WorkStats' />
         <meta name='twitter:site' content='@workstatsdev' />
         <meta name='twitter:creator' content='@workstatsdev' />
-        <meta
-          name='twitter:image'
-          content='https://drive.google.com/file/d/1oP-avBzGd6YCISYUia0XvklWuV3mOg3a/view?usp=sharing'
-        />
+        <meta name='twitter:image' content={imageURL} />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/icononly_transparent_nobuffer.ico' />
       </Head>
