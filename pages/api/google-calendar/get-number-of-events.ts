@@ -118,24 +118,19 @@ const GetGoogleCalendarNumberOfEvents = async (
     .catch((err) => {
       console.error({ err });
     });
-  console.log({ response });
-  // @ts-ignore
-  console.log('response?.error?.code: ', response?.error?.code);
   // @ts-ignore
   if (response?.error?.code === 401) {
-    res.status(401).json({ status: 401, message: 'Unauthorized' });
+    return res.status(401);
   }
 
   // Count the number of events
   const events = response.items;
-  console.log({ events });
   // const eventsHasMoreThan2Attendees = events.filter(
   //   (event) => event.attendees.length > 2
   // );
   // const numberOfEvents = eventsHasMoreThan2Attendees.length;
   const numberOfEvents = events?.length ?? 0;
-  console.log({ numberOfEvents });
-  res.status(200).json(numberOfEvents);
+  return res.status(200).json(numberOfEvents);
 };
 
 export default GetGoogleCalendarNumberOfEvents;
