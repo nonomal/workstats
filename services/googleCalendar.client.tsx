@@ -119,6 +119,7 @@ const useNumberOfEvents = async (
     const response = await fetch(url, fetchOptions)
       .then(async (res) => {
         // if res.status is 401, which means Unauthorized, then refresh the access token and try again
+        console.log('res.status', res.status);
         if (res.status === 401 && googleRefreshToken && uid) {
           return refreshAccessToken(googleRefreshToken)
             .then(async (res) => {
