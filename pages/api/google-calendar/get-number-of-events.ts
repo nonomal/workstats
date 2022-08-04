@@ -121,7 +121,7 @@ const GetGoogleCalendarNumberOfEvents = async (
   // @ts-ignore
   if (response?.error?.code === 401) {
     console.log('response.error.code === 401');
-    return res.status(401);
+    return res.status(401).json({ error: 'Unauthorized' });
   }
   console.log('response', response);
   // Count the number of events
