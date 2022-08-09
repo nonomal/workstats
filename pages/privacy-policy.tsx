@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
           content='This is the WorkStats Privacy Policy page'
         />
       </Head>
-      <main className='px-5'>
+      <main className='bg-slate-50 px-1 md:px-16'>
         <h1 className='text-3xl py-4'>Privacy Policy for Suchica, Inc.</h1>
 
         <p className='py-1'>
