@@ -447,7 +447,7 @@ export default function HomePage() {
       <div className='h-4 md:h-10'></div>
       <div className='text-xl md:text-3xl text-grey-800 p-2 m-2 text-center content-center place-items-center'>
         <p className='p-1 md:p-2'>
-          WorkStats users are in 41 countries worldwide.
+          WorkStats visitors are in 44 countries worldwide like below.
         </p>
       </div>
       <div className='flex place-content-center'>
