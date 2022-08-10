@@ -13,7 +13,7 @@ export default function TermsOfService() {
           content='This is the WorkStats Terms of Service page'
         />
       </Head>
-      <main className='px-5'>
+      <main className='bg-slate-50 px-1 md:px-16'>
         <h1 className='text-3xl py-4'>Terms of Service</h1>
 
         <p className='py-1'>Welcome to WorkStats!</p>
