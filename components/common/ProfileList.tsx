@@ -1,7 +1,10 @@
 // @ts-ignore
 const ProfileList = ({ profileList }) => {
   return (
-    <div className='hidden md:grid md:grid-cols-2 md:gap-3 md:m-4'>
+    <div
+      id='profile-list'
+      className='hidden md:grid md:grid-cols-2 md:gap-3 md:m-4'
+    >
       <div>Full Name :</div>
       <div>
         {profileList.firstName} {profileList.middleName} {profileList.lastName}

@@ -6,6 +6,7 @@ import Layout from '../components/common/Layout';
 import Topbar from '../components/common/Topbar';
 import { GlobalContextProvider } from '../context/GlobalContextProvider';
 import '../styles/globals.css';
+import 'intro.js/introjs.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const contentLong =

@@ -38,6 +38,10 @@ interface UserType extends Record<string, unknown> {
   };
   lastName?: string;
   middleName?: string;
+  productTour?: {
+    dashboard?: number;
+    userSettings?: number;
+  };
   rank?: string;
   role?: string;
   slack?: {

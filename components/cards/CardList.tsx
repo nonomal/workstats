@@ -288,59 +288,58 @@ const CardList = ({
   }, [numberOfEvents, TotalTimeOfEvents, uid]);
 
   return (
-    <>
-      <div className='container max-w-6xl px-5 my-1 md:my-1'>
-        <div className='flex'>
-          <h2 className='text-xl mt-4 mb-2'>Coding - GitHub</h2>
-          <GearIconLink
-            mt={5}
-            mb={2}
-            href='/user-settings'
-            alt='Gear icon links to user settings'
-          />
-        </div>
-        <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
-          <NumberOfCommits data={numberOfCommits} />
-          <NumberOfPullRequests data={numberOfPullRequests} />
-          <NumberOfReviews data={numberOfReviews} />
-        </div>
-        <div className='flex'>
-          <h2 className='text-xl mt-4 mb-2'>Tasks - Asana</h2>
-          <GearIconLink
-            mt={5}
-            mb={2}
-            href='/user-settings'
-            alt='Gear icon links to user settings'
-          />
-        </div>
-        <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
-          <NumberOfCloseTasks number={numberOfTasksClosed} />
-          <NumberOfOpenTasks number={numberOfTasksOpen} />
-          <VelocityOfTaskClose
-            number={velocityPerWeek.toFixed(1)} // If the first decimal place is 0, it is converted to a string to keep the 0
-          />
-          <EstimatedDateOfCompletion date={estimatedCompletionDate} />
-        </div>
-        <div className='flex'>
-          <h2 className='text-xl mt-4 mb-2'>
-            Communication - Slack & Google Calendar
-          </h2>
-          <GearIconLink
-            mt={5}
-            mb={2}
-            href='/user-settings'
-            alt='Gear icon links to user settings'
-          />
-        </div>
-        <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
-          <NumberOfMentioned data={numberOfMentioned} />
-          <NumberOfReplies data={numberOfReplies} />
-          <NumberOfNewSent data={numberOfNewSent} />
-          <NumberOfMeetings data={numberOfEvents} />
-          {/* <TotalTimeOfMeetings data={TotalTimeOfEvents} /> */}
-        </div>
+    <div id='card-list' className='container max-w-6xl px-5 my-1 md:my-1'>
+      <div id='github-cards' className='flex'>
+        <h2 className='text-xl mt-4 mb-2'>Coding - GitHub</h2>
+        <GearIconLink
+          mt={5}
+          mb={2}
+          href='/user-settings'
+          alt='Gear icon links to user settings'
+          id='gear-icon'
+        />
       </div>
-    </>
+      <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
+        <NumberOfCommits data={numberOfCommits} />
+        <NumberOfPullRequests data={numberOfPullRequests} />
+        <NumberOfReviews data={numberOfReviews} />
+      </div>
+      <div id='asana-cards' className='flex'>
+        <h2 className='text-xl mt-4 mb-2'>Tasks - Asana</h2>
+        <GearIconLink
+          mt={5}
+          mb={2}
+          href='/user-settings'
+          alt='Gear icon links to user settings'
+        />
+      </div>
+      <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
+        <NumberOfCloseTasks number={numberOfTasksClosed} />
+        <NumberOfOpenTasks number={numberOfTasksOpen} />
+        <VelocityOfTaskClose
+          number={velocityPerWeek.toFixed(1)} // If the first decimal place is 0, it is converted to a string to keep the 0
+        />
+        <EstimatedDateOfCompletion date={estimatedCompletionDate} />
+      </div>
+      <div id='slack-cards' className='flex'>
+        <h2 className='text-xl mt-4 mb-2'>
+          Communication - Slack & Google Calendar
+        </h2>
+        <GearIconLink
+          mt={5}
+          mb={2}
+          href='/user-settings'
+          alt='Gear icon links to user settings'
+        />
+      </div>
+      <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
+        <NumberOfMentioned data={numberOfMentioned} />
+        <NumberOfReplies data={numberOfReplies} />
+        <NumberOfNewSent data={numberOfNewSent} />
+        <NumberOfMeetings data={numberOfEvents} />
+        {/* <TotalTimeOfMeetings data={TotalTimeOfEvents} /> */}
+      </div>
+    </div>
   );
 };
 

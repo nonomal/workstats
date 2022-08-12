@@ -51,7 +51,10 @@ const Sidebar = ({ handleClick }: SidebarProps) => {
         </a>
         {/* </Link> */}
         <Link href='/user-settings'>
-          <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
+          <a
+            id='user-settings'
+            className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'
+          >
             User Settings
           </a>
         </Link>

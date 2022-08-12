@@ -227,6 +227,22 @@ const handleSubmitGoogleAccessToken = async (
   return;
 };
 
+const handleSubmitProductTour = async (
+  docId: string,
+  productTourType: string,
+  numberOfTimesCompleted: number
+) => {
+  const docRef = doc(db, 'users', docId);
+  const docData: UserType = {
+    productTour: {
+      [productTourType]: numberOfTimesCompleted
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 const handleSubmitSurveyWhyYouLeave = async (
   event: React.FormEvent<HTMLFormElement>,
   docId: string,
@@ -402,6 +418,7 @@ export {
   handleSubmitSlackAccessToken,
   handleSubmitCommunicationActivity,
   handleSubmitGoogleAccessToken,
+  handleSubmitProductTour,
   handleSubmitSurveyWhyYouLeave,
   UpdInsAsanaNumbers,
   UpdInsGithubNumbers,

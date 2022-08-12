@@ -13,6 +13,7 @@ import CardList from '../components/cards/CardList';
 import Avatar from '../components/common/Avatar';
 import ButtonList from '../components/buttons/ButtonList';
 import SpecifyPeriodFromTo from '../components/buttons/SpecifyPeriodFromTo';
+import Onboarding from '../components/onboarding/dashboard-tour';
 
 // Services
 import { getAUserDoc, getANumbersDoc } from '../services/getDocFromFirestore';
@@ -33,6 +34,7 @@ interface PropTypes {
   profileList: UserType;
   slackAccessToken: string;
   slackMemberId: string;
+  numberOfOnboardingTimes: number;
   uid: string;
 }
 
@@ -52,10 +54,12 @@ export default function Dashboard({
   profileList,
   slackAccessToken,
   slackMemberId,
+  numberOfOnboardingTimes,
   uid
 }: PropTypes) {
   const contentLong =
     'WorkStats is a dashboard tool for engineers and project managers engaged in system development to visualize their productivity and contributions in numbers. It aggregates various numbers from the platforms used by members and teams, such as GitHub for source control, Asana for task management, and Slack for communication tools.';
+
   return (
     <>
       <Head>
@@ -90,6 +94,10 @@ export default function Dashboard({
             />
             <div className='h-20'></div>
           </div>
+          <Onboarding
+            docId={uid}
+            numberOfOnboardingTimes={numberOfOnboardingTimes}
+          />
         </main>
       )}
     </>
@@ -176,6 +184,9 @@ export const getServerSideProps: GetServerSideProps = async (
         ? userDoc.google.workspace[0].refreshToken
         : null;
 
+      // Parameters for Product Tour
+      const numberOfOnboardingTimes = userDoc?.productTour?.dashboard || 0;
+
       // Pass data to the page via props
       return {
         props: {
@@ -194,6 +205,7 @@ export const getServerSideProps: GetServerSideProps = async (
           profileList,
           slackAccessToken,
           slackMemberId,
+          numberOfOnboardingTimes,
           uid
         }
       };
