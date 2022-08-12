@@ -62,8 +62,9 @@ const Onboarding = ({ docId, numberOfOnboardingTimes }: OnboardingProps) => {
     numberOfOnboardingTimes
   );
   const onExit = async (stepIndex: number) => {
-    // It should be compared to steps.length -1, but there is a weird quirk in the way the library counts indexes, so when there are n steps, the index just before Exit is somehow n.
-    if (stepIndex === steps.length) {
+    // It should be compared to steps.length -1, but at least in Windows, there is a weird quirk in the way the library counts indexes, so when there are n steps, the index just before Exit is somehow n.
+    // In iOS, like Mac PC, iPad, and iPhone, stepIndex will be 'n - 1'.
+    if (stepIndex === steps.length || stepIndex === steps.length - 1) {
       setStepEnabled(false);
       const newNumberOfTimesCompleted = numberOfTimesCompleted + 1;
       setNumberOfTimesCompleted(newNumberOfTimesCompleted);
