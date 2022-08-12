@@ -104,8 +104,6 @@ export default function Dashboard({
   );
 }
 
-Dashboard.requiresAuth = true;
-
 // This gets called on every request.
 // The official document is here: https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props
 export const getServerSideProps: GetServerSideProps = async (
@@ -116,16 +114,22 @@ export const getServerSideProps: GetServerSideProps = async (
   //   token: string; // Firebase ID token. It starts with "eyJhbGciOiJS..."
   //   _ga_45J7T193WF: string;
   // }
+  // console.log({ ctx });
   const cookies = nookies.get(ctx);
+  // console.log({ cookies });
 
+  // console.log('cookies.token: ', cookies.token);
+  // console.log('Boolean(cookies.token): ', Boolean(cookies.token));
   if (cookies.token) {
     try {
       const token = await verifyIdToken(cookies.token);
 
       // the user is authenticated!
       const { uid } = token;
-      const userDoc = await getAUserDoc(uid);
-      const numbersDoc = (await getANumbersDoc(uid)) || {};
+      const userDoc = (await getAUserDoc(uid)) ? await getAUserDoc(uid) : null;
+      const numbersDoc = (await getANumbersDoc(uid))
+        ? await getANumbersDoc(uid)
+        : null;
 
       // Profile list to be displayed on the left side
       const profileList = {
@@ -185,7 +189,9 @@ export const getServerSideProps: GetServerSideProps = async (
         : null;
 
       // Parameters for Product Tour
-      const numberOfOnboardingTimes = userDoc?.productTour?.dashboard || 0;
+      const numberOfOnboardingTimes = userDoc?.productTour?.dashboard
+        ? userDoc.productTour.dashboard
+        : 0;
 
       // Pass data to the page via props
       return {
@@ -210,10 +216,13 @@ export const getServerSideProps: GetServerSideProps = async (
         }
       };
     } catch (err) {
-      console.error(err);
+      // console.log('try catch error', err);
       return { props: {} };
     }
   } else {
+    // console.log('cookies.token is falsy');
     return { props: {} as never };
   }
 };
+
+Dashboard.requiresAuth = true;

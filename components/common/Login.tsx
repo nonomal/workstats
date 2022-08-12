@@ -42,7 +42,9 @@ const Login = () => {
         createNumbersDoc(user.uid);
       })
       .then(() => {
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -70,7 +72,9 @@ const Login = () => {
         createNumbersDoc(user.uid);
       })
       .then(() => {
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       })
       .catch((error) => {
         const errorCode = error.code;

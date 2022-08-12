@@ -17,13 +17,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     return auth.onIdTokenChanged(async (user) => {
+      // console.log('auth.onIdTokenChanged started');
+      // console.log('Boolean(!user)', Boolean(!user));
       if (!user) {
+        // console.log({ user });
         nookies.set(undefined, 'token', '', {});
         setCurrentUser({});
         setLoading(false);
         return;
       } else {
+        // console.log({ user });
         const token = await user.getIdToken(true); // forceRefresh = true
+        // console.log('token in auth.tsx: ', token);
         nookies.set(undefined, 'token', token, {});
         setCurrentUser(user);
         setLoading(false);

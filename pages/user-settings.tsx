@@ -811,9 +811,11 @@ export const getServerSideProps: GetServerSideProps = async (
         }
       };
     } catch (e) {
+      // console.log('try catch error', e);
       return { props: {} };
     }
   } else {
+    // console.log('cookies.token is falsy');
     return { props: {} as never };
   }
 };
