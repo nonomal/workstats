@@ -1,4 +1,4 @@
-## Problem
+## Issue
 
 
 
@@ -8,13 +8,13 @@
 
 ## Evidence
 
-For mobile screens;
+### For mobile screens;
 
 |Before|After|
 |---|---|
 |---|---|
 
-For desktop screens;
+### For desktop screens;
 
 |Before|
 |---|
@@ -37,7 +37,7 @@ Do you require registration for the following console screens beside the source 
 
 ## Performance
 
-For desktop screen,
+For desktop screens,
 
 - DOM Content Loaded Speed: x.xx (s) --> x.xx (s), -xxx (ms)
 - Finish: x.xx (s) --> x.xx (s), -xxx (ms)
@@ -49,6 +49,10 @@ For desktop screen,
 |Chrome Developer Console Network Tab (After)|
 |---|
 |---|
+
+## Documentation
+
+
 
 ## Help Pages
 
