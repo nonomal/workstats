@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import LogOut from './Logout';
 import Sidebar from './Sidebar';
 import HamburgerButton from './HamburgerButton';
@@ -8,6 +9,12 @@ const Layout = ({ children }) => {
   // Hamburger menu state
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+
+  useLayoutEffect(() => {
+    if (isMobile) setIsOpen(false);
+    else setIsOpen(true);
+  }, [isMobile]);
 
   return (
     <div className='md:flex bg-slate-50 w-full'>
