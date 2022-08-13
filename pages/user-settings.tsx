@@ -35,6 +35,8 @@ import DisconnectWithSlackButton from '../components/buttons/DisconnectWithSlack
 import DisconnectWithGoogleButton from '../components/buttons/DisconnectWithGoogleButton';
 import { requestGoogleUserIdentity } from '../services/googleCalendar.client';
 import RequestGoogleOAuthButton from '../components/buttons/RequestGoogleOAuthButton';
+import Onboarding from '../components/onboarding/product-tour';
+import Steps from '../constants/userSettingsTourSteps.json';
 
 interface UserSettingsProps {
   uid: string;
@@ -268,6 +270,8 @@ const useUserSettings = ({
     }
   }, [googleAccessToken, googleRefreshToken, isGoogleAuthenticatedState, uid]);
 
+  const numberOfOnboardingTimes = userDoc?.productTour?.userSettings || 0;
+
   return (
     <>
       <Head>
@@ -278,7 +282,7 @@ const useUserSettings = ({
         />
       </Head>
       <div className='flex'>
-        <div className='grid justify-items-center mt-5'>
+        <div id='avatar' className='grid justify-items-center mt-5'>
           <Avatar userId={uid} />
           <button
             // type="submit"
@@ -290,7 +294,7 @@ const useUserSettings = ({
             Change
           </button>
         </div>
-        <div className='w-full'>
+        <div id='basic-info' className='w-full'>
           <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
             Basic Information
           </h2>
@@ -376,396 +380,413 @@ const useUserSettings = ({
           </form>
         </div>
       </div>
-      <div className='flex'>
-        <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
-          Source Code / GitHub
-        </h2>
-        <QuestionMark mt={9} mb={1} href='/help/how-to-get-github-info' />
-        {isGithubAuthenticatedState ? (
-          <DisconnectWithGithubButton
-            label='Disconnect with GitHub'
-            uid={uid}
-          />
-        ) : (
-          <RequestOAuthButton
-            label='Connect with GitHub'
-            handleClick={requestGithubUserIdentity}
-          />
-        )}
-      </div>
-      <form
-        name='source-code'
-        onSubmit={(e) => handleSubmitSourceCode(e, uid)}
-        method='post'
-        target='_self'
-        autoComplete='off'
-      >
-        <div className='flex flex-wrap items-center'>
-          <div className='ml-6 w-28'></div>
-          <InputBox
-            label={'User ID'}
-            name={'githubUserId'}
-            inputType={'number'}
-            placeholder={'4620828'}
-            width={36}
-            value={userDoc?.github?.userId}
-          />
-          <InputBox
-            label={'User Name'}
-            name={'githubUserName'}
-            placeholder={'oliversmith'}
-            width={36}
-            value={userDoc?.github?.userName}
-          />
-          <InputBox
-            label={'Access Token'}
-            name={'githubAccessToken'}
-            placeholder={'No Access Token is set'}
-            width={36}
-            value={userDoc?.github?.accessToken}
-            disabled={true}
-            bgColor={'bg-gray-200'}
-          />
-        </div>
-        <div className='flex flex-wrap items-center'>
-          <h3 className='ml-6 w-28'>Repository 1 :</h3>
-          <InputBox
-            label={'Repo Owner Name'}
-            name={'githubRepoOwner1'}
-            placeholder={'octocat'}
-            width={36}
-            value={userDoc?.github?.repositories?.[0]?.owner}
-          />
-          <InputBox
-            label={'Repo Name'}
-            name={'githubRepo1'}
-            placeholder={'hello-world'}
-            width={36}
-            value={userDoc?.github?.repositories?.[0]?.repo}
-          />
-          <InputBox
-            label={'Repo Visibility'}
-            name={'githubRepoVisibility1'}
-            placeholder={'Public or Private'}
-            width={36}
-            value={userDoc?.github?.repositories?.[0]?.visibility}
-          />
-        </div>
-        <div className='flex flex-wrap items-center'>
-          <h3 className='ml-6 w-28'>Repository 2 :</h3>
-          <InputBox
-            label={'Repo Owner Name'}
-            name={'githubRepoOwner2'}
-            placeholder={'octocat'}
-            width={36}
-            value={userDoc?.github?.repositories?.[1]?.owner}
-            disabled={true}
-            bgColor={'bg-gray-200'}
-          />
-          <InputBox
-            label={'Repo Name'}
-            name={'githubRepo2'}
-            placeholder={'hello-world'}
-            width={36}
-            value={userDoc?.github?.repositories?.[1]?.repo}
-            disabled={true}
-            bgColor={'bg-gray-200'}
-          />
-          <InputBox
-            label={'Repo Visibility'}
-            name={'githubRepoVisibility2'}
-            placeholder={'Public or Private'}
-            width={36}
-            value={userDoc?.github?.repositories?.[1]?.visibility}
-            disabled={true}
-            bgColor={'bg-gray-200'}
-          />
-          <SubmitButton />
-        </div>
-      </form>
-      <div className='flex'>
-        <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
-          Task Ticket / Asana
-        </h2>
-        <QuestionMark mt={9} mb={1} href='/help/how-to-get-asana-info' />
-        {isAsanaAuthenticatedState ? (
-          <DisconnectWithAsanaButton
-            label='Disconnect with Asana'
-            uid={uid}
-            refreshToken={userDoc?.asana?.refreshToken}
-          />
-        ) : (
-          <RequestOAuthButton
-            label='Connect with Asana'
-            handleClick={requestAsanaUserIdentity}
-          />
-        )}
-      </div>
-      <form
-        name='task-ticket'
-        onSubmit={(e) => handleSubmitTaskTicket(e, uid)}
-        method='post'
-        target='_self'
-        autoComplete='off'
-      >
-        <div className='flex flex-wrap items-center'>
-          <div className='ml-6 w-28'></div>
-          <InputBox
-            label={'User ID'}
-            name={'asanaUserId'}
-            inputType={'number'}
-            placeholder={'1200781652740141'}
-            width={48}
-            value={userDoc?.asana?.userId}
-          />
-          <InputBox
-            label={'Access Token'}
-            name={'asanaAccessToken'}
-            placeholder={'No Access Token is set'}
-            width={36}
-            value={userDoc?.asana?.accessToken}
-            disabled={true}
-            bgColor={'bg-gray-200'}
-          />
-          <InputBox
-            label={'Refresh Token'}
-            name={'asanaRefreshToken'}
-            placeholder={'No Access Token is set'}
-            width={36}
-            value={userDoc?.asana?.refreshToken}
-            disabled={true}
-            bgColor={'bg-gray-200'}
-          />
-        </div>
-        <div className='flex flex-wrap items-center'>
-          <h3 className='ml-6 w-28'>Workspace 1 :</h3>
-          <InputBox
-            label={'Workspace ID'}
-            name={'asanaWorkspaceId1'}
-            inputType={'number'}
-            placeholder={'1234567890123456'}
-            width={48}
-            value={userDoc?.asana?.workspace?.[0]?.workspaceId}
-          />
-          <InputBox
-            label={'Workspace Name'}
-            name={'asanaWorkspaceName1'}
-            placeholder={'Suchica'}
-            width={36}
-            value={userDoc?.asana?.workspace?.[0]?.workspaceName}
-          />
-        </div>
-        <div className='flex flex-wrap items-center'>
-          <h3 className='ml-6 w-28'>Workspace 2 :</h3>
-          <InputBox
-            label={'Workspace ID'}
-            name={'asanaWorkspaceId2'}
-            inputType={'number'}
-            placeholder={'1234567890123456'}
-            width={48}
-            value={userDoc?.asana?.workspace?.[1]?.workspaceId}
-            disabled={true}
-            bgColor={'bg-gray-200'}
-          />
-          <InputBox
-            label={'Workspace Name'}
-            name={'asanaWorkspaceName2'}
-            placeholder={'Suchica'}
-            width={36}
-            value={userDoc?.asana?.workspace?.[1]?.workspaceName}
-            disabled={true}
-            bgColor={'bg-gray-200'}
-          />
-          <SubmitButton />
-        </div>
-      </form>
-      <div className='flex'>
-        <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
-          Communication Activity / Slack
-        </h2>
-        <QuestionMark mt={9} mb={1} href='/help/how-to-get-slack-info' />
-        {isSlackAuthenticatedState ? (
-          <DisconnectWithSlackButton
-            label='Disconnect with Slack'
-            uid={uid}
-            accessToken={userDoc?.slack?.workspace?.[0]?.accessToken}
-          />
-        ) : (
-          <RequestOAuthButton
-            label='Connect with Slack'
-            handleClick={requestSlackUserIdentity}
-          />
-        )}
-      </div>
-      <form
-        name='communication-activity'
-        onSubmit={(e) => handleSubmitCommunicationActivity(e, uid)}
-        method='post'
-        target='_self'
-        autoComplete='off'
-      >
-        <div className='flex items-center'>
-          <h3 className='ml-6 w-28'>Workspace 1 :</h3>
-          <div className='flex flex-wrap'>
-            <InputBox
-              label={'Workspace Name'}
-              name={'slackWorkspaceName1'}
-              placeholder={'Suchica'}
-              width={36}
-              value={userDoc?.slack?.workspace?.[0]?.workspaceName}
-              disabled={true}
-              bgColor={'bg-gray-200'}
+      <div id='source-control'>
+        <div className='flex'>
+          <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+            Source Code / GitHub
+          </h2>
+          <QuestionMark mt={9} mb={1} href='/help/how-to-get-github-info' />
+          {isGithubAuthenticatedState ? (
+            <DisconnectWithGithubButton
+              label='Disconnect with GitHub'
+              uid={uid}
             />
-            <InputBox
-              label={'Member ID'}
-              name={'slackWorkspaceMemberId1'}
-              placeholder={'U02DK80DN9H'}
-              width={36}
-              value={userDoc?.slack?.workspace?.[0]?.memberId}
-              disabled={true}
-              bgColor={'bg-gray-200'}
+          ) : (
+            <RequestOAuthButton
+              label='Connect with GitHub'
+              handleClick={requestGithubUserIdentity}
             />
-            <InputBox
-              label={'Access Token'}
-              name={'slackAccessToken1'}
-              placeholder={'No Access Token is set'}
-              width={36}
-              value={userDoc?.slack?.workspace?.[0]?.accessToken}
-              disabled={true}
-              bgColor={'bg-gray-200'}
-            />
-          </div>
+          )}
         </div>
-        <div className='flex items-center'>
-          <h3 className='ml-6 w-28'>Workspace 2 :</h3>
-          <div className='flex flex-wrap'>
+        <form
+          name='source-code'
+          onSubmit={(e) => handleSubmitSourceCode(e, uid)}
+          method='post'
+          target='_self'
+          autoComplete='off'
+        >
+          <div className='flex flex-wrap items-center'>
+            <div className='ml-6 w-28'></div>
             <InputBox
-              label={'Workspace Name'}
-              name={'slackWorkspaceName2'}
-              placeholder={'Suchica'}
+              label={'User ID'}
+              name={'githubUserId'}
+              inputType={'number'}
+              placeholder={'4620828'}
               width={36}
-              value={userDoc?.slack?.workspace?.[1]?.workspaceName}
-              disabled={true}
-              bgColor={'bg-gray-200'}
-            />
-            <InputBox
-              label={'Member ID'}
-              name={'slackWorkspaceMemberId2'}
-              placeholder={'U02DK80DN9H'}
-              width={36}
-              value={userDoc?.slack?.workspace?.[1]?.memberId}
-              disabled={true}
-              bgColor={'bg-gray-200'}
-            />
-            <InputBox
-              label={'Access Token'}
-              name={'slackAccessToken2'}
-              placeholder={'No Access Token is set'}
-              width={36}
-              value={userDoc?.slack?.workspace?.[1]?.accessToken}
-              disabled={true}
-              bgColor={'bg-gray-200'}
-            />
-          </div>
-        </div>
-      </form>
-      <div className='flex'>
-        <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
-          Communication Activity / Google
-        </h2>
-        <QuestionMark mt={9} mb={1} href='/help/how-to-get-google-info' />
-        {isGoogleAuthenticatedState ? (
-          <DisconnectWithGoogleButton
-            label='Disconnect with Google'
-            uid={uid}
-            accessToken={userDoc?.google?.workspace?.[0]?.accessToken}
-          />
-        ) : (
-          <RequestGoogleOAuthButton
-            label='Connect with Google'
-            handleClick={requestGoogleUserIdentity}
-          />
-        )}
-      </div>
-      <form
-        name='communication-activity-google'
-        // onSubmit={}
-        method='post'
-        target='_self'
-        autoComplete='off'
-      >
-        <div className='flex items-center'>
-          <h3 className='ml-6 w-28'>Workspace 1 :</h3>
-          <div className='flex flex-wrap'>
-            <InputBox
-              label={'Gmail'}
-              name={'gmail1'}
-              placeholder={'nishio.hiroshi@suchica.com'}
-              width={36}
-              value={userDoc?.google?.workspace?.[0]?.gmail}
-              disabled={true}
-              bgColor={'bg-gray-200'}
+              value={userDoc?.github?.userId}
             />
             <InputBox
               label={'User Name'}
-              name={'googleUserName1'}
-              placeholder={'Hiroshi Nishio'}
+              name={'githubUserName'}
+              placeholder={'oliversmith'}
               width={36}
-              value={userDoc?.google?.workspace?.[0]?.userName}
+              value={userDoc?.github?.userName}
+            />
+            <InputBox
+              label={'Access Token'}
+              name={'githubAccessToken'}
+              placeholder={'No Access Token is set'}
+              width={36}
+              value={userDoc?.github?.accessToken}
+              disabled={true}
+              bgColor={'bg-gray-200'}
+            />
+          </div>
+          <div className='flex flex-wrap items-center'>
+            <h3 className='ml-6 w-28'>Repository 1 :</h3>
+            <InputBox
+              label={'Repo Owner Name'}
+              name={'githubRepoOwner1'}
+              placeholder={'octocat'}
+              width={36}
+              value={userDoc?.github?.repositories?.[0]?.owner}
+            />
+            <InputBox
+              label={'Repo Name'}
+              name={'githubRepo1'}
+              placeholder={'hello-world'}
+              width={36}
+              value={userDoc?.github?.repositories?.[0]?.repo}
+            />
+            <InputBox
+              label={'Repo Visibility'}
+              name={'githubRepoVisibility1'}
+              placeholder={'Public or Private'}
+              width={36}
+              value={userDoc?.github?.repositories?.[0]?.visibility}
+            />
+          </div>
+          <div className='flex flex-wrap items-center'>
+            <h3 className='ml-6 w-28'>Repository 2 :</h3>
+            <InputBox
+              label={'Repo Owner Name'}
+              name={'githubRepoOwner2'}
+              placeholder={'octocat'}
+              width={36}
+              value={userDoc?.github?.repositories?.[1]?.owner}
               disabled={true}
               bgColor={'bg-gray-200'}
             />
             <InputBox
+              label={'Repo Name'}
+              name={'githubRepo2'}
+              placeholder={'hello-world'}
+              width={36}
+              value={userDoc?.github?.repositories?.[1]?.repo}
+              disabled={true}
+              bgColor={'bg-gray-200'}
+            />
+            <InputBox
+              label={'Repo Visibility'}
+              name={'githubRepoVisibility2'}
+              placeholder={'Public or Private'}
+              width={36}
+              value={userDoc?.github?.repositories?.[1]?.visibility}
+              disabled={true}
+              bgColor={'bg-gray-200'}
+            />
+            <SubmitButton />
+          </div>
+        </form>
+      </div>
+      <div id='task-control'>
+        <div className='flex'>
+          <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+            Task Ticket / Asana
+          </h2>
+          <QuestionMark mt={9} mb={1} href='/help/how-to-get-asana-info' />
+          {isAsanaAuthenticatedState ? (
+            <DisconnectWithAsanaButton
+              label='Disconnect with Asana'
+              uid={uid}
+              refreshToken={userDoc?.asana?.refreshToken}
+            />
+          ) : (
+            <RequestOAuthButton
+              label='Connect with Asana'
+              handleClick={requestAsanaUserIdentity}
+            />
+          )}
+        </div>
+        <form
+          name='task-ticket'
+          onSubmit={(e) => handleSubmitTaskTicket(e, uid)}
+          method='post'
+          target='_self'
+          autoComplete='off'
+        >
+          <div className='flex flex-wrap items-center'>
+            <div className='ml-6 w-28'></div>
+            <InputBox
+              label={'User ID'}
+              name={'asanaUserId'}
+              inputType={'number'}
+              placeholder={'1200781652740141'}
+              width={48}
+              value={userDoc?.asana?.userId}
+            />
+            <InputBox
               label={'Access Token'}
-              name={'googleAccessToken1'}
+              name={'asanaAccessToken'}
               placeholder={'No Access Token is set'}
               width={36}
-              value={userDoc?.google?.workspace?.[0]?.accessToken}
+              value={userDoc?.asana?.accessToken}
               disabled={true}
               bgColor={'bg-gray-200'}
             />
             <InputBox
               label={'Refresh Token'}
-              name={'googleRefreshToken1'}
+              name={'asanaRefreshToken'}
               placeholder={'No Access Token is set'}
               width={36}
-              value={userDoc?.google?.workspace?.[0]?.refreshToken}
+              value={userDoc?.asana?.refreshToken}
               disabled={true}
               bgColor={'bg-gray-200'}
             />
           </div>
-        </div>
-      </form>
-      <div className='flex'>
-        <Link href='/cancel-membership'>
-          <a
-            className='mr-3'
-            target='_blank'
-            rel='noreferrer noopener' // Must pair with target='_blank'
-          >
-            <button className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
-              Cancel Membership
-            </button>
-          </a>
-        </Link>
-        <div className='mt-9 mb-1'>
-          <Image
-            src={NewTabIcon}
-            width={24}
-            height={24}
-            layout='intrinsic'
-            alt='Open a new tab'
-            quality={75}
-            priority={false}
-            placeholder='empty'
-          />
-        </div>
+          <div className='flex flex-wrap items-center'>
+            <h3 className='ml-6 w-28'>Workspace 1 :</h3>
+            <InputBox
+              label={'Workspace ID'}
+              name={'asanaWorkspaceId1'}
+              inputType={'number'}
+              placeholder={'1234567890123456'}
+              width={48}
+              value={userDoc?.asana?.workspace?.[0]?.workspaceId}
+            />
+            <InputBox
+              label={'Workspace Name'}
+              name={'asanaWorkspaceName1'}
+              placeholder={'Suchica'}
+              width={36}
+              value={userDoc?.asana?.workspace?.[0]?.workspaceName}
+            />
+          </div>
+          <div className='flex flex-wrap items-center'>
+            <h3 className='ml-6 w-28'>Workspace 2 :</h3>
+            <InputBox
+              label={'Workspace ID'}
+              name={'asanaWorkspaceId2'}
+              inputType={'number'}
+              placeholder={'1234567890123456'}
+              width={48}
+              value={userDoc?.asana?.workspace?.[1]?.workspaceId}
+              disabled={true}
+              bgColor={'bg-gray-200'}
+            />
+            <InputBox
+              label={'Workspace Name'}
+              name={'asanaWorkspaceName2'}
+              placeholder={'Suchica'}
+              width={36}
+              value={userDoc?.asana?.workspace?.[1]?.workspaceName}
+              disabled={true}
+              bgColor={'bg-gray-200'}
+            />
+            <SubmitButton />
+          </div>
+        </form>
       </div>
-      <p className='py-1 ml-6'>
-        If you wish to cancel your membership to this service, please follow
-        this link.
-      </p>
+      <div id='communication-activity-slack'>
+        <div className='flex'>
+          <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+            Communication Activity / Slack
+          </h2>
+          <QuestionMark mt={9} mb={1} href='/help/how-to-get-slack-info' />
+          {isSlackAuthenticatedState ? (
+            <DisconnectWithSlackButton
+              label='Disconnect with Slack'
+              uid={uid}
+              accessToken={userDoc?.slack?.workspace?.[0]?.accessToken}
+            />
+          ) : (
+            <RequestOAuthButton
+              label='Connect with Slack'
+              handleClick={requestSlackUserIdentity}
+            />
+          )}
+        </div>
+        <form
+          name='communication-activity'
+          onSubmit={(e) => handleSubmitCommunicationActivity(e, uid)}
+          method='post'
+          target='_self'
+          autoComplete='off'
+        >
+          <div className='flex items-center'>
+            <h3 className='ml-6 w-28'>Workspace 1 :</h3>
+            <div className='flex flex-wrap'>
+              <InputBox
+                label={'Workspace Name'}
+                name={'slackWorkspaceName1'}
+                placeholder={'Suchica'}
+                width={36}
+                value={userDoc?.slack?.workspace?.[0]?.workspaceName}
+                disabled={true}
+                bgColor={'bg-gray-200'}
+              />
+              <InputBox
+                label={'Member ID'}
+                name={'slackWorkspaceMemberId1'}
+                placeholder={'U02DK80DN9H'}
+                width={36}
+                value={userDoc?.slack?.workspace?.[0]?.memberId}
+                disabled={true}
+                bgColor={'bg-gray-200'}
+              />
+              <InputBox
+                label={'Access Token'}
+                name={'slackAccessToken1'}
+                placeholder={'No Access Token is set'}
+                width={36}
+                value={userDoc?.slack?.workspace?.[0]?.accessToken}
+                disabled={true}
+                bgColor={'bg-gray-200'}
+              />
+            </div>
+          </div>
+          <div className='flex items-center'>
+            <h3 className='ml-6 w-28'>Workspace 2 :</h3>
+            <div className='flex flex-wrap'>
+              <InputBox
+                label={'Workspace Name'}
+                name={'slackWorkspaceName2'}
+                placeholder={'Suchica'}
+                width={36}
+                value={userDoc?.slack?.workspace?.[1]?.workspaceName}
+                disabled={true}
+                bgColor={'bg-gray-200'}
+              />
+              <InputBox
+                label={'Member ID'}
+                name={'slackWorkspaceMemberId2'}
+                placeholder={'U02DK80DN9H'}
+                width={36}
+                value={userDoc?.slack?.workspace?.[1]?.memberId}
+                disabled={true}
+                bgColor={'bg-gray-200'}
+              />
+              <InputBox
+                label={'Access Token'}
+                name={'slackAccessToken2'}
+                placeholder={'No Access Token is set'}
+                width={36}
+                value={userDoc?.slack?.workspace?.[1]?.accessToken}
+                disabled={true}
+                bgColor={'bg-gray-200'}
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id='communication-activity-google'>
+        <div className='flex'>
+          <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+            Communication Activity / Google
+          </h2>
+          <QuestionMark mt={9} mb={1} href='/help/how-to-get-google-info' />
+          {isGoogleAuthenticatedState ? (
+            <DisconnectWithGoogleButton
+              label='Disconnect with Google'
+              uid={uid}
+              accessToken={userDoc?.google?.workspace?.[0]?.accessToken}
+            />
+          ) : (
+            <RequestGoogleOAuthButton
+              label='Connect with Google'
+              handleClick={requestGoogleUserIdentity}
+            />
+          )}
+        </div>
+        <form
+          name='communication-activity-google'
+          // onSubmit={}
+          method='post'
+          target='_self'
+          autoComplete='off'
+        >
+          <div className='flex items-center'>
+            <h3 className='ml-6 w-28'>Workspace 1 :</h3>
+            <div className='flex flex-wrap'>
+              <InputBox
+                label={'Gmail'}
+                name={'gmail1'}
+                placeholder={'nishio.hiroshi@suchica.com'}
+                width={36}
+                value={userDoc?.google?.workspace?.[0]?.gmail}
+                disabled={true}
+                bgColor={'bg-gray-200'}
+              />
+              <InputBox
+                label={'User Name'}
+                name={'googleUserName1'}
+                placeholder={'Hiroshi Nishio'}
+                width={36}
+                value={userDoc?.google?.workspace?.[0]?.userName}
+                disabled={true}
+                bgColor={'bg-gray-200'}
+              />
+              <InputBox
+                label={'Access Token'}
+                name={'googleAccessToken1'}
+                placeholder={'No Access Token is set'}
+                width={36}
+                value={userDoc?.google?.workspace?.[0]?.accessToken}
+                disabled={true}
+                bgColor={'bg-gray-200'}
+              />
+              <InputBox
+                label={'Refresh Token'}
+                name={'googleRefreshToken1'}
+                placeholder={'No Access Token is set'}
+                width={36}
+                value={userDoc?.google?.workspace?.[0]?.refreshToken}
+                disabled={true}
+                bgColor={'bg-gray-200'}
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id='cancel-membership'>
+        <div className='flex'>
+          <Link href='/cancel-membership'>
+            <a
+              className='mr-3'
+              target='_blank'
+              rel='noreferrer noopener' // Must pair with target='_blank'
+            >
+              <button className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+                Cancel Membership
+              </button>
+            </a>
+          </Link>
+          <div className='mt-9 mb-1'>
+            <Image
+              src={NewTabIcon}
+              width={24}
+              height={24}
+              layout='intrinsic'
+              alt='Open a new tab'
+              quality={75}
+              priority={false}
+              placeholder='empty'
+            />
+          </div>
+        </div>
+        <p className='py-1 ml-6'>
+          If you wish to cancel your membership to this service, please follow
+          this link.
+        </p>
+      </div>
       <div className='h-20'></div>
+      <Onboarding
+        docId={uid}
+        // @ts-ignore
+        steps={Steps}
+        productTourName={'userSettings'}
+        numberOfOnboardingTimes={numberOfOnboardingTimes}
+      />
     </>
   );
 };

@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Let&apos;s set it up!!",
+    "intro": "This is your settings. Let&apos;s get started!!"
+  },
+  {
+    "element": "#basic-info",
+    "title": "Basic Info",
+    "intro":
+      "The information entered here will be used for dashboards, etc. You can easily navigate by tabs, or register with the Enter key!",
+    "position": "left"
+  },
+  {
+    "element": "#avatar",
+    "title": "Avatar",
+    "intro":
+      "Avatar registration and modification functions are under development. Thank you for your patience!",
+    "position": "right"
+  },
+  {
+    "element": "#source-control",
+    "title": "Source Control (GitHub)",
+    "intro":
+      "Here&apos;s the setup for aggregating from GitHub. First, just hit the 'Connect with GitHub' button! Then fill in your user ID, your user name, the name of the repository you want to retrieve, and its owner name. Of course, you can disconnect it later. Click '?' icon for more information.",
+    "position": "bottom"
+  },
+  {
+    "element": "#task-control",
+    "title": "Task Control",
+    "intro":
+      "Here&apos;s the setup for aggregating from Asana. First, just hit the 'Connect with Asana' button! Then fill in your user ID, workspace ID you want to retrieve, and its name. Of course, you can disconnect it later. Click '?' icon for more information.",
+    "position": "bottom"
+  },
+  {
+    "element": "#communication-activity-slack",
+    "title": "Communication Activity (Slack)",
+    "intro":
+      "Here&apos;s the setup for aggregating from Slack. Just hit the 'Connect with Slack' button. That's it!! Of course, you can disconnect it later. Click '?' icon for more information.",
+    "position": "bottom"
+  },
+  {
+    "element": "#communication-activity-google",
+    "title": "Communication Activity (Google)",
+    "intro":
+      "Here&apos;s the setup for aggregating from Google. Just hit the 'Connect with Google' button. That's it!! Of course, you can disconnect it later. Click '?' icon for more information.",
+    "position": "bottom"
+  },
+  {
+    "element": "#cancel-membership",
+    "title": "Cancel Membership",
+    "intro":
+      "You can cancel your membership at any time. Just hit the icon next to 'Cancel Membership'. Then you will jump to the 'Cancel Membership' page.",
+    "position": "top"
+  },
+  {
+    "element": "#start-tutorial",
+    "title": "Product Tour Later?",
+    "intro":
+      "You can view this product tour at any time by pressing this button.",
+    "position": "bottom"
+  }
+]

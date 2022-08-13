@@ -12,52 +12,34 @@ const Steps = dynamic(() => import('intro.js-react').then((mod) => mod.Steps), {
 
 interface OnboardingProps {
   docId: string;
+  steps: Array<{
+    intro: string;
+    element?: string;
+    title?: string;
+    position?:
+      | 'auto'
+      | 'top'
+      | 'bottom'
+      | 'left'
+      | 'right'
+      | 'top-left-aligned'
+      | 'top-middle-aligned'
+      | 'top-right-aligned'
+      | 'bottom-left-aligned'
+      | 'bottom-middle-aligned'
+      | 'bottom-right-aligned';
+  }>;
+  productTourName: string;
   numberOfOnboardingTimes: number;
 }
 
-const Onboarding = ({ docId, numberOfOnboardingTimes }: OnboardingProps) => {
+const Onboarding = ({
+  docId,
+  steps,
+  productTourName,
+  numberOfOnboardingTimes
+}: OnboardingProps) => {
   const [stepEnabled, setStepEnabled] = useState(numberOfOnboardingTimes === 0);
-  const steps = [
-    {
-      // element: '#entire-screen', // If the entire div is targeted, it will be displayed in the center of the screen, but the targeted div (background) will be brightened.
-      title: 'Welcome!!',
-      intro:
-        'This is your dashboard. Once you have set up, everything will be displayed.'
-    },
-    {
-      element: '#user-settings',
-      title: 'How to go to User Settings page? (1)',
-      intro: 'You can jump to the User Settings page from sidebar.',
-      position: 'right'
-    },
-    {
-      element: '#gear-icon',
-      title: 'How to go to User Settings page? (2)',
-      intro: 'You can jump to the User Settings page from gear icons as well.',
-      position: 'right'
-    },
-    {
-      element: '#profile-list',
-      title: 'Your Profile',
-      intro: 'You can set up your profile in the User Settings page.',
-      position: 'right'
-    },
-    {
-      element: '#card-list',
-      title: 'Your Numbers',
-      intro:
-        'Aggregate settings from each service can be configured on the User Settings page.',
-      position: 'left'
-    },
-    {
-      element: '#start-tutorial',
-      title: 'Product Tour Later?',
-      intro:
-        'You can view this product tour at any time by pressing this button.',
-      position: 'bottom'
-    }
-  ];
-  const productTourName = 'dashboard';
   const [numberOfTimesCompleted, setNumberOfTimesCompleted] = useState(
     numberOfOnboardingTimes
   );
@@ -107,7 +89,7 @@ const Onboarding = ({ docId, numberOfOnboardingTimes }: OnboardingProps) => {
     doneLabel: 'Done',
     overlayOpacity: 0.5,
     overlayColor: '#000',
-    // tooltipPosition: 'auto', // auto, top, bottom, left, right, bottom-left-aligned, bottom-middle-aligned, bottom-right-aligned, top-left-aligned, top-middle-aligned, top-right-aligned
+    // tooltipPosition: 'auto',
     scrollToElement: true, // Default is true
     scrollTo: 'tooltip', // Default is 'element'
     helperElementPadding: 10

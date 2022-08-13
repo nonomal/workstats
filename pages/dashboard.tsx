@@ -13,7 +13,8 @@ import CardList from '../components/cards/CardList';
 import Avatar from '../components/common/Avatar';
 import ButtonList from '../components/buttons/ButtonList';
 import SpecifyPeriodFromTo from '../components/buttons/SpecifyPeriodFromTo';
-import Onboarding from '../components/onboarding/dashboard-tour';
+import Onboarding from '../components/onboarding/product-tour';
+import Steps from '../constants/dashboardTourSteps.json';
 
 // Services
 import { getAUserDoc, getANumbersDoc } from '../services/getDocFromFirestore';
@@ -96,6 +97,9 @@ export default function Dashboard({
           </div>
           <Onboarding
             docId={uid}
+            // @ts-ignore
+            steps={Steps}
+            productTourName={'dashboard'}
             numberOfOnboardingTimes={numberOfOnboardingTimes}
           />
         </main>

@@ -1,0 +1,39 @@
+[
+  {
+    "title": "Welcome!!",
+    "intro":
+      "This is your dashboard. Once you have set up, everything will be displayed."
+  },
+  {
+    "element": "#user-settings",
+    "title": "How to go to User Settings page? (1)",
+    "intro": "You can jump to the User Settings page from sidebar.",
+    "position": "right"
+  },
+  {
+    "element": "#gear-icon",
+    "title": "How to go to User Settings page? (2)",
+    "intro": "You can jump to the User Settings page from gear icons as well.",
+    "position": "right"
+  },
+  {
+    "element": "#profile-list",
+    "title": "Your Profile",
+    "intro": "You can set up your profile in the User Settings page.",
+    "position": "right"
+  },
+  {
+    "element": "#card-list",
+    "title": "Your Numbers",
+    "intro":
+      "Aggregate settings from each service can be configured on the User Settings page.",
+    "position": "left"
+  },
+  {
+    "element": "#start-tutorial",
+    "title": "Product Tour Later?",
+    "intro":
+      "You can view this product tour at any time by pressing this button.",
+    "position": "bottom"
+  }
+]
