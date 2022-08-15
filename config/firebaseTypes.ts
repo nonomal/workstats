@@ -15,6 +15,7 @@ interface UserType extends Record<string, unknown> {
   avatarUrl?: string;
   birth?: Timestamp | number; // DB has Timestamp type but birth could be converted to number
   companyName?: string;
+  country?: string;
   department?: string;
   documentId?: string;
   firstName?: string;

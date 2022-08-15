@@ -13,7 +13,7 @@ const QuestionMark = ({ mt, mb, href }: QuestionMarkType) => {
       {/* Instead of opening a separate tab, it's too slow and doesn't take advantage of Next's good features. */}
       <a target='_blank' className=''>
         <button
-          className={`rounded-full text-center text-sm font-semibold text-blue-100 hover:text-white bg-gray-700 hover:bg-gray-600 w-5 h-5 mt-${mt} mb-${mb} ml-2`}
+          className={`rounded-full text-center text-base font-semibold text-blue-100 hover:text-white bg-gray-700 hover:bg-gray-600 w-6 h-6 mt-${mt} mb-${mb} ml-2`}
         >
           ?
         </button>

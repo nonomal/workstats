@@ -11,7 +11,6 @@ interface InputBoxType {
   placeholder?: string;
   // required?: boolean;
   value?: string | number | undefined;
-  width?: number;
 }
 
 const InputBox = ({
@@ -24,8 +23,7 @@ const InputBox = ({
   name,
   placeholder = 'a placeholder here',
   // required = false,
-  value = undefined,
-  width = 36
+  value = undefined
 }: InputBoxType) => {
   const [inputValue, setInputValue] = useState(value);
 
@@ -34,25 +32,23 @@ const InputBox = ({
   };
 
   return (
-    <>
-      <div className='px-3 py-1 mx-2 my-1'>
-        <label htmlFor={name} className='text-slate-800 pl-3'>
-          {label}
-        </label>
-        <input
-          type={inputType}
-          id={name}
-          max={max}
-          min={min}
-          name={name}
-          className={`${bgColor} text-gray-700 border border-gray-300 rounded-lg block w-${width} dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 px-2 py-1 pl-3 mt-1`}
-          placeholder={placeholder} // Placeholder is NOT recommended, see https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/number#placeholder
-          value={inputValue}
-          disabled={disabled}
-          onChange={(e) => handleInputOnChange(e)}
-        />
-      </div>
-    </>
+    <div className='px-1 md:px-3 py-1 md:py-1 mx-2 md:mx-1 my-0 md:my-1'>
+      <label htmlFor={name} className='text-slate-800 md:pl-3'>
+        {label}
+      </label>
+      <input
+        type={inputType}
+        id={name}
+        max={max}
+        min={min}
+        name={name}
+        className={`${bgColor} text-gray-700 border border-gray-300 rounded-lg block w-36 md:w-auto dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 px-2 py-1 md:pl-3 mt-1`}
+        placeholder={placeholder} // Placeholder is NOT recommended, see https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/number#placeholder
+        value={inputValue}
+        disabled={disabled}
+        onChange={(e) => handleInputOnChange(e)}
+      />
+    </div>
   );
 };
 

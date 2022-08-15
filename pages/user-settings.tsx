@@ -273,7 +273,7 @@ const useUserSettings = ({
   const numberOfOnboardingTimes = userDoc?.productTour?.userSettings || 0;
 
   return (
-    <>
+    <div className='px-4 md:px-5'>
       <Head>
         <title>User Settings - WorkStats</title>
         <meta
@@ -282,7 +282,7 @@ const useUserSettings = ({
         />
       </Head>
       <div className='flex'>
-        <div id='avatar' className='grid justify-items-center mt-5'>
+        <div id='avatar' className='hidden md:grid justify-items-center mt-5'>
           <Avatar userId={uid} />
           <button
             // type="submit"
@@ -295,7 +295,7 @@ const useUserSettings = ({
           </button>
         </div>
         <div id='basic-info' className='w-full'>
-          <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+          <h2 className='text-xl mt-8 mb-2 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
             Basic Information
           </h2>
           <form
@@ -310,82 +310,80 @@ const useUserSettings = ({
               label={'First Name'}
               name={'firstName'}
               placeholder={'Oliver'}
-              width={32}
               value={userDoc?.firstName}
             />
             <InputBox
               label={'Middle Name'}
               name={'middleName'}
               placeholder={'Alan'}
-              width={36}
               value={userDoc?.middleName}
             />
             <InputBox
               label={'Last Name'}
               name={'lastName'}
               placeholder={'Smith'}
-              width={36}
               value={userDoc?.lastName}
             />
             <InputBox
-              label={'Company Name'}
-              name={'companyName'}
-              placeholder={'Suchica, Inc.'}
-              width={36}
-              value={userDoc?.companyName}
+              label={'Role'}
+              name={'role'}
+              placeholder={'Product Manager'}
+              value={userDoc?.role}
             />
             <InputBox
-              label={'Department'}
-              name={'department'}
-              placeholder={'IT & Development'}
-              width={96}
-              value={userDoc?.department}
+              label={'Assigned Project'}
+              name={'assignedPj'}
+              placeholder={'New Business Development'}
+              value={userDoc?.assignedPj}
             />
             <InputBox
               label={'Rank'}
               name={'rank'}
               placeholder={'Director'}
-              width={36}
               value={userDoc?.rank}
+            />
+            <InputBox
+              label={'Department'}
+              name={'department'}
+              placeholder={'IT & Development'}
+              value={userDoc?.department}
             />
             <InputBox
               label={'Supervisor'}
               name={'supervisor'}
               placeholder={'A name here'}
-              width={36}
               value={userDoc?.supervisor}
             />
             <InputBox
               label={'Assessor'}
               name={'assessor'}
               placeholder={'A name here'}
-              width={36}
               value={userDoc?.assessor}
             />
             <InputBox
-              label={'Assigned Project'}
-              name={'assignedPj'}
-              placeholder={'New Business Development'}
-              width={96}
-              value={userDoc?.assignedPj}
+              label={'Company Name'}
+              name={'companyName'}
+              placeholder={'Suchica, Inc.'}
+              value={userDoc?.companyName}
             />
             <InputBox
-              label={'Role'}
-              name={'role'}
-              placeholder={'Product Manager'}
-              width={36}
-              value={userDoc?.role}
+              label={'Country'}
+              name={'country'}
+              placeholder={'United States of America'}
+              value={userDoc?.country}
             />
+            <div className='ml-2 md:ml-1 pl-1 md:pl-3'></div>
             <SubmitButton />
           </form>
         </div>
       </div>
       <div id='source-control'>
-        <div className='flex'>
-          <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+        <div className='h-9 md:h-10'></div>
+        <div className='flex flex-wrap'>
+          <h2 className='text-xl mb-2 md:mb-0 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
             Source Code / GitHub
           </h2>
-          <QuestionMark mt={9} mb={1} href='/help/how-to-get-github-info' />
+          <QuestionMark mt={1} mb={1} href='/help/how-to-get-github-info' />
           {isGithubAuthenticatedState ? (
             <DisconnectWithGithubButton
               label='Disconnect with GitHub'
@@ -405,64 +403,68 @@ const useUserSettings = ({
           target='_self'
           autoComplete='off'
         >
+          <div className='h-3 md:h-3'></div>
           <div className='flex flex-wrap items-center'>
-            <div className='ml-6 w-28'></div>
+            <div className='md:ml-6 md:w-28'></div>
             <InputBox
               label={'User ID'}
               name={'githubUserId'}
               inputType={'number'}
               placeholder={'4620828'}
-              width={36}
               value={userDoc?.github?.userId}
             />
             <InputBox
               label={'User Name'}
               name={'githubUserName'}
               placeholder={'oliversmith'}
-              width={36}
               value={userDoc?.github?.userName}
             />
             <InputBox
               label={'Access Token'}
               name={'githubAccessToken'}
               placeholder={'No Access Token is set'}
-              width={36}
               value={userDoc?.github?.accessToken}
               disabled={true}
               bgColor={'bg-gray-200'}
             />
           </div>
+          <div className='h-3 md:h-0'></div>
+          <h3 className='md:hidden text-lg ml-2 pl-1 w-32 underline underline-offset-1'>
+            Repository 1 :
+          </h3>
+          <div className='h-3 md:h-0'></div>
           <div className='flex flex-wrap items-center'>
-            <h3 className='ml-6 w-28'>Repository 1 :</h3>
+            <h3 className='hidden md:block md:ml-6 md:w-28'>Repository 1 :</h3>
             <InputBox
               label={'Repo Owner Name'}
               name={'githubRepoOwner1'}
               placeholder={'octocat'}
-              width={36}
               value={userDoc?.github?.repositories?.[0]?.owner}
             />
             <InputBox
               label={'Repo Name'}
               name={'githubRepo1'}
               placeholder={'hello-world'}
-              width={36}
               value={userDoc?.github?.repositories?.[0]?.repo}
             />
             <InputBox
               label={'Repo Visibility'}
               name={'githubRepoVisibility1'}
               placeholder={'Public or Private'}
-              width={36}
               value={userDoc?.github?.repositories?.[0]?.visibility}
             />
           </div>
+          <div className='h-3 md:h-0'></div>
+          <h3 className='md:hidden text-lg ml-2 pl-1 w-32 underline underline-offset-1'>
+            Repository 2 :
+          </h3>
+          <div className='h-3 md:h-0'></div>
           <div className='flex flex-wrap items-center'>
-            <h3 className='ml-6 w-28'>Repository 2 :</h3>
+            <h3 className='hidden md:block md:ml-6 md:w-28'>Repository 2 :</h3>
             <InputBox
               label={'Repo Owner Name'}
               name={'githubRepoOwner2'}
               placeholder={'octocat'}
-              width={36}
               value={userDoc?.github?.repositories?.[1]?.owner}
               disabled={true}
               bgColor={'bg-gray-200'}
@@ -471,7 +473,6 @@ const useUserSettings = ({
               label={'Repo Name'}
               name={'githubRepo2'}
               placeholder={'hello-world'}
-              width={36}
               value={userDoc?.github?.repositories?.[1]?.repo}
               disabled={true}
               bgColor={'bg-gray-200'}
@@ -480,21 +481,22 @@ const useUserSettings = ({
               label={'Repo Visibility'}
               name={'githubRepoVisibility2'}
               placeholder={'Public or Private'}
-              width={36}
               value={userDoc?.github?.repositories?.[1]?.visibility}
               disabled={true}
               bgColor={'bg-gray-200'}
             />
+            <div className='ml-2 md:ml-1 pl-1 md:pl-3'></div>
             <SubmitButton />
           </div>
         </form>
       </div>
       <div id='task-control'>
-        <div className='flex'>
-          <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+        <div className='h-9 md:h-10'></div>
+        <div className='flex flex-wrap'>
+          <h2 className='text-xl mb-2 md:mb-0 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
             Task Ticket / Asana
           </h2>
-          <QuestionMark mt={9} mb={1} href='/help/how-to-get-asana-info' />
+          <QuestionMark mt={1} mb={1} href='/help/how-to-get-asana-info' />
           {isAsanaAuthenticatedState ? (
             <DisconnectWithAsanaButton
               label='Disconnect with Asana'
@@ -515,21 +517,20 @@ const useUserSettings = ({
           target='_self'
           autoComplete='off'
         >
+          <div className='h-3 md:h-3'></div>
           <div className='flex flex-wrap items-center'>
-            <div className='ml-6 w-28'></div>
+            <div className='md:ml-6 md:w-28'></div>
             <InputBox
               label={'User ID'}
               name={'asanaUserId'}
               inputType={'number'}
               placeholder={'1200781652740141'}
-              width={48}
               value={userDoc?.asana?.userId}
             />
             <InputBox
               label={'Access Token'}
               name={'asanaAccessToken'}
               placeholder={'No Access Token is set'}
-              width={36}
               value={userDoc?.asana?.accessToken}
               disabled={true}
               bgColor={'bg-gray-200'}
@@ -538,38 +539,44 @@ const useUserSettings = ({
               label={'Refresh Token'}
               name={'asanaRefreshToken'}
               placeholder={'No Access Token is set'}
-              width={36}
               value={userDoc?.asana?.refreshToken}
               disabled={true}
               bgColor={'bg-gray-200'}
             />
           </div>
+          <div className='h-3 md:h-0'></div>
+          <h3 className='md:hidden text-lg ml-2 pl-1 w-32 underline underline-offset-1'>
+            Workspace 1 :
+          </h3>
+          <div className='h-3 md:h-0'></div>
           <div className='flex flex-wrap items-center'>
-            <h3 className='ml-6 w-28'>Workspace 1 :</h3>
+            <h3 className='hidden md:block md:ml-6 md:w-28'>Workspace 1 :</h3>
             <InputBox
               label={'Workspace ID'}
               name={'asanaWorkspaceId1'}
               inputType={'number'}
               placeholder={'1234567890123456'}
-              width={48}
               value={userDoc?.asana?.workspace?.[0]?.workspaceId}
             />
             <InputBox
               label={'Workspace Name'}
               name={'asanaWorkspaceName1'}
               placeholder={'Suchica'}
-              width={36}
               value={userDoc?.asana?.workspace?.[0]?.workspaceName}
             />
           </div>
+          <div className='h-3 md:h-0'></div>
+          <h3 className='md:hidden text-lg ml-2 pl-1 w-32 underline underline-offset-1'>
+            Workspace 2 :
+          </h3>
+          <div className='h-3 md:h-0'></div>
           <div className='flex flex-wrap items-center'>
-            <h3 className='ml-6 w-28'>Workspace 2 :</h3>
+            <h3 className='hidden md:block md:ml-6 md:w-28'>Workspace 2 :</h3>
             <InputBox
               label={'Workspace ID'}
               name={'asanaWorkspaceId2'}
               inputType={'number'}
               placeholder={'1234567890123456'}
-              width={48}
               value={userDoc?.asana?.workspace?.[1]?.workspaceId}
               disabled={true}
               bgColor={'bg-gray-200'}
@@ -578,21 +585,22 @@ const useUserSettings = ({
               label={'Workspace Name'}
               name={'asanaWorkspaceName2'}
               placeholder={'Suchica'}
-              width={36}
               value={userDoc?.asana?.workspace?.[1]?.workspaceName}
               disabled={true}
               bgColor={'bg-gray-200'}
             />
+            <div className='ml-2 md:ml-1 pl-1 md:pl-3'></div>
             <SubmitButton />
           </div>
         </form>
       </div>
       <div id='communication-activity-slack'>
-        <div className='flex'>
-          <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+        <div className='h-9 md:h-10'></div>
+        <div className='flex flex-wrap'>
+          <h2 className='text-xl mb-2 md:mb-0 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
             Communication Activity / Slack
           </h2>
-          <QuestionMark mt={9} mb={1} href='/help/how-to-get-slack-info' />
+          <QuestionMark mt={1} mb={1} href='/help/how-to-get-slack-info' />
           {isSlackAuthenticatedState ? (
             <DisconnectWithSlackButton
               label='Disconnect with Slack'
@@ -613,14 +621,18 @@ const useUserSettings = ({
           target='_self'
           autoComplete='off'
         >
-          <div className='flex items-center'>
-            <h3 className='ml-6 w-28'>Workspace 1 :</h3>
+          <div className='h-3 md:h-3'></div>
+          <h3 className='md:hidden text-lg ml-2 pl-1 w-32 underline underline-offset-1'>
+            Workspace 1 :
+          </h3>
+          <div className='h-3 md:h-0'></div>
+          <div className='flex flex-wrap items-center'>
+            <h3 className='hidden md:block md:ml-6 md:w-28'>Workspace 1 :</h3>
             <div className='flex flex-wrap'>
               <InputBox
                 label={'Workspace Name'}
                 name={'slackWorkspaceName1'}
                 placeholder={'Suchica'}
-                width={36}
                 value={userDoc?.slack?.workspace?.[0]?.workspaceName}
                 disabled={true}
                 bgColor={'bg-gray-200'}
@@ -629,7 +641,6 @@ const useUserSettings = ({
                 label={'Member ID'}
                 name={'slackWorkspaceMemberId1'}
                 placeholder={'U02DK80DN9H'}
-                width={36}
                 value={userDoc?.slack?.workspace?.[0]?.memberId}
                 disabled={true}
                 bgColor={'bg-gray-200'}
@@ -638,21 +649,24 @@ const useUserSettings = ({
                 label={'Access Token'}
                 name={'slackAccessToken1'}
                 placeholder={'No Access Token is set'}
-                width={36}
                 value={userDoc?.slack?.workspace?.[0]?.accessToken}
                 disabled={true}
                 bgColor={'bg-gray-200'}
               />
             </div>
           </div>
-          <div className='flex items-center'>
-            <h3 className='ml-6 w-28'>Workspace 2 :</h3>
+          <div className='h-3 md:h-0'></div>
+          <h3 className='md:hidden text-lg ml-2 pl-1 w-32 underline underline-offset-1'>
+            Workspace 2 :
+          </h3>
+          <div className='h-3 md:h-0'></div>
+          <div className='flex flex-wrap items-center'>
+            <h3 className='hidden md:block md:ml-6 md:w-28'>Workspace 2 :</h3>
             <div className='flex flex-wrap'>
               <InputBox
                 label={'Workspace Name'}
                 name={'slackWorkspaceName2'}
                 placeholder={'Suchica'}
-                width={36}
                 value={userDoc?.slack?.workspace?.[1]?.workspaceName}
                 disabled={true}
                 bgColor={'bg-gray-200'}
@@ -661,7 +675,6 @@ const useUserSettings = ({
                 label={'Member ID'}
                 name={'slackWorkspaceMemberId2'}
                 placeholder={'U02DK80DN9H'}
-                width={36}
                 value={userDoc?.slack?.workspace?.[1]?.memberId}
                 disabled={true}
                 bgColor={'bg-gray-200'}
@@ -670,7 +683,6 @@ const useUserSettings = ({
                 label={'Access Token'}
                 name={'slackAccessToken2'}
                 placeholder={'No Access Token is set'}
-                width={36}
                 value={userDoc?.slack?.workspace?.[1]?.accessToken}
                 disabled={true}
                 bgColor={'bg-gray-200'}
@@ -680,11 +692,12 @@ const useUserSettings = ({
         </form>
       </div>
       <div id='communication-activity-google'>
-        <div className='flex'>
-          <h2 className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+        <div className='h-9 md:h-10'></div>
+        <div className='flex flex-wrap'>
+          <h2 className='text-xl mb-2 md:mb-0 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
             Communication Activity / Google
           </h2>
-          <QuestionMark mt={9} mb={1} href='/help/how-to-get-google-info' />
+          <QuestionMark mt={1} mb={1} href='/help/how-to-get-google-info' />
           {isGoogleAuthenticatedState ? (
             <DisconnectWithGoogleButton
               label='Disconnect with Google'
@@ -705,14 +718,18 @@ const useUserSettings = ({
           target='_self'
           autoComplete='off'
         >
+          <div className='h-3 md:h-3'></div>
+          <h3 className='md:hidden text-lg ml-2 pl-1 w-32 underline underline-offset-1'>
+            Workspace 1 :
+          </h3>
+          <div className='h-3 md:h-0'></div>
           <div className='flex items-center'>
-            <h3 className='ml-6 w-28'>Workspace 1 :</h3>
+            <h3 className='hidden md:block md:ml-6 md:w-28'>Workspace 1 :</h3>
             <div className='flex flex-wrap'>
               <InputBox
                 label={'Gmail'}
                 name={'gmail1'}
                 placeholder={'nishio.hiroshi@suchica.com'}
-                width={36}
                 value={userDoc?.google?.workspace?.[0]?.gmail}
                 disabled={true}
                 bgColor={'bg-gray-200'}
@@ -721,7 +738,6 @@ const useUserSettings = ({
                 label={'User Name'}
                 name={'googleUserName1'}
                 placeholder={'Hiroshi Nishio'}
-                width={36}
                 value={userDoc?.google?.workspace?.[0]?.userName}
                 disabled={true}
                 bgColor={'bg-gray-200'}
@@ -730,7 +746,6 @@ const useUserSettings = ({
                 label={'Access Token'}
                 name={'googleAccessToken1'}
                 placeholder={'No Access Token is set'}
-                width={36}
                 value={userDoc?.google?.workspace?.[0]?.accessToken}
                 disabled={true}
                 bgColor={'bg-gray-200'}
@@ -739,7 +754,6 @@ const useUserSettings = ({
                 label={'Refresh Token'}
                 name={'googleRefreshToken1'}
                 placeholder={'No Access Token is set'}
-                width={36}
                 value={userDoc?.google?.workspace?.[0]?.refreshToken}
                 disabled={true}
                 bgColor={'bg-gray-200'}
@@ -756,7 +770,7 @@ const useUserSettings = ({
               target='_blank'
               rel='noreferrer noopener' // Must pair with target='_blank'
             >
-              <button className='text-xl mt-8 mb-2 ml-6 underline underline-offset-4'>
+              <button className='text-xl mt-8 mb-2 ml-2 pl-1 underline underline-offset-4'>
                 Cancel Membership
               </button>
             </a>
@@ -774,7 +788,7 @@ const useUserSettings = ({
             />
           </div>
         </div>
-        <p className='py-1 ml-6'>
+        <p className='py-1 ml-2 pl-1'>
           If you wish to cancel your membership to this service, please follow
           this link.
         </p>
@@ -787,7 +801,7 @@ const useUserSettings = ({
         productTourName={'userSettings'}
         numberOfOnboardingTimes={numberOfOnboardingTimes}
       />
-    </>
+    </div>
   );
 };
 

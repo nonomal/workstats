@@ -10,7 +10,7 @@ interface PropTypes {
 const RequestGoogleOAuthButton = ({ label, handleClick }: PropTypes) => {
   return (
     <button
-      className='w-auto h-8 flex bg-white ring-1 ring-gray-300 hover:ring-gray-500 ml-3 mt-7 pr-3 rounded place-items-center'
+      className='w-auto h-8 flex bg-white ring-1 ring-gray-300 hover:ring-gray-500 ml-3 mt-1 md:mt-0 pr-3 rounded place-items-center'
       onClick={handleClick}
     >
       <Image
