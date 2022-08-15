@@ -12,9 +12,9 @@
   },
   {
     "element": "#avatar",
-    "title": "Avatar",
+    "title": "Avatar (PC only)",
     "intro":
-      "Avatar registration and modification functions are under development. Thank you for your patience!",
+      "Avatar registration and modification functions are under development in PC. Thank you for your patience!",
     "position": "right"
   },
   {
@@ -26,7 +26,7 @@
   },
   {
     "element": "#task-control",
-    "title": "Task Control",
+    "title": "Task Control (Asana)",
     "intro":
       "Here&apos;s the setup for aggregating from Asana. First, just hit the 'Connect with Asana' button! Then fill in your user ID, workspace ID you want to retrieve, and its name. Of course, you can disconnect it later. Click '?' icon for more information.",
     "position": "bottom"
