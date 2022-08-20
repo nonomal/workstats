@@ -1,21 +1,24 @@
-// @ts-ignore
-const NumberOfReplies = ({ data }) => {
+interface PropTypes {
+  data: number;
+}
+
+const NumberOfLinesDeleted = ({ data }: PropTypes) => {
   return (
     <div className='bg-white shadow rounded-lg px-3 py-3 md:px-4 md:py-4 hover:bg-slate-200'>
       <div className='flex space-x-2 md:space-x-4 items-center'>
         <div>
-          <div className='bg-orange-50 rounded-full w-5 h-5 md:w-12 md:h-12 text-orange-400 flex justify-center items-center'>
+          <div className='bg-red-50 rounded-full w-5 h-5 md:w-12 md:h-12 text-red-400 flex justify-center items-center'>
             <svg
-              width='28'
-              height='28'
-              viewBox='0 0 20 20'
+              width='24px'
+              height='24px'
+              viewBox='0 0 24 24'
               fill='none'
               xmlns='http://www.w3.org/2000/svg'
             >
               <path
-                d='M19 16.685S16.775 6.953 8 6.953V2.969L1 9.542l7 6.69v-4.357c4.763-.001 8.516.421 11 4.81z'
+                d='M4 12L20 12'
                 stroke='currentColor'
-                strokeWidth='1.3'
+                strokeWidth='2'
                 strokeLinecap='round'
                 strokeLinejoin='round'
               />
@@ -23,16 +26,19 @@ const NumberOfReplies = ({ data }) => {
           </div>
         </div>
         <div>
-          <div className='text-gray-400 text-sm md:text-base'># of replies</div>
+          <div className='text-gray-400 text-sm md:text-base'>
+            # of lines deleted
+          </div>
           <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
-            {data.toLocaleString()} times
+            {data.toLocaleString()} lines
           </div>
         </div>
       </div>
       <div className='md:hidden text-xl font-bold text-gray-900'>
-        {data.toLocaleString()} times
+        {data.toLocaleString()} lines
       </div>
     </div>
   );
 };
-export default NumberOfReplies;
+
+export default NumberOfLinesDeleted;

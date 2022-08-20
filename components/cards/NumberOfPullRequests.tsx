@@ -4,8 +4,8 @@ interface PropTypes {
 
 const NumberOfPullRequests = ({ data }: PropTypes) => {
   return (
-    <div className='bg-white shadow rounded-lg p-3 md:p-4 hover:bg-slate-200'>
-      <div className='flex space-x-4 items-center'>
+    <div className='bg-white shadow rounded-lg px-3 py-3 md:px-4 md:py-4 hover:bg-slate-200'>
+      <div className='flex space-x-2 md:space-x-4 items-center'>
         <div>
           <div className='bg-amber-50 rounded-full w-5 h-5 md:w-12 md:h-12 text-amber-400 flex justify-center items-center'>
             <svg
@@ -37,12 +37,12 @@ const NumberOfPullRequests = ({ data }: PropTypes) => {
             # of pull reqs
           </div>
           <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
-            {data} times
+            {data.toLocaleString()} times
           </div>
         </div>
       </div>
       <div className='md:hidden text-xl font-bold text-gray-900'>
-        {data} times
+        {data.toLocaleString()} times
       </div>
     </div>
   );

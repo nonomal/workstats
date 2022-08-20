@@ -273,12 +273,16 @@ interface UpdInsGithubNumbersProps {
   numberOfCommitsAllPeriods: number;
   numberOfPullRequestsAllPeriods: number;
   numberOfReviewsAllPeriods: number;
+  numberOfLinesAddedAllPeriods: number;
+  numberOfLinesDeletedAllPeriods: number;
 }
 const UpdInsGithubNumbers = async ({
   docId,
   numberOfCommitsAllPeriods,
   numberOfPullRequestsAllPeriods,
-  numberOfReviewsAllPeriods
+  numberOfReviewsAllPeriods,
+  numberOfLinesAddedAllPeriods,
+  numberOfLinesDeletedAllPeriods
 }: UpdInsGithubNumbersProps) => {
   const docRef = doc(db, 'numbers', docId);
   const docData: NumbersType = {
@@ -291,6 +295,12 @@ const UpdInsGithubNumbers = async ({
       },
       numberOfReviews: {
         allPeriods: numberOfReviewsAllPeriods
+      },
+      numberOfLinesAdded: {
+        allPeriods: numberOfLinesAddedAllPeriods
+      },
+      numberOfLinesDeleted: {
+        allPeriods: numberOfLinesDeletedAllPeriods
       }
     }
   };

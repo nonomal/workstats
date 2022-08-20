@@ -30,7 +30,7 @@ interface UserType extends Record<string, unknown> {
     accessToken?: string;
   };
   google?: {
-    workspace: Array<{
+    workspace?: Array<{
       accessToken?: string;
       gmail?: string;
       refreshToken?: string;
@@ -55,59 +55,49 @@ interface UserType extends Record<string, unknown> {
   supervisor?: string;
 }
 
+interface NumbersByPeriodType extends Record<string, number | undefined> {
+  allPeriods?: number;
+  thisYear?: number;
+  lastYear?: number;
+  thisMonth?: number;
+  lastMonth?: number;
+  thisWeek?: number;
+  lastWeek?: number;
+}
+
 interface NumbersType extends Record<string, unknown> {
   asana?: {
-    numberOfTasks: {
-      allPeriods: number;
-    };
-    numberOfTasksClosed: {
-      allPeriods: number;
-    };
-    numberOfTasksOpen: {
-      allPeriods: number;
-    };
-    velocityPerDay: {
-      allPeriods: number;
-    };
-    velocityPerWeek: {
-      allPeriods: number;
-    };
-    estimatedCompletionDate: {
-      allPeriods: string;
+    numberOfTasks?: NumbersByPeriodType;
+    numberOfTasksClosed?: NumbersByPeriodType;
+    numberOfTasksOpen?: NumbersByPeriodType;
+    velocityPerDay?: NumbersByPeriodType;
+    velocityPerWeek?: NumbersByPeriodType;
+    estimatedCompletionDate?: {
+      allPeriods?: string;
+      thisYear?: string;
+      lastYear?: string;
+      thisMonth?: string;
+      lastMonth?: string;
+      thisWeek?: string;
+      lastWeek?: string;
     };
   };
   github?: {
-    numberOfCommits: {
-      allPeriods: number;
-    };
-    numberOfPullRequests: {
-      allPeriods: number;
-    };
-    numberOfReviews: {
-      allPeriods: number;
-    };
+    numberOfCommits?: NumbersByPeriodType;
+    numberOfPullRequests?: NumbersByPeriodType;
+    numberOfReviews?: NumbersByPeriodType;
+    numberOfLinesAdded?: NumbersByPeriodType;
+    numberOfLinesDeleted?: NumbersByPeriodType;
   };
   googleCalendar?: {
-    numberOfEvents: {
-      allPeriods: number;
-    };
-    totalTimeOfEvents: {
-      allPeriods: number;
-    };
+    numberOfEvents?: NumbersByPeriodType;
+    totalTimeOfEvents?: NumbersByPeriodType;
   };
   slack?: {
-    numberOfMentioned: {
-      allPeriods: number;
-    };
-    numberOfNewSent: {
-      allPeriods: number;
-    };
-    numberOfTotalSent: {
-      allPeriods: number;
-    };
-    numberOfReplies: {
-      allPeriods: number;
-    };
+    numberOfMentioned?: NumbersByPeriodType;
+    numberOfNewSent?: NumbersByPeriodType;
+    numberOfTotalSent?: NumbersByPeriodType;
+    numberOfReplies?: NumbersByPeriodType;
   };
 }
 

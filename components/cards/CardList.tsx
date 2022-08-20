@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 // import card components
 import NumberOfCommits from './NumberOfCommits';
 import NumberOfCloseTasks from './NumberOfCloseTasks';
+import NumberOfLinesAdded from './NumberOfLinesAdded';
+import NumberOfLinesDeleted from './NumberOfLinesDeleted';
 import NumberOfMeetings from './NumberOfMtgs';
 import NumberOfMentioned from './NumberOfMentioned';
 import NumberOfNewSent from './NumberOfNewSent';
@@ -17,6 +19,7 @@ import VelocityOfTaskClose from './VelocityOfTaskClose';
 // import services
 import GearIconLink from '../common/GearIcon';
 import {
+  GetNumberOfLinesOfCode,
   useNumberOfCommits,
   useNumberOfPullRequests,
   useNumberOfReviews
@@ -73,13 +76,19 @@ const CardList = ({
   uid
 }: PropTypes) => {
   const [numberOfCommits, setNumberOfCommits] = useState(
-    numbersDoc?.github?.numberOfCommits.allPeriods || 0
+    numbersDoc?.github?.numberOfCommits?.allPeriods || 0
   );
   const [numberOfPullRequests, setNumberOfPullRequests] = useState(
-    numbersDoc?.github?.numberOfPullRequests.allPeriods || 0
+    numbersDoc?.github?.numberOfPullRequests?.allPeriods || 0
   );
   const [numberOfReviews, setNumberOfReviews] = useState(
-    numbersDoc?.github?.numberOfReviews.allPeriods || 0
+    numbersDoc?.github?.numberOfReviews?.allPeriods || 0
+  );
+  const [numberOfLinesAdded, setNumberOfLinesAdded] = useState(
+    numbersDoc?.github?.numberOfLinesAdded?.allPeriods || 0
+  );
+  const [numberOfLinesDeleted, setNumberOfLinesDeleted] = useState(
+    numbersDoc?.github?.numberOfLinesDeleted?.allPeriods || 0
   );
   const numberOfCommitsCalc = useNumberOfCommits(
     githubOwnerName,
@@ -100,6 +109,21 @@ const CardList = ({
     githubAccessToken
   );
   useEffect(() => {
+    (async () => {
+      const { numberOfLinesAddedCalc, numberOfLinesDeletedCalc } =
+        await GetNumberOfLinesOfCode({
+          owner: githubOwnerName,
+          repo: githubRepoName,
+          githubUserId,
+          accessToken: githubAccessToken
+        });
+      setNumberOfLinesAdded(numberOfLinesAddedCalc);
+      setNumberOfLinesDeleted(numberOfLinesDeletedCalc);
+    })();
+  }, [githubOwnerName, githubRepoName, githubUserId, githubAccessToken]);
+
+  // console.log('numberOfLinesAddedCalc', numberOfLinesAddedCalc);
+  useEffect(() => {
     setNumberOfCommits(numberOfCommitsCalc);
     setNumberOfPullRequests(numberOfPullRequestsCalc);
     setNumberOfReviews(numberOfReviewsCalc);
@@ -110,28 +134,37 @@ const CardList = ({
       docId: uid,
       numberOfCommitsAllPeriods: numberOfCommits,
       numberOfPullRequestsAllPeriods: numberOfPullRequests,
-      numberOfReviewsAllPeriods: numberOfReviews
+      numberOfReviewsAllPeriods: numberOfReviews,
+      numberOfLinesAddedAllPeriods: numberOfLinesAdded,
+      numberOfLinesDeletedAllPeriods: numberOfLinesDeleted
     });
-  }, [numberOfCommits, numberOfPullRequests, numberOfReviews, uid]);
+  }, [
+    numberOfCommits,
+    numberOfLinesAdded,
+    numberOfLinesDeleted,
+    numberOfPullRequests,
+    numberOfReviews,
+    uid
+  ]);
 
   // Aggregate numbers from Asana
   const [numberOfTasks, setNumberOfTasks] = useState(
-    numbersDoc?.asana?.numberOfTasks.allPeriods || 0
+    numbersDoc?.asana?.numberOfTasks?.allPeriods || 0
   );
   const [numberOfTasksClosed, setNumberOfTasksClosed] = useState(
-    numbersDoc?.asana?.numberOfTasksClosed.allPeriods || 0
+    numbersDoc?.asana?.numberOfTasksClosed?.allPeriods || 0
   );
   const [numberOfTasksOpen, setNumberOfTasksOpen] = useState(
-    numbersDoc?.asana?.numberOfTasksOpen.allPeriods || 0
+    numbersDoc?.asana?.numberOfTasksOpen?.allPeriods || 0
   );
   const [velocityPerDay, setVelocityPerDay] = useState(
-    numbersDoc?.asana?.velocityPerDay.allPeriods || 0
+    numbersDoc?.asana?.velocityPerDay?.allPeriods || 0
   );
   const [velocityPerWeek, setVelocityPerWeek] = useState(
-    numbersDoc?.asana?.velocityPerWeek.allPeriods || 0
+    numbersDoc?.asana?.velocityPerWeek?.allPeriods || 0
   );
   const [estimatedCompletionDate, setEstimatedCompletionDate] = useState(
-    numbersDoc?.asana?.estimatedCompletionDate.allPeriods || '--'
+    numbersDoc?.asana?.estimatedCompletionDate?.allPeriods || '--'
   );
   const [asanaAccessToken, setAsanaAccessToken] = useState(
     asanaOAuthAccessToken
@@ -174,10 +207,10 @@ const CardList = ({
 
   // Aggregate numbers from Slack
   const [numberOfMentioned, setNumberOfMentioned] = useState(
-    numbersDoc?.slack?.numberOfMentioned.allPeriods || 0
+    numbersDoc?.slack?.numberOfMentioned?.allPeriods || 0
   );
   const [numberOfTotalSent, setNumberOfTotalSent] = useState(
-    numbersDoc?.slack?.numberOfTotalSent.allPeriods || 0
+    numbersDoc?.slack?.numberOfTotalSent?.allPeriods || 0
   );
   const numberOfTotalSentCalc = useSlackSearch({
     slackMemberId,
@@ -195,10 +228,10 @@ const CardList = ({
   }, [numberOfMentionedCalc, numberOfTotalSentCalc]);
   const slackChannelList = useSlackChannelList({ slackAccessToken });
   const [numberOfNewSent, setNumberOfNewSent] = useState(
-    numbersDoc?.slack?.numberOfNewSent.allPeriods || 0
+    numbersDoc?.slack?.numberOfNewSent?.allPeriods || 0
   );
   const [numberOfReplies, setNumberOfReplies] = useState(
-    numbersDoc?.slack?.numberOfReplies.allPeriods || 0
+    numbersDoc?.slack?.numberOfReplies?.allPeriods || 0
   );
   useEffect(() => {
     // Since this is an unnamed asynchronous function, it is enclosed in parentheses for immediate execution upon declaration
@@ -254,10 +287,10 @@ const CardList = ({
 
   // Aggregate numbers from Google Calendar
   const [numberOfEvents, setNumberOfEvents] = useState(
-    numbersDoc?.googleCalendar?.numberOfEvents.allPeriods || 0
+    numbersDoc?.googleCalendar?.numberOfEvents?.allPeriods || 0
   );
   const [TotalTimeOfEvents, setTotalTimeOfEvents] = useState(
-    numbersDoc?.googleCalendar?.totalTimeOfEvents.allPeriods || 0
+    numbersDoc?.googleCalendar?.totalTimeOfEvents?.allPeriods || 0
   );
   const [googleAccessToken, setGoogleAccessToken] = useState(
     googleOAuthAccessToken
@@ -303,6 +336,8 @@ const CardList = ({
         <NumberOfCommits data={numberOfCommits} />
         <NumberOfPullRequests data={numberOfPullRequests} />
         <NumberOfReviews data={numberOfReviews} />
+        <NumberOfLinesAdded data={numberOfLinesAdded} />
+        <NumberOfLinesDeleted data={numberOfLinesDeleted} />
       </div>
       <div id='asana-cards' className='flex'>
         <h2 className='text-xl mt-4 mb-2'>Tasks - Asana</h2>

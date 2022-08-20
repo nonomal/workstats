@@ -1,4 +1,12 @@
 import useSWR from 'swr';
+import {
+  ListPullRequestArgTypes,
+  ListPullRequestParamTypes,
+  ListPullRequestResponseItemTypes,
+  ListPullRequestsFilesPramTypes,
+  ListPullRequestsFilesQueryTypes,
+  ListPullRequestsFilesResponseItemTypes
+} from '../config/githubTypes';
 
 // HTTP endpoint v3 (REST API)
 const baseURL = 'https://api.github.com';
@@ -77,10 +85,10 @@ const useNumberOfCommits = (
         c: number; // number of commits
       }>;
     }
-    const filteredResponse = response.filter((item: ItemTypes) => {
+    const filteredResponse = response?.filter((item: ItemTypes) => {
       return item.author.id === githubUserId;
     });
-    const output: number = filteredResponse[0].total;
+    const output: number = filteredResponse?.[0].total;
     return output;
   };
   const { data, error } = useSWR(url, fetcher, options);
@@ -170,10 +178,10 @@ const useNumberOfPullRequests = ({
         closed_at: string;
         merged_at: string;
       }
-      const filteredResponse = response.filter((item: ItemTypes) => {
+      const filteredResponse = response?.filter((item: ItemTypes) => {
         return item.user.id === githubUserId;
       });
-      count = filteredResponse.length;
+      count = filteredResponse?.length;
       totalCount += count;
       pageCount++;
       params.page = pageCount;
@@ -238,9 +246,137 @@ const useNumberOfReviews = (
   }
 };
 
+// Create a list of pull request numbers
+// The official document is here https://docs.github.com/en/rest/reference/pulls#list-pull-requests
+const ListPullRequestNumbers = async ({
+  owner,
+  repo,
+  githubUserId,
+  state = 'closed', // Default is 'open'
+  sort = 'created', // Default is 'created'
+  direction = 'asc', // Default is 'desc'
+  per_page = 100, // Default is 30, max is 100
+  page = 1,
+  accessToken
+}: ListPullRequestArgTypes): Promise<number[]> => {
+  const params: ListPullRequestParamTypes = {
+    state,
+    sort,
+    direction,
+    per_page,
+    page
+  };
+  let query = Object.keys(params)
+    .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+    .join('&');
+  let url = `${baseURL}/repos/${owner}/${repo}/pulls?${query}`;
+
+  const headers = new Headers();
+  headers.append('Accept', 'application/vnd.github.v3+json');
+  accessToken && accessToken !== ''
+    ? headers.append('Authorization', `token ${accessToken}`)
+    : null;
+  let count = 0;
+  let listOfPullRequestNumbers: number[] = [];
+  let pageCount = 1;
+  do {
+    const response = await fetch(url, {
+      headers: headers
+    }).then((res) => res.json());
+    const filteredResponse = response
+      ?.filter((item: ListPullRequestResponseItemTypes) => {
+        return item.user.id === githubUserId;
+      })
+      ?.map((item: ListPullRequestResponseItemTypes) => {
+        return item.number;
+      }) as number[];
+    count = filteredResponse?.length ?? 0;
+    listOfPullRequestNumbers = [
+      ...listOfPullRequestNumbers,
+      ...filteredResponse
+    ];
+    pageCount++;
+    params.page = pageCount;
+    query = Object.keys(params)
+      .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+      .join('&');
+    url = `${baseURL}/repos/${owner}/${repo}/pulls?${query}`;
+  } while (count > 0);
+  return listOfPullRequestNumbers;
+};
+
+// Get the number of lines of code added and deleted
+// See this for more details: https://docs.github.com/en/rest/pulls/pulls#list-pull-requests-files
+const GetNumberOfLinesOfCode = async (
+  Props: ListPullRequestsFilesPramTypes
+) => {
+  // Assume no more than 100 commits per pull request. Since this is not normally considered in business operations. Therefore, there is no looping on the page.
+  const queryObject: ListPullRequestsFilesQueryTypes = {
+    per_page: 100, // max = 100
+    page: 1
+  };
+  const headers = new Headers();
+  headers.append('Accept', 'application/vnd.github+json');
+  Props.accessToken && Props.accessToken !== ''
+    ? headers.append('Authorization', `token ${Props.accessToken}`)
+    : null;
+  const query = Object.keys(queryObject)
+    .map((key) => `${key}=${encodeURIComponent(queryObject[key])}`)
+    .join('&');
+  const listOfPullRequestNumbers = await ListPullRequestNumbers({
+    owner: Props.owner,
+    repo: Props.repo,
+    githubUserId: Props.githubUserId,
+    accessToken: Props.accessToken
+  });
+  let totalLinesOfCodeAdded = 0;
+  let totalLinesOfCodeDeleted = 0;
+  for (const pullRequestNumber of listOfPullRequestNumbers) {
+    const url = `${baseURL}/repos/${Props.owner}/${Props.repo}/pulls/${pullRequestNumber}/files?${query}`;
+    const response: Array<ListPullRequestsFilesResponseItemTypes> = await fetch(
+      url,
+      {
+        headers
+      }
+    ).then((res) => res.json());
+
+    // Because there may be multiple commits per pull request.
+    const linesOfCodeAdded =
+      response
+        ?.filter(
+          (item: ListPullRequestsFilesResponseItemTypes) =>
+            item.filename !== 'package-lock.json'
+        )
+        ?.reduce(
+          (acc: number, item: ListPullRequestsFilesResponseItemTypes) =>
+            acc + item.additions,
+          0
+        ) || 0;
+    const linesOfCodeDeleted =
+      response
+        ?.filter(
+          (item: ListPullRequestsFilesResponseItemTypes) =>
+            item.filename !== 'package-lock.json'
+        )
+        ?.reduce(
+          (acc: number, item: ListPullRequestsFilesResponseItemTypes) =>
+            acc + item.deletions,
+          0
+        ) || 0;
+    totalLinesOfCodeAdded += linesOfCodeAdded;
+    totalLinesOfCodeDeleted += linesOfCodeDeleted;
+  }
+
+  return {
+    numberOfLinesAddedCalc: totalLinesOfCodeAdded,
+    numberOfLinesDeletedCalc: totalLinesOfCodeDeleted
+  };
+};
+
 export {
+  GetNumberOfLinesOfCode,
+  requestGithubUserIdentity,
   useNumberOfCommits,
   useNumberOfPullRequests,
-  useNumberOfReviews,
-  requestGithubUserIdentity
+  useNumberOfReviews
 };

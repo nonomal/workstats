@@ -4,8 +4,8 @@ interface PropTypes {
 
 const EstimatedDateOfCompletion = ({ date }: PropTypes) => {
   return (
-    <div className='bg-white shadow rounded-lg p-3 md:p-4 hover:bg-slate-200'>
-      <div className='flex space-x-4 items-center'>
+    <div className='bg-white shadow rounded-lg px-3 py-3 md:px-4 md:py-4 hover:bg-slate-200'>
+      <div className='flex space-x-2 md:space-x-4 items-center'>
         <div>
           <div className='bg-purple-50 rounded-full w-5 h-5 md:w-12 md:h-12 text-purple-400 flex justify-center items-center'>
             <svg
@@ -30,7 +30,7 @@ const EstimatedDateOfCompletion = ({ date }: PropTypes) => {
         </div>
         <div>
           <div className='text-gray-400 text-sm md:text-base'>
-            Est. cmpl. date
+            Est. completion
           </div>
           <div className='hidden md:contents md:text-2xl whitespace-nowrap md:font-bold md:text-gray-900'>
             {date ? date : '--'}

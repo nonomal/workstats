@@ -3,8 +3,8 @@ interface PropTypes {
 }
 const TotalTimeOfMeetings = ({ data }: PropTypes) => {
   return (
-    <div className='bg-white shadow rounded-lg p-3 md:p-4 hover:bg-slate-200'>
-      <div className='flex space-x-4 items-center'>
+    <div className='bg-white shadow rounded-lg px-3 py-3 md:px-4 md:py-4 hover:bg-slate-200'>
+      <div className='flex space-x-2 md:space-x-4 items-center'>
         <div>
           <div className='bg-lime-50 rounded-full w-5 h-5 md:w-12 md:h-12 text-lime-400 flex justify-center items-center'>
             <svg
@@ -34,12 +34,12 @@ const TotalTimeOfMeetings = ({ data }: PropTypes) => {
             Ttl time of mtgs
           </div>
           <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
-            {data} hours
+            {data.toLocaleString()} hours
           </div>
         </div>
       </div>
       <div className='md:hidden text-xl font-bold text-gray-900'>
-        {data} hours
+        {data.toLocaleString()} hours
       </div>
     </div>
   );
