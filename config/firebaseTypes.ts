@@ -63,6 +63,18 @@ interface NumbersByPeriodType extends Record<string, number | undefined> {
   lastMonth?: number;
   thisWeek?: number;
   lastWeek?: number;
+  customPeriods?: number;
+}
+
+interface StringsByPeriodType extends Record<string, string | undefined> {
+  allPeriods?: string;
+  thisYear?: string;
+  lastYear?: string;
+  thisMonth?: string;
+  lastMonth?: string;
+  thisWeek?: string;
+  lastWeek?: string;
+  customPeriods?: string;
 }
 
 interface NumbersType extends Record<string, unknown> {
@@ -72,15 +84,7 @@ interface NumbersType extends Record<string, unknown> {
     numberOfTasksOpen?: NumbersByPeriodType;
     velocityPerDay?: NumbersByPeriodType;
     velocityPerWeek?: NumbersByPeriodType;
-    estimatedCompletionDate?: {
-      allPeriods?: string;
-      thisYear?: string;
-      lastYear?: string;
-      thisMonth?: string;
-      lastMonth?: string;
-      thisWeek?: string;
-      lastWeek?: string;
-    };
+    estimatedCompletionDate?: StringsByPeriodType;
   };
   github?: {
     numberOfCommits?: NumbersByPeriodType;
@@ -101,4 +105,4 @@ interface NumbersType extends Record<string, unknown> {
   };
 }
 
-export type { UserType, NumbersType };
+export type { UserType, NumbersType, NumbersByPeriodType, StringsByPeriodType };
