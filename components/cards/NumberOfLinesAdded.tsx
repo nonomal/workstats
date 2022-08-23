@@ -4,7 +4,7 @@ interface PropTypes {
 
 const NumberOfLinesAdded = ({ data }: PropTypes) => {
   return (
-    <div className='bg-white shadow rounded-lg px-3 py-3 md:px-4 md:py-4 hover:bg-slate-200'>
+    <div className='bg-white shadow rounded-lg px-3 py-3 md:pl-4 md:pr-3 md:py-4 hover:bg-slate-200'>
       <div className='flex space-x-2 md:space-x-4 items-center'>
         <div>
           <div className='bg-green-50 rounded-full w-5 h-5 md:w-12 md:h-12 text-green-400 flex justify-center items-center'>

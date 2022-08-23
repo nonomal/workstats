@@ -30,12 +30,12 @@ const NumberOfOpenTasks = ({ number }: PropTypes) => {
             # of open tasks
           </div>
           <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
-            {number ? number.toLocaleString() : 0} times
+            {number ? number.toLocaleString() : 0} tasks
           </div>
         </div>
       </div>
       <div className='md:hidden text-xl font-bold text-gray-900'>
-        {number ? number.toLocaleString() : 0} times
+        {number ? number.toLocaleString() : 0} tasks
       </div>
     </div>
   );

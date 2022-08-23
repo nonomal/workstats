@@ -34,7 +34,7 @@ const NumberOfPullRequests = ({ data }: PropTypes) => {
         </div>
         <div>
           <div className='text-gray-400 text-sm md:text-base'>
-            # of pull reqs
+            # of pull requests
           </div>
           <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
             {data.toLocaleString()} times

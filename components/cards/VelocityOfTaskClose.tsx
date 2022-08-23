@@ -4,7 +4,7 @@ interface PropTypes {
 
 const VelocityOfTaskClose = ({ number }: PropTypes) => {
   return (
-    <div className='bg-white shadow rounded-lg px-3 py-3 md:px-4 md:py-4 hover:bg-slate-200'>
+    <div className='bg-white shadow rounded-lg px-3 py-3 md:pl-4 md:pr-3 md:py-4 hover:bg-slate-200'>
       <div className='flex space-x-2 md:space-x-4 items-center'>
         <div>
           <div className='bg-pink-50 rounded-full w-5 h-5 md:w-12 md:h-12 text-pink-400 flex justify-center items-center'>
@@ -33,12 +33,12 @@ const VelocityOfTaskClose = ({ number }: PropTypes) => {
           </div>
           <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
             {number ? number.toLocaleString() : 0}{' '}
-            <span className='md:text-xl'>times/wk</span>
+            <span className='md:text-xl'>tasks/wk</span>
           </div>
         </div>
       </div>
       <div className='md:hidden text-xl font-bold text-gray-900'>
-        {number ? number.toLocaleString() : 0} times/wk
+        {number ? number.toLocaleString() : 0} tasks/wk
       </div>
     </div>
   );
