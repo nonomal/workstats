@@ -3,8 +3,9 @@ import useSWR from 'swr';
 // This is useSWR's options, the document is here: https://swr.vercel.app/docs/options
 const options = {
   shouldRetryOnError: true, // Default is true. If this is false, it doesn't work because data returns undefined for some reason.
+  refreshInterval: 1000, // Default is 0, which means it doesn't refresh. It is set to refresh every 1000 milliseconds, but it does not seem to refresh extra if there is no change in the data.
   revalidateIfStale: true, // Default is true
-  // revalidateOnMount: false,
+  revalidateOnMount: true,
   revalidateOnFocus: true, // Default is true
   revalidateOnReconnect: true // Default is true
 };
@@ -49,13 +50,17 @@ const requestSlackUserIdentity = () => {
 interface SlackSearchTypes {
   slackMemberId: string;
   slackAccessToken: string;
-  searchMode: 'mentioned' | 'sent';
+  searchMode: 'mentioned' | 'sent' | 'replies';
+  since: string;
+  until: string;
 }
 
 const useSlackSearch = ({
   slackMemberId,
   slackAccessToken,
-  searchMode
+  searchMode,
+  since,
+  until
 }: SlackSearchTypes) => {
   const apiEndPoint = `/api/search-slack-${searchMode}`;
   const headers = new Headers();
@@ -63,7 +68,9 @@ const useSlackSearch = ({
   headers.append('Content-Type', 'application/json');
   const body = {
     slackMemberId,
-    slackAccessToken
+    slackAccessToken,
+    since,
+    until
   };
   const fetchOptions = {
     method: 'POST',

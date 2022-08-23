@@ -10,6 +10,8 @@ import {
 
 // HTTP endpoint v3 (REST API)
 const baseURL = 'https://api.github.com';
+
+// useSWR option details: https://swr.vercel.app/ja/docs/options
 const options = {
   shouldRetryOnError: false, // Default is true. Set to false due to small rate limit
   revalidateIfStale: false, // Default is true
@@ -51,175 +53,41 @@ const requestGithubUserIdentity = () => {
   window.location.href = url;
 };
 
-// Get a number of commits for a specific user
-// The official document is here https://docs.github.com/en/rest/metrics/statistics#get-all-contributor-commit-activity
-const useNumberOfCommits = (
-  owner: string,
-  repo: string,
-  githubUserId: number,
-  accessToken?: string // Unnecessary for public repositories and necessarily for private repositories
-) => {
-  const url = `${baseURL}/repos/${owner}/${repo}/stats/contributors`;
-  const headers = new Headers();
-  headers.append('Accept', 'application/vnd.github.v3+json');
-  accessToken && accessToken !== ''
-    ? headers.append('Authorization', `token ${accessToken}`)
-    : null;
-  const fetcher = async (url: string) => {
-    const response = await fetch(url, {
-      headers: headers
-    }).then((res) => res.json());
-
-    interface ItemTypes {
-      author: {
-        login: string;
-        id: number;
-        type: string;
-        site_admin: boolean;
-      };
-      total: number;
-      weeks: Array<{
-        w: number; // Start of the week, given as a Unix timestamp seconds
-        a: number; // number of additions
-        d: number; // number of deletions
-        c: number; // number of commits
-      }>;
-    }
-    const filteredResponse = response?.filter((item: ItemTypes) => {
-      return item.author.id === githubUserId;
-    });
-    const output: number = filteredResponse?.[0].total;
-    return output;
-  };
-  const { data, error } = useSWR(url, fetcher, options);
-
-  if (error) {
-    return 0;
-  } else if (!data) {
-    return 0;
-  } else {
-    return data;
-  }
-};
-
-// List pull requests
-// The official document is here https://docs.github.com/en/rest/reference/pulls#list-pull-requests
-interface NumberOfPullRequestsTypes {
-  owner: string;
-  repo: string;
-  githubUserId: number;
-  state?: 'open' | 'closed' | 'all'; // Default is 'open'
-  // head?: string;
-  // base?: string;
-  sort?: 'created' | 'updated' | 'popularity' | 'long-running'; // Default is 'created'
-  direction?: 'asc' | 'desc'; // Default is 'desc'
-  per_page?: number; // Default is 30, max is 100
-  page?: number; // Default is 1
-  accessToken?: string;
-}
-const useNumberOfPullRequests = ({
-  owner,
-  repo,
-  githubUserId,
-  state = 'closed', // Default is 'open'
-  sort = 'created', // Default is 'created'
-  direction = 'desc', // Default is 'desc'
-  per_page = 100, // Default is 30, max is 100
-  page = 1,
-  accessToken
-}: NumberOfPullRequestsTypes) => {
-  interface PramsTypes {
-    state: string;
-    sort: string;
-    direction: string;
-    per_page: number;
-    page: number;
-    [key: string]: string | number; // To avoid type error ts(7053) in params[key]
-  }
-  const params: PramsTypes = {
-    state,
-    sort,
-    direction,
-    per_page,
-    page
-  };
-  let query = Object.keys(params)
-    .map((key) => `${key}=${encodeURIComponent(params[key])}`)
-    .join('&');
-  const url = `${baseURL}/repos/${owner}/${repo}/pulls?${query}`;
-
-  // use useSWR function in Next.js
-  // The official document is here: https://swr.vercel.app/docs/data-fetching
-  const headers = new Headers();
-  headers.append('Accept', 'application/vnd.github.v3+json');
-  accessToken && accessToken !== ''
-    ? headers.append('Authorization', `token ${accessToken}`)
-    : null;
-  const fetcher = async (url: string) => {
-    let count = 0;
-    let totalCount = 0;
-    let pageCount = 1;
-    do {
-      const response = await fetch(url, {
-        headers: headers
-      }).then((res) => res.json());
-      interface ItemTypes {
-        id: number;
-        number: number;
-        state: string;
-        user: {
-          login: string;
-          id: number;
-          type: string;
-          site_admin: boolean;
-        };
-        created_at: string;
-        updated_at: string;
-        closed_at: string;
-        merged_at: string;
-      }
-      const filteredResponse = response?.filter((item: ItemTypes) => {
-        return item.user.id === githubUserId;
-      });
-      count = filteredResponse?.length;
-      totalCount += count;
-      pageCount++;
-      params.page = pageCount;
-      query = Object.keys(params)
-        .map((key) => `${key}=${encodeURIComponent(params[key])}`)
-        .join('&');
-      url = `${baseURL}/repos/${owner}/${repo}/pulls?${query}`;
-    } while (count > 0);
-    return totalCount;
-  };
-
-  const { data, error } = useSWR(url, fetcher, options);
-
-  if (error) {
-    return 0;
-  } else if (!data) {
-    return 0;
-  } else {
-    return data;
-  }
-};
-
 // Search for pull request data with reviewer
 // The official document is here https://docs.github.com/en/rest/reference/search#search-issues-and-pull-requests
-const useNumberOfReviews = (
-  owner: string,
-  repo: string,
-  githubUserName: string,
-  accessToken?: string
-): number => {
-  const params = {
-    q: `is:pr repo:${owner}/${repo} reviewed-by:${githubUserName}`,
+interface GitHubSearchTypes {
+  searchWhere:
+    | 'code'
+    | 'commits'
+    | 'issues'
+    | 'labels'
+    | 'repositories'
+    | 'topics'
+    | 'users';
+  searchQuery: string;
+  accessToken?: string; // Required for private repositories
+}
+const useGitHubSearch = ({
+  searchWhere,
+  searchQuery,
+  accessToken
+}: GitHubSearchTypes): number => {
+  interface ParamsTypes {
+    q: string; // Search query, see the details: https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests
+    sort?: string; // Default is 'best match', can be one of: comments, reactions, reactions-+1, reactions--1, reactions-smile, reactions-thinking_face, reactions-heart, reactions-tada, interactions, created, updated
+    order?: string; // Default is 'desc', can be 'asc' or 'desc'
+    per_page?: string; // Default is 30, max is 100
+    page?: string; // Default is 1
+    [key: string]: string | number | undefined; // To avoid type error ts(7053) in params[key]
+  }
+  const params: ParamsTypes = {
+    q: searchQuery, // `is:pr repo:${owner}/${repo} ${githubUserName} created:${createdSince}..${createdUntil}`, '..' means between
     per_page: '100', // max = 100
     page: '1'
   };
+  // @ts-ignore
   const query = new URLSearchParams(params);
-  const url = `${baseURL}/search/issues?${query}`;
-  // console.log(url);
+  const url = `${baseURL}/search/${searchWhere}?${query}`;
 
   const headers = new Headers();
   headers.append('Accept', 'application/vnd.github.v3+json');
@@ -236,10 +104,8 @@ const useNumberOfReviews = (
   const { data, error } = useSWR(url, fetcher, options);
 
   if (error) {
-    // console.log(`Failed to load number of reviews: ${error}`);
     return 0;
   } else if (!data) {
-    // console.log('Loading number of reviews...');
     return 0;
   } else {
     return data;
@@ -257,6 +123,8 @@ const ListPullRequestNumbers = async ({
   direction = 'asc', // Default is 'desc'
   per_page = 100, // Default is 30, max is 100
   page = 1,
+  createdSince, // milliseconds from ISO 8601 format, e.g. '2019-01-01T00:00:00Z'
+  createdUntil, // milliseconds from ISO 8601 format, e.g. '2019-01-01T00:00:00Z'
   accessToken
 }: ListPullRequestArgTypes): Promise<number[]> => {
   const params: ListPullRequestParamTypes = {
@@ -283,13 +151,18 @@ const ListPullRequestNumbers = async ({
     const response = await fetch(url, {
       headers: headers
     }).then((res) => res.json());
-    const filteredResponse = response
-      ?.filter((item: ListPullRequestResponseItemTypes) => {
-        return item.user.id === githubUserId;
-      })
-      ?.map((item: ListPullRequestResponseItemTypes) => {
-        return item.number;
-      }) as number[];
+    const filteredResponse: number[] =
+      response
+        ?.filter((item: ListPullRequestResponseItemTypes) => {
+          return (
+            item.user.id === githubUserId &&
+            Date.parse(item.created_at) >= createdSince &&
+            Date.parse(item.created_at) <= createdUntil
+          );
+        })
+        ?.map((item: ListPullRequestResponseItemTypes) => {
+          return item.number;
+        }) || [];
     count = filteredResponse?.length ?? 0;
     listOfPullRequestNumbers = [
       ...listOfPullRequestNumbers,
@@ -327,6 +200,8 @@ const GetNumberOfLinesOfCode = async (
     owner: Props.owner,
     repo: Props.repo,
     githubUserId: Props.githubUserId,
+    createdSince: Props.createdSince,
+    createdUntil: Props.createdUntil,
     accessToken: Props.accessToken
   });
   let totalLinesOfCodeAdded = 0;
@@ -338,7 +213,9 @@ const GetNumberOfLinesOfCode = async (
       {
         headers
       }
-    ).then((res) => res.json());
+    )
+      .then((res) => res.json())
+      .catch(() => []);
 
     // Because there may be multiple commits per pull request.
     const linesOfCodeAdded =
@@ -373,10 +250,4 @@ const GetNumberOfLinesOfCode = async (
   };
 };
 
-export {
-  GetNumberOfLinesOfCode,
-  requestGithubUserIdentity,
-  useNumberOfCommits,
-  useNumberOfPullRequests,
-  useNumberOfReviews
-};
+export { GetNumberOfLinesOfCode, requestGithubUserIdentity, useGitHubSearch };

@@ -1,9 +1,12 @@
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 interface SpecifyPeriodFixedTermTypes {
   currentTimeframe?: {
     timeframe: {
       label: string;
+      since: moment.Moment | undefined; // moment object
+      until: moment.Moment; // moment object
     };
     setTimeFrame({}): void; // func dispatchSetState
   };
@@ -29,7 +32,59 @@ const SpecifyPeriodFixedTerm = ({
   }, [currentTimeframe, label]);
 
   const handleOnClick = () => {
-    currentTimeframe?.setTimeFrame({ label: label });
+    switch (label) {
+      case 'Full':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: undefined,
+          until: moment()
+        });
+        break;
+      case 'This Year':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: moment().startOf('year'),
+          until: moment()
+        });
+        break;
+      case 'Last Year':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: moment().subtract(1, 'year').startOf('year'),
+          until: moment().subtract(1, 'year').endOf('year')
+        });
+        break;
+      case 'This Month':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: moment().startOf('month'),
+          until: moment()
+        });
+        break;
+      case 'Last Month':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: moment().subtract(1, 'month').startOf('month'),
+          until: moment().subtract(1, 'month').endOf('month')
+        });
+        break;
+      case 'This Week':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: moment().startOf('week'),
+          until: moment()
+        });
+        break;
+      case 'Last Week':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: moment().subtract(1, 'week').startOf('week'),
+          until: moment().subtract(1, 'week').endOf('week')
+        });
+        break;
+      default:
+        break;
+    }
   };
 
   return (

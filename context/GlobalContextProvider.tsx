@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { createContext, useContext, useState } from 'react';
 import timestampButtonList from '../constants/timestampButtonList.json';
 
@@ -6,6 +7,8 @@ export type GlobalContextObjectType = {
   currentTimeframe?: {
     timeframe: {
       label: string;
+      since: moment.Moment | undefined; // moment object
+      until: moment.Moment; // moment object
     };
     setTimeFrame({}): void; // func dispatchSetState
   };
@@ -26,7 +29,9 @@ type GlobalContextProps = {
 // define initial states
 const initialStates = {
   timestamp: {
-    label: timestampButtonList[0].label
+    label: timestampButtonList[0].label,
+    since: undefined,
+    until: moment()
   }
 };
 

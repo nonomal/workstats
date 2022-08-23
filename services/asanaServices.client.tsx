@@ -85,13 +85,25 @@ const refreshAccessToken = async (
   return output;
 };
 
-const useNumberOfTasks = (
-  asanaAccessToken: string,
-  asanaWorkspaceId: string,
-  asanaUserId: string,
-  asanaRefreshToken?: string,
-  uid?: string
-) => {
+interface NumberOfTasksTypes {
+  asanaAccessToken: string;
+  asanaWorkspaceId: string;
+  asanaUserId: string;
+  since: string; // ISO 8601 format, e.g. '2019-01-01T00:00:00Z'
+  until: string; // ISO 8601 format, e.g. '2019-01-01T00:00:00Z'
+  asanaRefreshToken?: string;
+  uid?: string;
+}
+
+const useNumberOfTasks = ({
+  asanaAccessToken,
+  asanaWorkspaceId,
+  asanaUserId,
+  since, // ISO 8601 format, e.g. '2019-01-01T00:00:00Z'
+  until, // ISO 8601 format, e.g. '2019-01-01T00:00:00Z'
+  asanaRefreshToken,
+  uid
+}: NumberOfTasksTypes) => {
   const token = asanaAccessToken;
   let newAsanaAccessToken = '';
   const myHeaders = new Headers();
@@ -102,6 +114,8 @@ const useNumberOfTasks = (
   params.workspace = asanaWorkspaceId;
   params.assignee = asanaUserId;
   params.opt_fields = 'completed,completed_at,created_at';
+  params.completed_since = since;
+
   interface item {
     completed: boolean;
     completed_at: string;
@@ -135,38 +149,41 @@ const useNumberOfTasks = (
       })
       .catch((err) => console.log({ err }));
 
+    // Aggregate the number of tasks
     const numberOfAll: number = response.data?.length
       ? response.data.length
       : 0;
-
-    const numberOfClosed: number = response['data']?.filter((item: item) => {
-      return item['completed'] === true;
-    })?.length;
+    const numberOfClosed: number =
+      response.data?.filter((item: item) => {
+        return item.completed === true && item.completed_at <= until;
+      })?.length || 0;
     const numberOfOpened: number =
-      numberOfAll - numberOfClosed ? numberOfAll - numberOfClosed : 0;
+      response.data?.filter((item: item) => {
+        return item.completed === false;
+      })?.length || 0;
 
-    // Get the earliest created_at date
-    // See the MDN docs here, https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+    // Calculate velocity and estimated completion date
     const now = moment().toISOString();
-    const earliestCreatedAt: string = response['data']?.reduce(
+    const earliestCreatedAt: string = response.data?.reduce(
       (earliest: string, item: item) => {
-        if (item.created_at < earliest) {
-          return item.created_at;
-        }
+        if (item.created_at < earliest) return item.created_at;
         return earliest;
       },
       now // Initial value
     );
-    const durationDays = moment(now).diff(earliestCreatedAt, 'days', true);
+    // Basically, "since" is used, but if the period is "Full", "since" is not used.
+    const startDate = earliestCreatedAt <= since ? since : earliestCreatedAt;
+    const durationDays = moment(until).diff(startDate, 'days', true);
     const velocityPerDays = Math.round(numberOfClosed / durationDays)
       ? Math.round((numberOfClosed / durationDays) * 10) / 10
       : 0; // Daily basis including Saturdays and Sundays
-    const remainingDevDays = Math.round(numberOfOpened / velocityPerDays)
+    const remainingDays = Math.round(numberOfOpened / velocityPerDays)
       ? Math.round(numberOfOpened / velocityPerDays)
       : 0;
+    // I'm adding the number of remaining days given at a rate that includes weekends, so you don't have to take weekdays or weekends into account.
     const estimatedCompletionDate = moment()
-      .add(remainingDevDays, 'days')
-      .format('MMM D YYYY');
+      .add(remainingDays, 'days')
+      .format('ll');
 
     const output = {
       asanaAccessToken: newAsanaAccessToken
@@ -188,6 +205,9 @@ const useNumberOfTasks = (
   };
 
   const { data, error } = useSWR(asanaUrl, fetcher, {
+    shouldRetryOnError: true, // Default is true
+    revalidateIfStale: true, // Default is true
+    // revalidateOnMount: false,
     revalidateOnFocus: true, // Don't revalidate on focus because a new user has not set up their asana profile yet
     revalidateOnReconnect: true
   });

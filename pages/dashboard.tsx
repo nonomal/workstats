@@ -12,7 +12,7 @@ import ProfileList from '../components/common/ProfileList';
 import CardList from '../components/cards/CardList';
 import Avatar from '../components/common/Avatar';
 import ButtonList from '../components/buttons/ButtonList';
-import SpecifyPeriodFromTo from '../components/buttons/SpecifyPeriodFromTo';
+// import SpecifyPeriodFromTo from '../components/buttons/SpecifyPeriodFromTo';
 import Onboarding from '../components/onboarding/product-tour';
 import Steps from '../constants/dashboardTourSteps.json';
 
@@ -75,7 +75,7 @@ export default function Dashboard({
           </div>
           <div>
             <ButtonList />
-            <SpecifyPeriodFromTo />
+            {/* <SpecifyPeriodFromTo /> */}
             <CardList
               asanaWorkspaceId={asanaWorkspaceId}
               asanaUserId={asanaUserId}

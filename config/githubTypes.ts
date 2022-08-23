@@ -10,6 +10,8 @@ interface ListPullRequestArgTypes {
   direction?: 'asc' | 'desc'; // Default is 'desc'
   per_page?: number; // Default is 30, max is 100
   page?: number; // Default is 1
+  createdSince: number; // milliseconds from ISO 8601 format, e.g. '2019-01-01T00:00:00Z'
+  createdUntil: number; // milliseconds from ISO 8601 format, e.g. '2019-01-01T00:00:00Z'
   accessToken?: string;
 }
 
@@ -45,8 +47,8 @@ interface ListPullRequestsFilesPramTypes
   repo: string; // A path parameter. The repository name.
   // number: number; // A path parameter. The pull request number will be obtained from other method.
   githubUserId: number; // The GitHub user id.
-  createdSince?: string; // YYYY-MM-DD
-  createdUntil?: string; // YYYY-MM-DD
+  createdSince: number; // milliseconds from ISO 8601 format, e.g. '2019-01-01T00:00:00Z'
+  createdUntil: number; // milliseconds from ISO 8601 format, e.g. '2019-01-01T00:00:00Z'
   accessToken?: string;
 }
 interface ListPullRequestsFilesQueryTypes extends Record<string, number> {

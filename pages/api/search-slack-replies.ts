@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // Rate limit is Tier 2: 20+ requests per minute.
 const SearchSlack = async (req: NextApiRequest, res: NextApiResponse) => {
   // To know more query, see https://slack.com/help/articles/202528808-Search-in-Slack
-  const url = `https://slack.com/api/search.messages?query=from:@${req.body.slackMemberId}+after:${req.body.since}+before:${req.body.until}`;
+  const url = `https://slack.com/api/search.messages?query=from:@${req.body.slackMemberId}+after:${req.body.since}+before:${req.body.until}+is:thread`;
   const response = await fetch(url, {
     method: 'GET',
     headers: {
