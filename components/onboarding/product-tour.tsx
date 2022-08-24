@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { handleSubmitProductTour } from '../../services/setDocToFirestore';
 import StartTutorial from './start-tutorial';
 
@@ -39,15 +39,22 @@ const Onboarding = ({
   productTourName,
   numberOfOnboardingTimes
 }: OnboardingProps) => {
-  const [stepEnabled, setStepEnabled] = useState(numberOfOnboardingTimes === 0);
+  // Workaround for the popup position of the first step to poke through to the upper left and not center correctly when transitioning from another page. Reloading is not a problem.
+  const [stepEnabled, setStepEnabled] = useState(false);
+  useEffect(() => {
+    if (numberOfOnboardingTimes === 0) setStepEnabled(true);
+  }, [numberOfOnboardingTimes]);
+
   const [numberOfTimesCompleted, setNumberOfTimesCompleted] = useState(
     numberOfOnboardingTimes
   );
   const onExit = async (stepIndex: number) => {
+    // If you exit the tour in any way, you must assign stepEnabled = false, otherwise the tour will not start when you press the "Start Tutorial" button
+    setStepEnabled(false);
+
     // It should be compared to steps.length -1, but at least in Windows, there is a weird quirk in the way the library counts indexes, so when there are n steps, the index just before Exit is somehow n.
     // In iOS, like Mac PC, iPad, and iPhone, stepIndex will be 'n - 1'.
     if (stepIndex === steps.length || stepIndex === steps.length - 1) {
-      setStepEnabled(false);
       const newNumberOfTimesCompleted = numberOfTimesCompleted + 1;
       setNumberOfTimesCompleted(newNumberOfTimesCompleted);
       await handleSubmitProductTour(
@@ -59,19 +66,15 @@ const Onboarding = ({
   };
   const onBeforeExit = (stepIndex: number) => {
     // For some reason, onExit is called when index = 0, and because of that, for some reason, step 1 is displayed twice, so prevent it. Instead, users cannot leave by pressing the escape button or off-screen during the first pop-up
-    if (stepIndex === 0) return false;
+    // Also added undefined. Couldn't figure out why, but it makes the behavior more stable.
+    if (stepIndex === undefined || stepIndex === 0) return false;
     return true;
   };
   // For testing purposes
   // const onAfterChange = (newStepIndex: number) => {
   //   console.log({ newStepIndex });
   // };
-  const onStart = () => {
-    // If stepEnabled remains true for some reason, the product tour cannot be restarted again, so force it to be false once and then set it to true.
-    if (stepEnabled === true) {
-      setStepEnabled(false);
-      setStepEnabled(true);
-    }
+  const handleClick = () => {
     setStepEnabled(true);
   };
   const options = {
@@ -107,7 +110,7 @@ const Onboarding = ({
         // onAfterChange={onAfterChange}
         options={options}
       />
-      <StartTutorial label='Start Tutorial' handleClick={onStart} />
+      <StartTutorial label='Start Tutorial' handleClick={handleClick} />
     </>
   );
 };

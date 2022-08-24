@@ -19,7 +19,10 @@ const Layout = ({ children }) => {
   return (
     <div className='md:flex bg-slate-50 w-full'>
       {isOpen ? (
-        <Sidebar handleClick={toggleMenu} />
+        <>
+          <div className='h-10 md:hidden'></div>
+          <Sidebar isMobile={isMobile} handleClick={toggleMenu} />
+        </>
       ) : (
         <HamburgerButton
           color='text-gray-800'
@@ -29,7 +32,13 @@ const Layout = ({ children }) => {
       )}
       <div>
         <LogOut />
-        <main>{children}</main>
+        <main
+          onClick={() => {
+            if (isMobile && isOpen) toggleMenu();
+          }}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );
