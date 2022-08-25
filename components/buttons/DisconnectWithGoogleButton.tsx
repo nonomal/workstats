@@ -15,7 +15,7 @@ const DisconnectWithGoogleButton = ({ label, uid, accessToken }: PropTypes) => {
 
   return (
     <button
-      className='w-auto h-7 bg-red-600 hover:bg-red-700 text-white font-semibold px-3 ml-3 mt-9 rounded-lg inline-block align-middle'
+      className='w-auto h-7 bg-red-600 hover:bg-red-700 text-white font-semibold px-3 ml-3 mt-1 md:mt-0 rounded-lg inline-block align-middle'
       onClick={async () => {
         await handleSubmitGoogleAccessToken(uid, '', '');
         // Deauthorize Google
