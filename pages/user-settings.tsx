@@ -325,6 +325,13 @@ const useUserSettings = ({
               value={userDoc?.lastName}
             />
             <InputBox
+              label={'Login Email'}
+              name={'email'}
+              placeholder={'xxx@xxx.xxx'}
+              disabled={true}
+              value={userDoc?.email}
+            />
+            <InputBox
               label={'Role'}
               name={'role'}
               placeholder={'Product Manager'}

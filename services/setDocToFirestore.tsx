@@ -1,10 +1,35 @@
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseClient';
 import { NumbersType, UserType } from '../config/firebaseTypes';
+import { getUserInfo } from './getDocFromFirestore';
 
-const createUserDoc = async (docId: string) => {
+const createUserDoc = async (
+  docId: string,
+  firstName?: string,
+  middleName?: string,
+  lastName?: string,
+  email?: string,
+  photoURL?: string
+  // displayName?: string
+) => {
   const docRef = doc(db, 'users', docId);
-  const docData: UserType = {};
+  const userInfo = await getUserInfo(docId);
+  const docData: UserType = {
+    firstName: userInfo.firstName || firstName || '',
+    middleName: userInfo.middleName || middleName || '',
+    lastName: userInfo.lastName || lastName || '',
+    email: userInfo.email || email || '',
+    photoURL: userInfo.photoURL || photoURL || ''
+    // Google's Gmail and User Name are items that users are not allowed to edit, so they should always be updated.
+    // google: {
+    //   workspace: [
+    //     {
+    //       gmail: email || '',
+    //       userName: displayName || ''
+    //     }
+    //   ]
+    // }
+  };
   const option = { merge: true };
   await setDoc(docRef, docData, option);
   return;

@@ -148,9 +148,12 @@ const ListPullRequestNumbers = async ({
   let listOfPullRequestNumbers: number[] = [];
   let pageCount = 1;
   do {
-    const response = await fetch(url, {
+    const response: Array<ListPullRequestResponseItemTypes> = await fetch(url, {
       headers: headers
     }).then((res) => res.json());
+    // If the API limit is exceeded, response === undefined and the next response.filter is not a function will result in an error, so avoid this.
+    if (response.length === undefined) break;
+
     const filteredResponse: number[] =
       response
         ?.filter((item: ListPullRequestResponseItemTypes) => {

@@ -1,12 +1,18 @@
 ## Issue
 
-
+1. 
 
 ## Solution
 
-
+1. 
 
 ## Evidence
+
+### Checklist
+
+- [ ] xxx
+- [ ] xxx
+- [ ] xxx
 
 ### For mobile screens;
 
@@ -16,24 +22,24 @@
 
 ### For desktop screens;
 
-|Before|
-|---|
-|---|
+Before
 
-|After|
-|---|
-|---|
+
+
+After
+
+
 
 ### Environment Variables Setting
 
-Do you require registration for the following console screens beside the source code? If so, please attach evidence of registration to each of the console screens below.
+Do you require registration for the following console screens beside the source code? If so, please attach evidence of registration to each of the console screens below. If not, just make the list below checked.
 
-- GitHub Actions: 
-- Vercel Hosting: 
-- Firebase Console: 
-- Google Cloud Platform: 
-- Asana Developer Console: 
-- Slack Developer Console: 
+- [ ] GitHub Actions
+- [ ] Vercel Hosting
+- [ ] Firebase Console
+- [ ] Google Cloud Platform
+- [ ] Asana Developer Console
+- [ ] Slack Developer Console
 
 ## Performance
 
@@ -52,16 +58,20 @@ For desktop screens,
 
 ## Documentation
 
-
+- [ ] Necessary
+- [ ] Unnecessary
 
 ## Help Pages
 
-
+- [ ] Necessary
+- [ ] Unnecessary
 
 ## Caveats
 
-
+- [ ] Yes, there is.
+- [ ] No, there isn't.
 
 ## References
 
-
+- [ ] Yes, there is.
+- [ ] No, there isn't.

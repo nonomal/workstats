@@ -1,6 +1,6 @@
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 
-const getAvatarUrl = (docId: string) => {
+const getAvatarURL = (docId: string) => {
   // Create a reference to the file we want to download.
   // The official document is here: https://firebase.google.com/docs/storage/web/download-files
   const storage = getStorage();
@@ -34,4 +34,4 @@ const getAvatarUrl = (docId: string) => {
   return avatarUrl;
 };
 
-export default getAvatarUrl;
+export default getAvatarURL;

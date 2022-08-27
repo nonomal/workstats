@@ -146,7 +146,10 @@ export const getServerSideProps: GetServerSideProps = async (
         assessor: userDoc?.assessor ? userDoc.assessor : '',
         assignedPj: userDoc?.assignedPj ? userDoc.assignedPj : '',
         role: userDoc?.role ? userDoc.role : '',
-        avatarUrl: userDoc?.avatarUrl ? userDoc.avatarUrl : ''
+        avatarUrl: userDoc?.avatarUrl ? userDoc.avatarUrl : '',
+        email: userDoc?.email ? userDoc.email : '',
+        company: userDoc?.company ? userDoc.company : '',
+        country: userDoc?.country ? userDoc.country : ''
       };
 
       // Parameters for Asana

@@ -18,6 +18,7 @@ interface UserType extends Record<string, unknown> {
   country?: string;
   department?: string;
   documentId?: string;
+  email?: string;
   firstName?: string;
   github?: {
     repositories?: Array<{
@@ -39,6 +40,7 @@ interface UserType extends Record<string, unknown> {
   };
   lastName?: string;
   middleName?: string;
+  photoURL?: string;
   productTour?: {
     dashboard?: number;
     userSettings?: number;

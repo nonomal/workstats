@@ -3,7 +3,11 @@
  **/
 const nextConfig = {
   images: {
-    domains: ['firebasestorage.googleapis.com', 'api.producthunt.com'],
+    domains: [
+      'firebasestorage.googleapis.com', // Photo URL from Firebase Storage
+      'api.producthunt.com', // Image URL from Product Hunt API
+      'lh3.googleusercontent.com' // Photo URL from Google account
+    ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: 'default-src "self"; script-src "none"; sandbox;'
   },
