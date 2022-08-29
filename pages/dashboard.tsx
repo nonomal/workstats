@@ -75,8 +75,10 @@ export default function Dashboard({
             <ProfileList profileList={profileList} />
           </div>
           <div>
-            <ButtonList />
-            {/* <SpecifyPeriodFromTo /> */}
+            <div id='time-periods'>
+              <ButtonList />
+              {/* <SpecifyPeriodFromTo /> */}
+            </div>
             <CardList
               asanaWorkspaceId={asanaWorkspaceId}
               asanaUserId={asanaUserId}

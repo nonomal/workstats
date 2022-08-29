@@ -12,9 +12,9 @@
   },
   {
     "element": "#avatar",
-    "title": "Avatar (PC only)",
+    "title": "Your Avatar (PC only)",
     "intro":
-      "Avatar registration and modification functions are under development in PC. Thank you for your patience!",
+      "A photo associated with your Google account will be set as default. Click here if you want to change it.",
     "position": "right"
   },
   {
@@ -54,7 +54,7 @@
   },
   {
     "element": "#start-tutorial",
-    "title": "Product Tour Later?",
+    "title": "Want to See This Tour Again?",
     "intro":
       "You can view this product tour at any time by pressing this button.",
     "position": "bottom"

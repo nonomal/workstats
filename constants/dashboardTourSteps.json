@@ -30,8 +30,14 @@
     "position": "left"
   },
   {
+    "element": "#time-periods",
+    "title": "Time Period",
+    "intro": "Specify a time period according to that you wish to look back on.",
+    "position": "bottom"
+  },
+  {
     "element": "#start-tutorial",
-    "title": "Product Tour Later?",
+    "title": "Want to See This Tour Again?",
     "intro":
       "You can view this product tour at any time by pressing this button.",
     "position": "bottom"
