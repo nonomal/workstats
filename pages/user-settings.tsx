@@ -384,9 +384,9 @@ const useUserSettings = ({
             />
             <InputBox
               label={'Company Name'}
-              name={'companyName'}
+              name={'company'}
               placeholder={'Suchica, Inc.'}
-              value={userDoc?.companyName}
+              value={userDoc?.company}
             />
             <InputBox
               label={'Country'}

@@ -59,7 +59,8 @@ const handleSubmitBasicInfo = async (
   const docData: UserType = {
     assessor: event.currentTarget.assessor.value,
     assignedPj: event.currentTarget.assignedPj.value,
-    companyName: event.currentTarget.companyName.value,
+    company: event.currentTarget.company.value,
+    country: event.currentTarget.country.value,
     department: event.currentTarget.department.value,
     firstName: event.currentTarget.firstName.value,
     lastName: event.currentTarget.lastName.value,
