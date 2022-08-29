@@ -71,6 +71,7 @@ export default function Dashboard({
         <main className='md:flex min-h-screen'>
           <div className='md:w-72'>
             <Avatar userId={uid} />
+            <div className='hidden md:block md:h-5'></div>
             <ProfileList profileList={profileList} />
           </div>
           <div>

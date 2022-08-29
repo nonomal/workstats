@@ -43,6 +43,13 @@ const createNumbersDoc = async (docId: string) => {
   return;
 };
 
+const updatePhotoURL = async (docId: string, photoURL: string) => {
+  const docRef = doc(db, 'users', docId);
+  const option = { merge: true };
+  await setDoc(docRef, { photoURL }, option);
+  return;
+};
+
 const handleSubmitBasicInfo = async (
   event: React.FormEvent<HTMLFormElement>,
   docId: string
@@ -455,6 +462,7 @@ export {
   handleSubmitGoogleAccessToken,
   handleSubmitProductTour,
   handleSubmitSurveyWhyYouLeave,
+  updatePhotoURL,
   UpdInsAsanaNumbers,
   UpdInsGithubNumbers,
   UpdInsGoogleCalendarNumbers,

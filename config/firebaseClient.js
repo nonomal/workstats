@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -17,9 +18,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 const db = getFirestore();
+const storage = getStorage();
 const auth = getAuth();
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 
-export { app, db, auth, googleProvider, githubProvider, analytics };
+export { app, db, storage, auth, googleProvider, githubProvider, analytics };

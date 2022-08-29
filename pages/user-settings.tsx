@@ -37,6 +37,7 @@ import { requestGoogleUserIdentity } from '../services/googleCalendar.client';
 import RequestGoogleOAuthButton from '../components/buttons/RequestGoogleOAuthButton';
 import Onboarding from '../components/onboarding/product-tour';
 import Steps from '../constants/userSettingsTourSteps.json';
+import uploadAnImageToFirebaseStorage from '../services/uploadAnImageToFirebaseStorage';
 
 interface UserSettingsProps {
   uid: string;
@@ -271,6 +272,7 @@ const useUserSettings = ({
   }, [googleAccessToken, googleRefreshToken, isGoogleAuthenticatedState, uid]);
 
   const numberOfOnboardingTimes = userDoc?.productTour?.userSettings || 0;
+  const [isUploaded, setIsUploaded] = useState(0);
 
   return (
     <div className='px-4 md:px-5'>
@@ -283,16 +285,29 @@ const useUserSettings = ({
       </Head>
       <div className='flex'>
         <div id='avatar' className='hidden md:grid justify-items-center mt-5'>
-          <Avatar userId={uid} />
-          <button
-            // type="submit"
-            className='text-blue-500 hover:underline hover:underline-offset-4'
-            onClick={() => {
-              console.log('Change icon button was clicked');
-            }}
-          >
-            Change
-          </button>
+          <Avatar userId={uid} isUploaded={isUploaded} />
+          <div>
+            <input
+              type='file'
+              accept='image/*'
+              id='avatar-upload'
+              className='block cursor-pointer rounded-lg w-64 py-0 mx-3 border border-gray-300 bg-white text-gray-700 file:cursor-pointer file:py-1 file:px-2 file:mr-3 file:border-0 file:border-r file:border-gray-200 file:text-slate-800 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-gray-500'
+              onChange={async (event) => {
+                const file = event.target.files?.[0];
+                file
+                  ? await uploadAnImageToFirebaseStorage({
+                      docId: uid,
+                      file,
+                      isUploaded,
+                      setIsUploaded
+                    })
+                  : null;
+              }}
+            />
+            <p className='px-2 mx-3 py-1 my-1 text-base text-gray-500'>
+              SVG, PNG, JPG or GIF files are available.
+            </p>
+          </div>
         </div>
         <div id='basic-info' className='w-full'>
           <h2 className='text-xl mt-8 mb-2 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
