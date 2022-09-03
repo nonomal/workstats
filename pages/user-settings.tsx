@@ -7,6 +7,7 @@ import nookies from 'nookies';
 import SettingsForAvatar from '../components/user-settings/SettingsForAvatar';
 import SettingsForBasicInfo from '../components/user-settings/SettingsForBasicInfo';
 import SettingsForGitHub from '../components/user-settings/SettingsForGitHub';
+import SettingsForAtlassian from '../components/user-settings/SettingsForAtlassian';
 import SettingsForAsana from '../components/user-settings/SettingsForAsana';
 import SettingsForSlack from '../components/user-settings/SettingsForSlack';
 import SettingsForGoogle from '../components/user-settings/SettingsForGoogle';
@@ -23,6 +24,7 @@ interface UserSettingsProps {
   uid: string;
   userDoc: UserType | null;
   isAsanaAuthenticated: boolean;
+  isAtlassianAuthenticated: boolean;
   isGithubAuthenticated: boolean;
   isGoogleAuthenticated: boolean;
   isSlackAuthenticated: boolean;
@@ -32,6 +34,7 @@ const useUserSettings = ({
   uid,
   userDoc,
   isAsanaAuthenticated,
+  isAtlassianAuthenticated,
   isGithubAuthenticated,
   isGoogleAuthenticated,
   isSlackAuthenticated
@@ -55,6 +58,11 @@ const useUserSettings = ({
         uid={uid}
         userDoc={userDoc}
         isGithubAuthenticated={isGithubAuthenticated}
+      />
+      <SettingsForAtlassian
+        uid={uid}
+        userDoc={userDoc}
+        isAtlassianAuthenticated={isAtlassianAuthenticated}
       />
       <SettingsForAsana
         uid={uid}
@@ -99,6 +107,11 @@ export const getServerSideProps: GetServerSideProps = async (
         userDoc?.github?.accessToken && userDoc?.github?.accessToken !== ''
           ? true
           : false;
+      const isAtlassianAuthenticated =
+        userDoc?.atlassian?.accessToken &&
+        userDoc?.atlassian?.accessToken !== ''
+          ? true
+          : false;
       const isAsanaAuthenticated =
         userDoc?.asana?.accessToken && userDoc?.asana?.accessToken !== ''
           ? true
@@ -119,6 +132,7 @@ export const getServerSideProps: GetServerSideProps = async (
           uid,
           userDoc,
           isAsanaAuthenticated,
+          isAtlassianAuthenticated,
           isGithubAuthenticated,
           isGoogleAuthenticated,
           isSlackAuthenticated

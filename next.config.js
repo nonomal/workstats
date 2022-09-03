@@ -11,17 +11,7 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: 'default-src "self"; script-src "none"; sandbox;'
   },
-  reactStrictMode: true
-  // webpack: (config, { isServer }) => {
-  //   // Fixes npm packages that depend on `fs` module
-  //   if (!isServer) {
-  //     config.node = {
-  //       fs: 'empty'
-  //     }
-  //   }
-
-  //   return config
-  // },
+  reactStrictMode: false // If true, React executes useEffect twice for bug detection. Hence, the access code exchange API with Atlassian will result in an error, so we set this to false.
 };
 
 module.exports = nextConfig;

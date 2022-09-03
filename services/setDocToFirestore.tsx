@@ -122,6 +122,48 @@ const handleSubmitSourceCode = async (
   return;
 };
 
+const handleSubmitAtlassianAccessToken = async (
+  docId: string,
+  accessToken: string,
+  accountId: string,
+  cloudId: string,
+  cloudName: string,
+  refreshToken: string
+) => {
+  const docRef = doc(db, 'users', docId);
+  const docData: UserType =
+    // If refreshToken is falsy and is not empty string then go to ?, otherwise go to :
+    !refreshToken && refreshToken !== ''
+      ? {
+          atlassian: {
+            accessToken: accessToken,
+            accountId: accountId,
+            organization: [
+              {
+                organizationId: cloudId,
+                organizationName: cloudName
+              }
+            ]
+          }
+        }
+      : {
+          atlassian: {
+            accessToken: accessToken,
+            accountId: accountId,
+            refreshToken: refreshToken,
+            organization: [
+              {
+                organizationId: cloudId,
+                organizationName: cloudName
+              }
+            ]
+          }
+        };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 const handleSubmitAsanaAccessToken = async (
   docId: string,
   accessToken: string,
@@ -456,6 +498,7 @@ export {
   handleSubmitBasicInfo,
   handleSubmitGithubAccessToken,
   handleSubmitSourceCode,
+  handleSubmitAtlassianAccessToken,
   handleSubmitAsanaAccessToken,
   handleSubmitTaskTicket,
   handleSubmitSlackAccessToken,

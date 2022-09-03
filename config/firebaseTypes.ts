@@ -12,6 +12,15 @@ interface UserType extends Record<string, unknown> {
   };
   assessor?: string;
   assignedPj?: string;
+  atlassian?: {
+    accountId?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    organization?: Array<{
+      organizationId?: string;
+      organizationName?: string;
+    }>;
+  };
   avatarUrl?: string;
   birth?: Timestamp | number; // DB has Timestamp type but birth could be converted to number
   company?: string;
