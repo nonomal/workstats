@@ -157,7 +157,7 @@ const SettingsForAtlassian = ({
       </div>
       <div className='h-3 md:h-3'></div>
       <div className='flex flex-wrap items-center'>
-        <div className='md:ml-6 md:w-28'></div>
+        <div className='md:ml-6 md:w-32'></div>
         <InputBox
           label={'Account ID'}
           name={'atlassianAccountId'}
@@ -184,12 +184,12 @@ const SettingsForAtlassian = ({
         />
       </div>
       <div className='h-3 md:h-0'></div>
-      <h3 className='md:hidden text-lg ml-2 pl-1 w-32 underline underline-offset-1'>
+      <h3 className='md:hidden text-lg ml-2 pl-1 w-36 underline underline-offset-1'>
         Organization 1 :
       </h3>
       <div className='h-3 md:h-0'></div>
       <div className='flex flex-wrap items-center'>
-        <h3 className='hidden md:block md:ml-6 md:w-28'>Organization 1 :</h3>
+        <h3 className='hidden md:block md:ml-6 md:w-32'>Organization 1 :</h3>
         <InputBox
           label={'Organization ID'}
           name={'atlassianOrganizationId1'}
@@ -208,12 +208,12 @@ const SettingsForAtlassian = ({
         />
       </div>
       <div className='h-3 md:h-0'></div>
-      <h3 className='md:hidden text-lg ml-2 pl-1 w-32 underline underline-offset-1'>
+      <h3 className='md:hidden text-lg ml-2 pl-1 w-36 underline underline-offset-1'>
         Organization 2 :
       </h3>
       <div className='h-3 md:h-0'></div>
       <div className='flex flex-wrap items-center'>
-        <h3 className='hidden md:block md:ml-6 md:w-28'>Organization 2 :</h3>
+        <h3 className='hidden md:block md:ml-6 md:w-32'>Organization 2 :</h3>
         <InputBox
           label={'Organization ID'}
           name={'atlassianOrganizationId2'}
