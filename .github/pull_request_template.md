@@ -11,8 +11,6 @@
 ### Checklist
 
 - [ ] xxx
-- [ ] xxx
-- [ ] xxx
 
 ### For mobile screens;
 
@@ -39,6 +37,7 @@ Do you require registration for the following console screens beside the source 
 - [ ] Firebase Console
 - [ ] Google Cloud Platform
 - [ ] Asana Developer Console
+- [ ] Atlassian Developer Console
 - [ ] Slack Developer Console
 
 ## Performance
@@ -55,6 +54,16 @@ For desktop screens,
 |Chrome Developer Console Network Tab (After)|
 |---|
 |---|
+
+### Core Web Vitals
+
+Before
+
+
+
+After
+
+
 
 ## Documentation
 
