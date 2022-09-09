@@ -125,9 +125,18 @@ const CardListForAsana = ({
         />
       </div>
       <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
-        <NumberOfCloseTasks number={numberOfTasksClosed} />
-        <NumberOfOpenTasks number={numberOfTasksOpen} />
+        <NumberOfCloseTasks
+          label='# of closed tasks'
+          unit='tasks'
+          number={numberOfTasksClosed}
+        />
+        <NumberOfOpenTasks
+          label='# of open tasks'
+          unit='tasks'
+          number={numberOfTasksOpen}
+        />
         <VelocityOfTaskClose
+          unit='tasks/wk'
           number={velocityPerWeek.toFixed(1)} // If the first decimal place is 0, it is converted to a string to keep the 0
         />
         <EstimatedDateOfCompletion date={estimatedCompletionDate} />

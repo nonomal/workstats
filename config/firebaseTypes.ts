@@ -108,6 +108,14 @@ interface NumbersType extends Record<string, unknown> {
     numberOfEvents?: NumbersByPeriodType;
     totalTimeOfEvents?: NumbersByPeriodType;
   };
+  jira?: {
+    numberOfIssues?: NumbersByPeriodType;
+    numberOfIssuesClosed?: NumbersByPeriodType;
+    numberOfIssuesOpen?: NumbersByPeriodType;
+    velocityPerBizDay?: NumbersByPeriodType;
+    velocityPerWeek?: NumbersByPeriodType;
+    estimatedCompletionDate?: StringsByPeriodType;
+  };
   slack?: {
     numberOfMentioned?: NumbersByPeriodType;
     numberOfNewSent?: NumbersByPeriodType;

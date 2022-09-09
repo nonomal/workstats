@@ -1,10 +1,11 @@
 // import card components
 import CardListForGithub from './CardListForGithub';
+import CardListForJira from './CardListForJira';
 import CardListForAsana from './CardListForAsana';
 import CardListForSlack from './CardListForSlack';
 import CardListForGoogleCalendar from './CardListForGoogleCalendar';
 
-// import configs and contexts
+// import configs
 import { NumbersType } from '../../config/firebaseTypes';
 
 interface PropTypes {
@@ -12,6 +13,9 @@ interface PropTypes {
   asanaUserId: string;
   asanaOAuthAccessToken: string;
   asanaRefreshToken: string;
+  atlassianAccessToken: string;
+  atlassianRefreshToken: string;
+  atlassianOrganizationId: string;
   githubOwnerName: string;
   githubRepoName: string;
   githubUserId: number;
@@ -30,6 +34,9 @@ const CardList = ({
   asanaUserId,
   asanaOAuthAccessToken,
   asanaRefreshToken,
+  atlassianAccessToken,
+  atlassianRefreshToken,
+  atlassianOrganizationId,
   githubOwnerName,
   githubRepoName,
   githubUserId,
@@ -50,6 +57,13 @@ const CardList = ({
         githubUserId={githubUserId}
         githubUserName={githubUserName}
         githubAccessToken={githubAccessToken}
+        numbersDoc={numbersDoc}
+        uid={uid}
+      />
+      <CardListForJira
+        organizationId={atlassianOrganizationId}
+        accessToken={atlassianAccessToken}
+        refreshToken={atlassianRefreshToken}
         numbersDoc={numbersDoc}
         uid={uid}
       />

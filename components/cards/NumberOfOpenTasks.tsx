@@ -1,8 +1,10 @@
 interface PropTypes {
+  label: string;
+  unit: string;
   number: number;
 }
 
-const NumberOfOpenTasks = ({ number }: PropTypes) => {
+const NumberOfOpenTasks = ({ label, unit, number }: PropTypes) => {
   return (
     <div className='bg-white shadow rounded-lg px-3 py-3 md:px-4 md:py-4 hover:bg-slate-200'>
       <div className='flex space-x-2 md:space-x-4 items-center'>
@@ -26,16 +28,14 @@ const NumberOfOpenTasks = ({ number }: PropTypes) => {
           </div>
         </div>
         <div>
-          <div className='text-gray-400 text-sm md:text-base'>
-            # of open tasks
-          </div>
+          <div className='text-gray-400 text-sm md:text-base'>{label}</div>
           <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
-            {number ? number.toLocaleString() : 0} tasks
+            {number ? number.toLocaleString() : 0} {unit}
           </div>
         </div>
       </div>
       <div className='md:hidden text-xl font-bold text-gray-900'>
-        {number ? number.toLocaleString() : 0} tasks
+        {number ? number.toLocaleString() : 0} {unit}
       </div>
     </div>
   );

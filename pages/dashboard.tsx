@@ -24,6 +24,9 @@ interface PropTypes {
   asanaUserId: string;
   asanaOAuthAccessToken: string;
   asanaRefreshToken: string;
+  atlassianAccessToken: string;
+  atlassianRefreshToken: string;
+  atlassianOrganizationId: string;
   githubOwnerName: string;
   githubRepoName: string;
   githubUserId: number;
@@ -44,6 +47,9 @@ export default function Dashboard({
   asanaUserId,
   asanaOAuthAccessToken,
   asanaRefreshToken,
+  atlassianAccessToken,
+  atlassianRefreshToken,
+  atlassianOrganizationId,
   githubOwnerName,
   githubRepoName,
   githubUserId,
@@ -84,6 +90,9 @@ export default function Dashboard({
               asanaUserId={asanaUserId}
               asanaOAuthAccessToken={asanaOAuthAccessToken}
               asanaRefreshToken={asanaRefreshToken}
+              atlassianAccessToken={atlassianAccessToken}
+              atlassianRefreshToken={atlassianRefreshToken}
+              atlassianOrganizationId={atlassianOrganizationId}
               githubOwnerName={githubOwnerName}
               githubRepoName={githubRepoName}
               githubUserId={githubUserId}
@@ -155,6 +164,18 @@ export const getServerSideProps: GetServerSideProps = async (
         country: userDoc?.country ? userDoc.country : ''
       };
 
+      // Parameters for Jira
+      const atlassianAccessToken = userDoc?.atlassian?.accessToken
+        ? userDoc.atlassian.accessToken
+        : null;
+      const atlassianRefreshToken = userDoc?.atlassian?.refreshToken
+        ? userDoc.atlassian.refreshToken
+        : null;
+      const atlassianOrganizationId = userDoc?.atlassian?.organization?.[0]
+        ?.organizationId
+        ? userDoc.atlassian.organization[0].organizationId
+        : null;
+
       // Parameters for Asana
       const asanaOAuthAccessToken = userDoc?.asana?.accessToken
         ? userDoc.asana.accessToken
@@ -210,6 +231,9 @@ export const getServerSideProps: GetServerSideProps = async (
           asanaWorkspaceId,
           asanaOAuthAccessToken,
           asanaRefreshToken,
+          atlassianAccessToken,
+          atlassianRefreshToken,
+          atlassianOrganizationId,
           githubRepoName,
           githubOwnerName,
           githubUserId,

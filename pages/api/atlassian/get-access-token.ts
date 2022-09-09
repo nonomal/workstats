@@ -14,7 +14,7 @@ interface bodyType {
   client_secret: string;
   code: string;
   redirect_uri: string;
-  // refresh_token: string; // Set if the access token has expired
+  refresh_token: string; // Set if the access token has expired
   [key: string]: string; // To avoid type error ts(7053) in params[key]
 }
 
@@ -30,8 +30,8 @@ const GetAtlassianAccessToken = async (
     client_secret: process.env.ATLASSIAN_CLIENT_SECRET || '',
     code: req.body.code,
     redirect_uri:
-      `${process.env.NEXT_PUBLIC_ORIGIN}/user-settings?atlassian=true` || ''
-    // refresh_token: req.body.refresh_token || ''
+      `${process.env.NEXT_PUBLIC_ORIGIN}/user-settings?atlassian=true` || '',
+    refresh_token: req.body.refresh_token || ''
   };
   const url = 'https://auth.atlassian.com/oauth/token';
 

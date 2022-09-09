@@ -164,6 +164,24 @@ const handleSubmitAtlassianAccessToken = async (
   return;
 };
 
+// Update Atlassian access token and refresh token when the access token expires.
+const updateAtlassianTokens = async (
+  docId: string,
+  accessToken: string,
+  refreshToken: string
+) => {
+  const docRef = doc(db, 'users', docId);
+  const docData: UserType = {
+    atlassian: {
+      accessToken: accessToken,
+      refreshToken: refreshToken
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 const handleSubmitAsanaAccessToken = async (
   docId: string,
   accessToken: string,
@@ -384,6 +402,52 @@ const UpdInsGithubNumbers = async ({
   return;
 };
 
+interface UpdInsJiraNumbersProps {
+  docId: string;
+  numberOfIssuesAllPeriods: number;
+  numberOfIssuesClosedAllPeriods: number;
+  numberOfIssuesOpenAllPeriods: number;
+  velocityPerBizDayAllPeriods: number;
+  velocityPerWeekAllPeriods: number;
+  estimatedCompletionDateAllPeriods: string;
+}
+const UpdInsJiraNumbers = async ({
+  docId,
+  numberOfIssuesAllPeriods,
+  numberOfIssuesClosedAllPeriods,
+  numberOfIssuesOpenAllPeriods,
+  velocityPerBizDayAllPeriods,
+  velocityPerWeekAllPeriods,
+  estimatedCompletionDateAllPeriods
+}: UpdInsJiraNumbersProps) => {
+  const docRef = doc(db, 'numbers', docId);
+  const docData: NumbersType = {
+    jira: {
+      numberOfIssues: {
+        allPeriods: numberOfIssuesAllPeriods
+      },
+      numberOfIssuesClosed: {
+        allPeriods: numberOfIssuesClosedAllPeriods
+      },
+      numberOfIssuesOpen: {
+        allPeriods: numberOfIssuesOpenAllPeriods
+      },
+      velocityPerBizDay: {
+        allPeriods: velocityPerBizDayAllPeriods
+      },
+      velocityPerWeek: {
+        allPeriods: velocityPerWeekAllPeriods
+      },
+      estimatedCompletionDate: {
+        allPeriods: estimatedCompletionDateAllPeriods
+      }
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 interface UpdInsAsanaNumbersProps {
   docId: string;
   numberOfTasksAllPeriods: number;
@@ -507,8 +571,10 @@ export {
   handleSubmitProductTour,
   handleSubmitSurveyWhyYouLeave,
   updatePhotoURL,
+  updateAtlassianTokens,
   UpdInsAsanaNumbers,
   UpdInsGithubNumbers,
   UpdInsGoogleCalendarNumbers,
+  UpdInsJiraNumbers,
   UpdInsSlackNumbers
 };

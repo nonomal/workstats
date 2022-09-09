@@ -35,23 +35,19 @@ const requestAtlassianUserIdentity = (uid: string) => {
   window.location.href = url;
 };
 
+// Refresh access token
 type ResponseData = {
   access_token: string;
-  expires_in: number;
-  token_type: string;
   refresh_token: string;
-  data: {
-    id: number;
-    gid: string;
-    name: string;
-    email: string;
-  };
+  expires_in: number; // expiry time of access_token in second
+  scope: string;
+  token_type: string; // like 'Bearer'
 };
 
 const refreshAccessToken = async (
   refreshToken: string
 ): Promise<ResponseData> => {
-  const url = '/api/get-atlassian-access-token';
+  const url = '/api/atlassian/get-access-token';
   const headers = new Headers();
   headers.append('Accept', 'application/json');
   headers.append('Content-Type', 'application/json');
@@ -69,4 +65,54 @@ const refreshAccessToken = async (
   return output;
 };
 
-export { requestAtlassianUserIdentity, refreshAccessToken };
+// Search issues in Jira with JQL
+interface ParamsTypes extends Record<string, string | number | boolean> {
+  jql: string;
+  startAt: number; // Default is 0
+  maxResults: number; // Default is 50
+  validateQuery: 'strict' | 'warn' | 'none' | 'true' | 'false'; // Default is strict
+  fields: string; // Default is all fields
+  // expand?: string[]; // Default is empty
+  // properties?: string[]; // Default is empty
+  // fieldsByKeys?: boolean; // Default is false
+}
+
+interface SearchIssuesProps {
+  atlassianAccessToken: string;
+  atlassianCloudId: string;
+  startAt: number;
+  maxResults: number;
+  jql: string; // https://support.atlassian.com/jira-service-management-cloud/docs/use-advanced-search-with-jira-query-language-jql/
+}
+
+const searchIssues = async ({
+  atlassianAccessToken,
+  atlassianCloudId,
+  startAt,
+  maxResults,
+  jql
+}: SearchIssuesProps) => {
+  const headers = new Headers();
+  headers.append('Accept', 'application/json');
+  headers.append('Authorization', 'Bearer ' + atlassianAccessToken);
+  const params: ParamsTypes = {
+    startAt, // Default is 0
+    maxResults, // Default is 50
+    validateQuery: 'strict', // Default is strict
+    fields: 'summary,status,assignee,creator,reporter,created,updated',
+    jql: jql
+  };
+  const queryString = Object.keys(params)
+    .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+    .join('&');
+  const url = `https://api.atlassian.com/ex/jira/${atlassianCloudId}/rest/api/3/search?${queryString}`;
+
+  // Get tasks completed
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: headers
+  }).then((res) => res.json());
+  return response;
+};
+
+export { searchIssues, requestAtlassianUserIdentity, refreshAccessToken };
