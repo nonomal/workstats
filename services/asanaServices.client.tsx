@@ -173,17 +173,23 @@ const useNumberOfTasks = ({
     );
     // Basically, "since" is used, but if the period is "Full", "since" is not used.
     const startDate = earliestCreatedAt <= since ? since : earliestCreatedAt;
-    const durationDays = moment(until).diff(startDate, 'days', true);
-    const velocityPerDays = Math.round(numberOfClosed / durationDays)
-      ? Math.round((numberOfClosed / durationDays) * 10) / 10
-      : 0; // Daily basis including Saturdays and Sundays
+    const durationDays =
+      moment(until).diff(startDate, 'days', true) > 0
+        ? moment(until).diff(startDate, 'days', true)
+        : 0; // true: floating point
+    const velocityPerDays =
+      Math.round((numberOfClosed / durationDays) * 10) / 10
+        ? Math.round((numberOfClosed / durationDays) * 10) / 10
+        : 0; // Daily basis including Saturdays and Sundays
     const remainingDays = Math.round(numberOfOpened / velocityPerDays)
       ? Math.round(numberOfOpened / velocityPerDays)
       : 0;
     // I'm adding the number of remaining days given at a rate that includes weekends, so you don't have to take weekdays or weekends into account.
-    const estimatedCompletionDate = moment()
-      .add(remainingDays, 'days')
-      .format('ll');
+    const estimatedCompletionDate =
+      moment().add(remainingDays, 'days').format('ll') ===
+      'undefined NaN, -0NaN'
+        ? '---'
+        : moment().add(remainingDays, 'days').format('ll');
 
     const output = {
       asanaAccessToken: newAsanaAccessToken
@@ -193,9 +199,10 @@ const useNumberOfTasks = ({
       numberOfClosed: numberOfClosed ? numberOfClosed : 0,
       numberOfOpened: numberOfOpened ? numberOfOpened : 0,
       durationDays: durationDays ? durationDays : 0,
-      velocityPerDays: Math.round((numberOfClosed / durationDays) * 7)
-        ? Math.round(((numberOfClosed / durationDays) * 70) / 5) / 10
-        : 0, // weekday basis
+      velocityPerDays:
+        Math.round(((numberOfClosed / durationDays) * 70) / 5) / 10
+          ? Math.round(((numberOfClosed / durationDays) * 70) / 5) / 10
+          : 0, // weekday basis
       velocityPerWeeks: Math.round((numberOfClosed / durationDays) * 7)
         ? Math.round((numberOfClosed / durationDays) * 70) / 10
         : 0,
