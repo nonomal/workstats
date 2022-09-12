@@ -25,8 +25,9 @@ const SettingsForAtlassian = ({
 }: SettingsForAtlassianProps) => {
   // If a user click 'Connect with xxxxx' button to agree to authenticate WorkStats with xxxxx scopes, a code will be passed to the redirect URL.
   const htmlParams = window.location.search;
+  // In Atlassian, consider that the position of code and state may change randomly
   const atlassianCode = htmlParams.startsWith('?atlassian=')
-    ? decodeURIComponent(htmlParams.split(/[=&]+/)[3]) // ['atlassian', 'true', 'code', 'codeValue']
+    ? new URLSearchParams(htmlParams).get('code')
     : undefined;
 
   // If atlassianCode is defined and isAtlassianAuthenticatedState is false, call /api/get-atlassian-access-token to exchange the code for an Atlassian access token
