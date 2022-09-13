@@ -7,7 +7,14 @@ const Footer = () => {
       <div className='grid grid-cols-2 md:flex text-base items-center justify-center'>
         <div className='grid grid-rows-5 gap-1 md:gap-2 md:w-40 py-2 px-2 my-2 mx-3'>
           <p className='border-b border-white pb-1'>Service</p>
-          <a className='rounded hover:bg-gray-700 hover:text-white'>About Us</a>
+          <a
+            className='rounded hover:bg-gray-700 hover:text-white'
+            href='https://www.linkedin.com/company/suchica/'
+            target='_blank'
+            rel='noreferrer noopener' // Must pair with target='_blank'
+          >
+            About Us
+          </a>
           <Link href='/terms-of-service'>
             <a className='rounded hover:bg-gray-700 hover:text-white'>
               Terms & Conditions

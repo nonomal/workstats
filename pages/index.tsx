@@ -9,6 +9,7 @@ import ProductHuntVote from '../components/buttons/ProductHunt';
 // Pictures
 import Dashboard from '../public/home-page/WorkStats_Dashboard2.png';
 import Dashboard_Mobile from '../public/home-page/WorkStats_Dashboard_Mobile.png';
+import JiraIcon from '../public/home-page/Jira-Logo.png';
 import AsanaIcon from '../public/home-page/Asana-Official-Logo.png';
 import SlackIcon from '../public/slack-svgrepo-com.svg';
 import GoogleCalendarIcon from '../public/google-calendar-svgrepo-com.svg';
@@ -19,11 +20,12 @@ import A_1on1_Meeting from '../public/home-page/A-1on1-meeting.jpg';
 import Issue1 from '../public/home-page/WorkStats_Dashboard_Issue1.png';
 import Issue2 from '../public/home-page/WorkStats_Dashboard_Issue2.png';
 import Issue3 from '../public/home-page/WorkStats_Dashboard_Issue3.png';
-import WorkStats_Users_By_Country from '../public/home-page/workstats-users-by-country.png';
+import WorkStats_Visitors_By_Country from '../public/home-page/workstats-visitors-by-country.png';
 import ProductHunt from '../public/home-page/Logo_ProductHunt.png';
 import BetaList from '../public/home-page/Logo_BetaList.png';
 import StartupBase from '../public/home-page/Logo_StartupBase.png';
 import Betafy from '../public/home-page/Logo_Betafy.png';
+import SaaSHub from '../public/home-page/Logo_SaaSHub.png';
 
 export default function HomePage() {
   const contentHead =
@@ -56,8 +58,18 @@ export default function HomePage() {
               width={30}
               height={30}
               layout='intrinsic'
-              alt='GitHub logo'
-              quality={75}
+              alt='GitHub'
+              quality={100}
+              priority={false}
+              placeholder='empty'
+            />
+            <Image
+              src={JiraIcon}
+              width={30}
+              height={30}
+              layout='intrinsic'
+              alt='Jira'
+              quality={100}
               priority={false}
               placeholder='empty'
             />
@@ -66,8 +78,8 @@ export default function HomePage() {
               width={30}
               height={30}
               layout='intrinsic'
-              alt='Asana logo'
-              quality={75}
+              alt='Asana'
+              quality={100}
               priority={false}
               placeholder='empty'
             />
@@ -76,8 +88,8 @@ export default function HomePage() {
               width={30}
               height={30}
               layout='intrinsic'
-              alt='Slack logo'
-              quality={75}
+              alt='Slack'
+              quality={100}
               priority={false}
               placeholder='empty'
             />
@@ -86,13 +98,13 @@ export default function HomePage() {
               width={30}
               height={30}
               layout='intrinsic'
-              alt='Google Calendar logo'
-              quality={75}
+              alt='Google Calendar'
+              quality={100}
               priority={false}
               placeholder='empty'
             />
           </div>
-          <LinkButton href='/dashboard' label='Get Started' />
+          <LinkButton href='/dashboard' label='Try For Free' />
         </div>
         <div className='hidden md:block md:w-8/12 m-4 rounded-2xl border border-slate-300'>
           <Image
@@ -447,13 +459,13 @@ export default function HomePage() {
       <div className='h-4 md:h-10'></div>
       <div className='text-xl md:text-3xl text-grey-800 p-2 m-2 text-center content-center place-items-center'>
         <p className='p-1 md:p-2'>
-          WorkStats visitors are in 44 countries worldwide like below.
+          WorkStats visitors come from 55 countries worldwide.
         </p>
       </div>
       <div className='flex place-content-center'>
         <div className='w-full md:w-9/12 m-4 rounded-2xl border border-slate-300'>
           <Image
-            src={WorkStats_Users_By_Country}
+            src={WorkStats_Visitors_By_Country}
             alt='A dashboard'
             layout='responsive'
             objectFit='contain'
@@ -470,7 +482,7 @@ export default function HomePage() {
       </h2>
       <div className='h-8 md:h-20'></div>
       <div className='flex place-content-center'>
-        <div className='grid grid-cols-4 gap-y-2 gap-x-4 md:gap-y-2 md:gap-x-14 w-9/12 md:w-6/12 text-center text-xl md:text-2xl text-grey-800'>
+        <div className='grid grid-cols-5 gap-y-2 gap-x-4 md:gap-y-2 md:gap-x-14 w-9/12 md:w-6/12 text-center text-xl md:text-2xl text-grey-800'>
           <a
             href='https://www.producthunt.com/products/workstats#workstats'
             target='_blank'
@@ -535,10 +547,27 @@ export default function HomePage() {
               className='h-10 rounded-full'
             />
           </a>
-          <p>Product Hunt</p>
-          <p>Beta List</p>
-          <p>Startup Base</p>
-          <p>Betafy</p>
+          <a
+            href='https://www.saashub.com/workstats-dev-alternatives'
+            target='_blank'
+            rel='noreferrer noopener' // Must pair with target='_blank'
+          >
+            <Image
+              src={SaaSHub}
+              alt='SaaSHub logo'
+              layout='responsive'
+              objectFit='cover'
+              quality={100}
+              priority={true}
+              placeholder='empty'
+              className='h-10 rounded-full'
+            />
+          </a>
+          <p className='flex items-center justify-center'>Product Hunt</p>
+          <p className='flex items-center justify-center'>Beta List</p>
+          <p className='flex items-center justify-center'>Startup Base</p>
+          <p className='flex items-center justify-center'>Betafy</p>
+          <p className='flex items-center justify-center'>SaaS Hub</p>
         </div>
       </div>
       <div className='h-4 md:h-10'></div>
@@ -555,7 +584,7 @@ export default function HomePage() {
         <p className='p-1 md:p-2'>Keep tracking your numbers.</p>
         <p className='p-1 md:p-2'>Take action to drive your numbers.</p>
         <div className='h-2 md:h-4'></div>
-        <LinkButton href='/dashboard' label='Get Started' />
+        <LinkButton href='/dashboard' label='Try For Free' />
       </div>
       <div className='h-12 md:h-32'></div>
     </div>
