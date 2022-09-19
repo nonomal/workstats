@@ -111,7 +111,9 @@ const searchIssues = async ({
   const response = await fetch(url, {
     method: 'GET',
     headers: headers
-  }).then((res) => res.json());
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
   return response;
 };
 

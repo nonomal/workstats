@@ -91,7 +91,7 @@ const CardListForJira = ({
       jql: jqlForNumberOfIssues
     }).then(async (res) => {
       // If res.code is 401, the access token is expired, so refresh it
-      if (res.code === 401) {
+      if (res?.code === 401) {
         // Refresh the access token
         const newToken = await refreshAccessToken(atlassianRefreshToken);
         const newAccessToken = newToken.access_token;
@@ -105,7 +105,7 @@ const CardListForJira = ({
       }
 
       // Otherwise, update the number of issues
-      if (res.total >= 0) setNumberOfIssues(res.total);
+      if (res?.total >= 0) setNumberOfIssues(res.total);
     });
 
     // Aggregate number of issues closed
@@ -117,7 +117,7 @@ const CardListForJira = ({
       maxResults: 1,
       jql: jqlForNumberOfIssuesClosed
     }).then((res) => {
-      if (res.total >= 0) setNumberOfIssuesClosed(res.total);
+      if (res?.total >= 0) setNumberOfIssuesClosed(res.total);
     });
 
     // Aggregate number of issues open as of now
@@ -130,7 +130,7 @@ const CardListForJira = ({
       maxResults: 1,
       jql: jqlForNumberOfIssuesOpen
     }).then((res) => {
-      if (res.total >= 0) setNumberOfIssuesOpen(res.total);
+      if (res?.total >= 0) setNumberOfIssuesOpen(res.total);
     });
   }, [
     atlassianAccessToken,
@@ -154,7 +154,7 @@ const CardListForJira = ({
       jql: jqlForEarliestCreatedDate
     }).then((res) => {
       // Specify the earliest created date and aggregate the duration of the period
-      const earliestCreatedDate = res.issues?.[0]?.fields.created; // YYYY-MM-DDTHH:mm:ss.SSSZ
+      const earliestCreatedDate = res?.issues?.[0]?.fields.created; // YYYY-MM-DDTHH:mm:ss.SSSZ
       const earliestCreatedDateFormatted =
         moment(earliestCreatedDate).format('YYYY-MM-DD');
       const startDate =
