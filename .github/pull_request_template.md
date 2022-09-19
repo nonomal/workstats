@@ -36,6 +36,7 @@ Do you require registration for the following console screens beside the source 
 - [ ] Vercel Hosting
 - [ ] Firebase Console
 - [ ] Google Cloud Platform
+- [ ] Microsoft Azure Console
 - [ ] Asana Developer Console
 - [ ] Atlassian Developer Console
 - [ ] Slack Developer Console
