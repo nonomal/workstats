@@ -143,7 +143,7 @@ const SettingsForAtlassian = ({
         <h2 className='text-xl mb-2 md:mb-0 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
           Task Ticket / Jira (Atlassian)
         </h2>
-        <QuestionMark mt={1} mb={1} href='/help/how-to-get-atlassian-info' />
+        <QuestionMark mt={1} mb={1} href='https://youtu.be/QYkGxnqln7Q' />
         {isAtlassianAuthenticatedState ? (
           <DisconnectWithAtlassianButton
             label='Disconnect with Atlassian'
