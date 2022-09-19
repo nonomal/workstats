@@ -45,6 +45,7 @@ const SettingsForBasicInfo = ({ uid, userDoc }: SettingsForBasicInfoProps) => {
           name={'email'}
           placeholder={'xxx@xxx.xxx'}
           disabled={true}
+          bgColor={'bg-gray-200'}
           value={userDoc?.email}
         />
         <InputBox
