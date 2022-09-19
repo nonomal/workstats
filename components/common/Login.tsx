@@ -11,10 +11,11 @@ import WorkStats from '../../public/fulllogo_transparent_nobuffer.png';
 import GoogleIcon from '@mui/icons-material/Google';
 import MicrosoftIcon from '../../public/home-page/Microsoft-Logo.png';
 import Image from 'next/image';
+import JiraIcon from '../../public/home-page/Jira-Logo.png';
 import AsanaIcon from '../../public/home-page/Asana-Official-Logo.png';
 import SlackIcon from '../../public/slack-svgrepo-com.svg';
 import GoogleCalendarIcon from '../../public/google-calendar-svgrepo-com.svg';
-import GitHubIcon2 from '../../public/github-svgrepo-com.svg';
+import GitHubIcon from '../../public/home-page/GitHub-Logo-64px.png';
 
 // Next related and Custom services
 import {
@@ -153,12 +154,22 @@ const Login = () => {
         </p>
         <div className='flex gap-3'>
           <Image
-            src={GitHubIcon2}
+            src={GitHubIcon}
             width={30}
             height={30}
             layout='intrinsic'
             alt='GitHub logo'
             quality={75}
+            priority={false}
+            placeholder='empty'
+          />
+          <Image
+            src={JiraIcon}
+            width={30}
+            height={30}
+            layout='intrinsic'
+            alt='Jira'
+            quality={100}
             priority={false}
             placeholder='empty'
           />
@@ -220,6 +231,9 @@ const Login = () => {
             <div className='w-2'></div>
             Login with Microsoft
           </button>
+          <p className='text-white px-4 text-sm md:text-lg text-center'>
+            * No credit card is required for free plan.
+          </p>
         </div>
       </div>
     </>
