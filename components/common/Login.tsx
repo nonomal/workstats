@@ -1,10 +1,15 @@
 // firebase related
 import { signInWithPopup } from '@firebase/auth';
-import { auth, googleProvider } from '../../config/firebaseClient';
+import {
+  auth,
+  googleProvider,
+  microsoftProvider
+} from '../../config/firebaseClient';
 
 // styles
 import WorkStats from '../../public/fulllogo_transparent_nobuffer.png';
 import GoogleIcon from '@mui/icons-material/Google';
+import MicrosoftIcon from '../../public/home-page/Microsoft-Logo.png';
 import Image from 'next/image';
 import AsanaIcon from '../../public/home-page/Asana-Official-Logo.png';
 import SlackIcon from '../../public/slack-svgrepo-com.svg';
@@ -55,7 +60,56 @@ const Login = () => {
         // Workaround for Firebase authentication expires after 1 hour and nothing may be displayed after login.
         setTimeout(() => {
           window.location.reload();
-        }, 1000);
+        }, 1500);
+      })
+      .catch((error) => {
+        // window.location.reload();
+        console.log('error is: ', error);
+      });
+  };
+
+  // Microsoft login handler. References are as below
+  // https://firebase.google.com/docs/auth/web/microsoft-oauth
+  // https://dev.to/425show/integrate-azure-ad-with-firebase-and-call-ms-graph-in-a-node-js-app-973
+  const loginWithMicrosoft = () => {
+    signInWithPopup(auth, microsoftProvider)
+      .then((result) => {
+        // Save these tokens to the user document in Firestore in the future
+        // const credential = OAuthProvider.credentialFromResult(result);
+        // const accessToken = credential?.accessToken;
+        // @ts-ignore
+        // const refreshToken = result._tokenResponse.refreshToken;
+
+        // Get the signed-in user info.
+        // @ts-ignore
+        const email = result?._tokenResponse?.email || undefined;
+        // @ts-ignore
+        const firstName = result?._tokenResponse?.firstName || undefined;
+        // @ts-ignore
+        const lastName = result?._tokenResponse?.lastName || undefined;
+        const user = result.user;
+        const { uid, displayName } = user;
+        const middleName =
+          displayName?.split(' ').slice(1, -1).join(' ') || undefined;
+        const photoURL = user?.photoURL || undefined;
+
+        // Asynchronous functions are intentionally executed simultaneously without await
+        createUserDoc(
+          uid,
+          firstName,
+          middleName,
+          lastName,
+          email,
+          photoURL
+          // displayName || undefined
+        );
+        createNumbersDoc(uid);
+      })
+      .then(() => {
+        // Workaround for Firebase authentication expires after 1 hour and nothing may be displayed after login.
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       })
       .catch((error) => {
         // window.location.reload();
@@ -145,11 +199,26 @@ const Login = () => {
             Both login and sign up here.
           </p>
           <button
-            className='text-white bg-blue-600 hover:bg-blue-800 font-bold rounded-md w-52 h-10'
+            className='text-white bg-blue-600 hover:bg-blue-800 font-bold rounded-md w-56 h-10'
             onClick={loginWithGoogle}
           >
             <GoogleIcon className='text-white mr-2' />
             Login with Google
+          </button>
+          <button
+            className='flex text-slate-700 bg-white font-bold rounded-md w-56 h-10 place-items-center justify-center'
+            onClick={loginWithMicrosoft}
+          >
+            <Image
+              src={MicrosoftIcon}
+              alt='Microsoft logo'
+              width={28}
+              height={28}
+              layout='intrinsic'
+              className='mr-2'
+            />
+            <div className='w-2'></div>
+            Login with Microsoft
           </button>
         </div>
       </div>

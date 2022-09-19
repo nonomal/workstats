@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth, GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, OAuthProvider } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
@@ -21,7 +21,9 @@ const db = getFirestore();
 const storage = getStorage();
 const auth = getAuth();
 const googleProvider = new GoogleAuthProvider();
-const githubProvider = new GithubAuthProvider();
+const microsoftProvider = new OAuthProvider('microsoft.com'); // https://firebase.google.com/docs/auth/web/microsoft-oauth
+// microsoftProvider.addScope('mail.read');
+// microsoftProvider.addScope('calendars.read');
 const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 
-export { app, db, storage, auth, googleProvider, githubProvider, analytics };
+export { app, db, storage, auth, googleProvider, microsoftProvider, analytics };

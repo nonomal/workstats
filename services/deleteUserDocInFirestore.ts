@@ -3,8 +3,8 @@ import { deleteDoc, doc } from 'firebase/firestore';
 import {
   auth,
   db,
-  githubProvider,
-  googleProvider
+  googleProvider,
+  microsoftProvider
 } from '../config/firebaseClient';
 
 // const user = auth.currentUser;
@@ -35,8 +35,8 @@ const handleSubmitCancelMembership = async (docId: string) => {
             // If the user has signed in too long ago, deleting the user will fail. In this case, we have to reauthenticate the user with their credential.
             if (error.code === 'auth/requires-recent-login') {
               let provider = googleProvider;
-              if (user.providerData[0].providerId === 'github.com') {
-                provider = githubProvider;
+              if (user.providerData[0].providerId === 'microsoft.com') {
+                provider = microsoftProvider;
               }
               reauthenticateWithPopup(user, provider)
                 .then(() => {
