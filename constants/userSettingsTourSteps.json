@@ -21,7 +21,7 @@
     "element": "#source-control",
     "title": "Source Control (GitHub)",
     "intro":
-      "Here&apos;s the setup for aggregating from GitHub. First, just hit the 'Connect with GitHub' button! Then fill in your user ID, your user name, the name of the repository you want to retrieve, and its owner name. Of course, you can disconnect it later. Click '?' icon for more information.",
+      "Here&apos;s the setup for aggregating from GitHub. First, just hit the 'Connect with GitHub' button! Then fill in a name of a repository you want to retrieve, and its owner name. Of course, you can disconnect it later. Click '?' icon for more information.",
     "position": "bottom"
   },
   {

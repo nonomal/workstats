@@ -13,18 +13,24 @@ import {
   handleSubmitGithubAccessToken,
   handleSubmitSourceCode
 } from '../../services/setDocToFirestore';
-import { requestGithubUserIdentity } from '../../services/githubServices.client';
+import {
+  GetTheAuthenticatedUser,
+  ListRepositoriesForTheAuthenticatedUser,
+  requestGithubUserIdentity
+} from '../../services/githubServices.client';
 import { UserType } from '../../config/firebaseTypes';
+import { Timestamp } from 'firebase/firestore';
 
 interface SettingsForGitHubProps {
   uid: string;
-  userDoc: UserType | null;
+  userDocState: UserType;
   isGithubAuthenticated: boolean;
+  // setState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SettingsForGitHub = ({
   uid,
-  userDoc,
+  userDocState,
   isGithubAuthenticated
 }: SettingsForGitHubProps) => {
   // If a user click 'Connect with xxxxx' button to agree to authenticate WorkStats with xxxxx scopes, a code will be passed to the redirect URL.
@@ -33,11 +39,23 @@ const SettingsForGitHub = ({
     ? htmlParams.split(/[=&]+/)[1] // split by '=' or '&'
     : undefined;
 
-  // If code is defined and isGithubAuthenticatedState is false, call /api/get-github-access-token to exchange the code for a GitHub access token
+  // Initialize states
+  const [userDoc, setUserDoc] = useState<UserType>(userDocState);
+  const [createdAt, setCreatedAt] = useState<Timestamp | undefined>(undefined);
   const [isGithubAuthenticatedState, setIsGithubAuthenticatedState] = useState(
     isGithubAuthenticated
   );
+  useEffect(() => {
+    if (userDocState) setUserDoc(userDocState);
+    if (userDocState?.github?.createdAt)
+      setCreatedAt(userDocState.github.createdAt);
+    setIsGithubAuthenticatedState(isGithubAuthenticated);
+  }, [isGithubAuthenticated, userDocState]);
   const [githubAccessToken, setGithubAccessToken] = useState('');
+  const [owner1, setOwner1] = useState<string[]>([]);
+  const [repo1, setRepo1] = useState<string[]>([]);
+
+  // If code is defined and isGithubAuthenticatedState is false, call /api/get-github-access-token to exchange the code for a GitHub access token
   useEffect(() => {
     if (code && !isGithubAuthenticatedState) {
       const url = '/api/get-github-access-token';
@@ -55,6 +73,13 @@ const SettingsForGitHub = ({
         .then((res) => res.json())
         .then((res) => {
           setGithubAccessToken(res.access_token);
+
+          // Remove the code from the URL without reloading the page
+          window.history.replaceState(
+            {}, // state object
+            document.title, // 'User Settings - WorkStats' in this case
+            window.location.pathname // '/user-settings' in this case
+          );
         });
     }
   }, [code, isGithubAuthenticatedState]);
@@ -62,10 +87,40 @@ const SettingsForGitHub = ({
   // If githubAccessToken is defined and isGithubAuthenticatedState is false, update/insert the GitHub access token to Firestore
   useEffect(() => {
     if (githubAccessToken && !isGithubAuthenticatedState) {
-      handleSubmitGithubAccessToken(uid, githubAccessToken);
-      setIsGithubAuthenticatedState(true);
+      GetTheAuthenticatedUser(githubAccessToken).then((res) => {
+        handleSubmitGithubAccessToken(
+          uid,
+          githubAccessToken,
+          res.id,
+          res.login,
+          createdAt
+        );
+      });
     }
-  }, [githubAccessToken, isGithubAuthenticatedState, uid]);
+  }, [createdAt, githubAccessToken, isGithubAuthenticatedState, uid]);
+
+  // If githubAccessToken is defined, get a unique list of repositories that the user has access to
+  useEffect(() => {
+    if (userDoc?.github?.accessToken) {
+      ListRepositoriesForTheAuthenticatedUser(userDoc.github.accessToken).then(
+        (res) => {
+          const ownerList: string[] = [];
+          const repoList: string[] = [];
+          // @ts-ignore
+          res.map((repo) => {
+            if (!ownerList.includes(repo.owner.login)) {
+              ownerList.push(repo.owner.login);
+            }
+            if (!repoList.includes(repo.name)) {
+              repoList.push(repo.name);
+            }
+          });
+          setOwner1(ownerList);
+          setRepo1(repoList);
+        }
+      );
+    }
+  }, [userDoc?.github?.accessToken]);
 
   return (
     <div id='source-control'>
@@ -79,6 +134,7 @@ const SettingsForGitHub = ({
           <DisconnectWithGithubButton
             label='Disconnect with GitHub'
             uid={uid}
+            setState={setGithubAccessToken}
           />
         ) : (
           <RequestOAuthButton
@@ -87,6 +143,15 @@ const SettingsForGitHub = ({
           />
         )}
       </div>
+      <p className='py-1 ml-3 pl-1'>Follow the steps below to register.</p>
+      <ol className='py-1 ml-3 pl-1 list-decimal list-inside' role='list'>
+        <li key={1}>Press the &quot;Connect with GitHub&quot; button.</li>
+        <li key={2}>
+          According to the dialog, login to GitHub, check the scopes and
+          authenticate them.
+        </li>
+        <li key={3}>Register a repository you want to aggregate below.</li>
+      </ol>
       <form
         name='source-code'
         onSubmit={(e) => handleSubmitSourceCode(e, uid)}
@@ -94,21 +159,23 @@ const SettingsForGitHub = ({
         target='_self'
         autoComplete='off'
       >
-        <div className='h-3 md:h-3'></div>
         <div className='flex flex-wrap items-center'>
           <div className='md:ml-6 md:w-28'></div>
           <InputBox
             label={'User ID'}
             name={'githubUserId'}
-            inputType={'number'}
             placeholder={'4620828'}
             value={userDoc?.github?.userId}
+            disabled={true}
+            bgColor={'bg-gray-200'}
           />
           <InputBox
             label={'User Name'}
             name={'githubUserName'}
             placeholder={'oliversmith'}
             value={userDoc?.github?.userName}
+            disabled={true}
+            bgColor={'bg-gray-200'}
           />
           <InputBox
             label={'Access Token'}
@@ -131,18 +198,22 @@ const SettingsForGitHub = ({
             name={'githubRepoOwner1'}
             placeholder={'octocat'}
             value={userDoc?.github?.repositories?.[0]?.owner}
+            listValues={owner1}
           />
           <InputBox
             label={'Repo Name'}
             name={'githubRepo1'}
             placeholder={'hello-world'}
             value={userDoc?.github?.repositories?.[0]?.repo}
+            listValues={repo1}
           />
           <InputBox
             label={'Repo Visibility'}
             name={'githubRepoVisibility1'}
             placeholder={'Public or Private'}
             value={userDoc?.github?.repositories?.[0]?.visibility}
+            disabled={true}
+            bgColor={'bg-gray-200'}
           />
         </div>
         <div className='h-3 md:h-0'></div>
@@ -180,6 +251,11 @@ const SettingsForGitHub = ({
           <SubmitButton />
         </div>
       </form>
+      <p className='py-1 ml-3 pl-1'>
+        Press &quot;Disconnect with GitHub&quot; to disconnect at any time. If
+        you have any concerns or requests, please feel free to ask us through
+        the &quot;Contact Us&quot; link in the side menu.
+      </p>
     </div>
   );
 };

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface InputBoxType {
   bgColor?: string;
   disabled?: boolean;
   inputType?: string;
   label?: string;
+  listValues?: string[];
   max?: number;
   min?: number;
   name?: string;
@@ -18,14 +19,20 @@ const InputBox = ({
   disabled = false,
   inputType = 'text',
   label = 'a label here',
+  listValues,
   max,
   min,
   name,
   placeholder = 'a placeholder here',
   // required = false,
-  value = undefined
+  value = ''
 }: InputBoxType) => {
   const [inputValue, setInputValue] = useState(value);
+  const [listValue, setListValue] = useState(listValues);
+  useEffect(() => {
+    setInputValue(value);
+    setListValue(listValues);
+  }, [listValues, value]);
 
   const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -39,6 +46,7 @@ const InputBox = ({
       <input
         type={inputType}
         id={name}
+        list={name}
         max={max}
         min={min}
         name={name}
@@ -48,6 +56,13 @@ const InputBox = ({
         disabled={disabled}
         onChange={(e) => handleInputOnChange(e)}
       />
+      {listValues && (
+        <datalist id={name}>
+          {listValue?.map((item, index) => (
+            <option key={index} value={item} />
+          ))}
+        </datalist>
+      )}
     </div>
   );
 };

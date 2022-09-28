@@ -38,6 +38,8 @@ interface UserType extends Record<string, unknown> {
     userId?: number;
     userName?: string;
     accessToken?: string;
+    createdAt?: Timestamp; // When accessToken was created
+    updatedAt?: Timestamp; // When accessToken was updated
   };
   google?: {
     workspace?: Array<{

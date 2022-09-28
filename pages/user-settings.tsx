@@ -1,7 +1,8 @@
 // Libraries
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import nookies from 'nookies';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../config/firebaseClient';
 
 // Components
 import SettingsForAvatar from '../components/user-settings/SettingsForAvatar';
@@ -15,31 +16,53 @@ import JumpToCancelMembership from '../components/user-settings/JumpToCancelMemb
 import Onboarding from '../components/onboarding/product-tour';
 
 // Services and Others
-import { getAUserDoc } from '../services/getDocFromFirestore';
-import { verifyIdToken } from '../firebaseAdmin';
+import { useAuth } from '../auth';
 import { UserType } from '../config/firebaseTypes';
 import Steps from '../constants/userSettingsTourSteps.json';
 
-interface UserSettingsProps {
-  uid: string;
-  userDoc: UserType | null;
-  isAsanaAuthenticated: boolean;
-  isAtlassianAuthenticated: boolean;
-  isGithubAuthenticated: boolean;
-  isGoogleAuthenticated: boolean;
-  isSlackAuthenticated: boolean;
-}
+// Page Component
+const useUserSettings = () => {
+  // @ts-ignore
+  const { currentUser } = useAuth();
+  const uid = currentUser?.uid;
+  const [userDoc, setUserDoc] = useState<UserType>({});
+  const [numberOfOnboardingTimes, setNumberOfOnboardingTimes] = useState(1);
+  const [isGithubAuthenticated, setIsGithubAuthenticated] = useState(false);
+  const [isAtlassianAuthenticated, setIsAtlassianAuthenticated] =
+    useState(false);
+  const [isAsanaAuthenticated, setIsAsanaAuthenticated] = useState(false);
+  const [isSlackAuthenticated, setIsSlackAuthenticated] = useState(false);
+  const [isGoogleAuthenticated, setIsGoogleAuthenticated] = useState(false);
 
-const useUserSettings = ({
-  uid,
-  userDoc,
-  isAsanaAuthenticated,
-  isAtlassianAuthenticated,
-  isGithubAuthenticated,
-  isGoogleAuthenticated,
-  isSlackAuthenticated
-}: UserSettingsProps) => {
-  const numberOfOnboardingTimes = userDoc?.productTour?.userSettings || 0;
+  // Get a user document from Firestore after the component is mounted
+  useEffect(() => {
+    if (uid) {
+      onSnapshot(doc(db, 'users', uid), (docSnap) => {
+        const theUserDoc = docSnap.data() as UserType;
+        if (theUserDoc) {
+          setUserDoc(theUserDoc);
+          setNumberOfOnboardingTimes(
+            theUserDoc?.productTour?.userSettings || 0
+          );
+          setIsGithubAuthenticated(
+            theUserDoc?.github?.accessToken ? true : false
+          );
+          setIsAtlassianAuthenticated(
+            theUserDoc?.atlassian?.accessToken ? true : false
+          );
+          setIsAsanaAuthenticated(
+            theUserDoc?.asana?.accessToken ? true : false
+          );
+          setIsSlackAuthenticated(
+            theUserDoc?.slack?.workspace?.[0]?.accessToken ? true : false
+          );
+          setIsGoogleAuthenticated(
+            theUserDoc?.google?.workspace?.[0]?.accessToken ? true : false
+          );
+        }
+      });
+    }
+  }, [uid, isGithubAuthenticated]);
 
   return (
     <div className='px-4 md:px-5'>
@@ -56,7 +79,7 @@ const useUserSettings = ({
       </div>
       <SettingsForGitHub
         uid={uid}
-        userDoc={userDoc}
+        userDocState={userDoc}
         isGithubAuthenticated={isGithubAuthenticated}
       />
       <SettingsForAtlassian
@@ -93,57 +116,5 @@ const useUserSettings = ({
 };
 
 export default useUserSettings;
-
-export const getServerSideProps: GetServerSideProps = async (
-  ctx: GetServerSidePropsContext
-) => {
-  const cookies = nookies.get(ctx);
-  if (cookies.token) {
-    try {
-      const token = await verifyIdToken(cookies.token);
-      const { uid } = token;
-      const userDoc = (await getAUserDoc(uid)) ? await getAUserDoc(uid) : null;
-      const isGithubAuthenticated =
-        userDoc?.github?.accessToken && userDoc?.github?.accessToken !== ''
-          ? true
-          : false;
-      const isAtlassianAuthenticated =
-        userDoc?.atlassian?.accessToken &&
-        userDoc?.atlassian?.accessToken !== ''
-          ? true
-          : false;
-      const isAsanaAuthenticated =
-        userDoc?.asana?.accessToken && userDoc?.asana?.accessToken !== ''
-          ? true
-          : false;
-      const isSlackAuthenticated =
-        userDoc?.slack?.workspace?.[0]?.accessToken &&
-        userDoc?.slack?.workspace?.[0]?.accessToken !== ''
-          ? true
-          : false;
-      const isGoogleAuthenticated =
-        userDoc?.google?.workspace?.[0]?.accessToken &&
-        userDoc?.google?.workspace?.[0]?.accessToken !== ''
-          ? true
-          : false;
-
-      return {
-        props: {
-          uid,
-          userDoc,
-          isAsanaAuthenticated,
-          isAtlassianAuthenticated,
-          isGithubAuthenticated,
-          isGoogleAuthenticated,
-          isSlackAuthenticated
-        }
-      };
-    } catch (e) {
-      return { props: {} };
-    }
-  } else {
-    return { props: {} as never };
-  }
-};
 
 useUserSettings.requiresAuth = true;

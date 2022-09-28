@@ -53,6 +53,56 @@ const requestGithubUserIdentity = () => {
   window.location.href = url;
 };
 
+// Get the authenticated user's profile
+// See https://docs.github.com/en/rest/users/users#get-the-authenticated-user
+const GetTheAuthenticatedUser = (accessToken: string) => {
+  const url = `${baseURL}/user`;
+  const headers = new Headers();
+  headers.append('Accept', 'application/vnd.github.v3+json');
+  headers.append('Authorization', `token ${accessToken}`);
+  const response = fetch(url, {
+    headers: headers
+  }).then((res) => res.json());
+  return response;
+};
+
+// Get a repository
+// See https://docs.github.com/en/rest/repos/repos#get-a-repository
+interface GetTheRepositoryTypes {
+  owner: string;
+  repo: string;
+  accessToken: string;
+}
+const GetTheRepository = ({
+  owner,
+  repo,
+  accessToken
+}: GetTheRepositoryTypes) => {
+  const url = `${baseURL}/repos/${owner}/${repo}`;
+  const headers = new Headers();
+  headers.append('Accept', 'application/vnd.github.v3+json');
+  accessToken && accessToken !== ''
+    ? headers.append('Authorization', `token ${accessToken}`)
+    : null;
+  const response = fetch(url, {
+    headers: headers
+  }).then((res) => res.json());
+  return response;
+};
+
+// List repositories for the authenticated user
+// See https://docs.github.com/en/rest/repos/repos#list-repositories-for-the-authenticated-user
+const ListRepositoriesForTheAuthenticatedUser = (accessToken: string) => {
+  const url = `${baseURL}/user/repos`;
+  const headers = new Headers();
+  headers.append('Accept', 'application/vnd.github.v3+json');
+  headers.append('Authorization', `token ${accessToken}`);
+  const response = fetch(url, {
+    headers: headers
+  }).then((res) => res.json());
+  return response;
+};
+
 // Search for pull request data with reviewer
 // The official document is here https://docs.github.com/en/rest/reference/search#search-issues-and-pull-requests
 interface GitHubSearchTypes {
@@ -253,4 +303,11 @@ const GetNumberOfLinesOfCode = async (
   };
 };
 
-export { GetNumberOfLinesOfCode, requestGithubUserIdentity, useGitHubSearch };
+export {
+  GetNumberOfLinesOfCode,
+  GetTheAuthenticatedUser,
+  GetTheRepository,
+  ListRepositoriesForTheAuthenticatedUser,
+  requestGithubUserIdentity,
+  useGitHubSearch
+};

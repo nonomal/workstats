@@ -1,7 +1,8 @@
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, serverTimestamp, setDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../config/firebaseClient';
 import { NumbersType, UserType } from '../config/firebaseTypes';
 import { getUserInfo } from './getDocFromFirestore';
+import { GetTheRepository } from './githubServices.client';
 
 const createUserDoc = async (
   docId: string,
@@ -78,14 +79,31 @@ const handleSubmitBasicInfo = async (
 
 const handleSubmitGithubAccessToken = async (
   docId: string,
-  accessToken: string
+  accessToken: string,
+  userId: number | string,
+  userName: string,
+  createdAt?: Timestamp | undefined | boolean
 ) => {
   const docRef = doc(db, 'users', docId);
-  const docData = {
-    github: {
-      accessToken: accessToken
-    }
-  };
+  // If createdAt is truthy, which means GitHub has been connected with WorkStats at least once before, then go to ?, otherwise go to :
+  const docData = createdAt
+    ? {
+        github: {
+          accessToken: accessToken,
+          userId: userId,
+          userName: userName,
+          updatedAt: serverTimestamp()
+        }
+      }
+    : {
+        github: {
+          accessToken: accessToken,
+          userId: userId,
+          userName: userName,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        }
+      };
   const option = { merge: true };
   await setDoc(docRef, docData, option);
   return;
@@ -96,23 +114,41 @@ const handleSubmitSourceCode = async (
   docId: string
 ) => {
   event.preventDefault();
+
+  // Get the repository values from the input fields.
+  const owner1 = event.currentTarget.githubRepoOwner1.value || '';
+  const repo1 = event.currentTarget.githubRepo1.value || '';
+  const owner2 = event.currentTarget.githubRepoOwner2.value || '';
+  const repo2 = event.currentTarget.githubRepo2.value || '';
+
+  // Get the repository visibility using the input fields.
+  const visibility1 =
+    owner1 && repo1
+      ? await GetTheRepository({
+          owner: event.currentTarget.githubRepoOwner1.value,
+          repo: event.currentTarget.githubRepo1.value,
+          accessToken: event.currentTarget.githubAccessToken.value
+        }).then((res) => {
+          if (res) return res?.visibility || '';
+          else return '';
+        })
+      : '';
+
+  // Store the repository values in the database.
   const docRef = doc(db, 'users', docId);
   const docData: UserType = {
     github: {
       repositories: [
         {
-          owner: event.currentTarget.githubRepoOwner1.value,
-          repo: event.currentTarget.githubRepo1.value,
-          visibility: event.currentTarget.githubRepoVisibility1.value
+          owner: owner1,
+          repo: repo1,
+          visibility: visibility1
         },
         {
-          owner: event.currentTarget.githubRepoOwner2.value,
-          repo: event.currentTarget.githubRepo2.value,
-          visibility: event.currentTarget.githubRepoVisibility2.value
+          owner: owner2,
+          repo: repo2
         }
-      ],
-      userId: event.currentTarget.githubUserId.valueAsNumber, // should be a number
-      userName: event.currentTarget.githubUserName.value
+      ]
     }
   };
   const option = { merge: true };
