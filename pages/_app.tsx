@@ -10,9 +10,9 @@ import 'intro.js/introjs.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const contentLong =
-    'WorkStats is a dashboard tool for engineers and project managers engaged in system development to visualize their productivity and contributions in numbers. It aggregates various numbers from the platforms used by members and teams, such as GitHub for source control, Asana for task management, and Slack for communication tools.';
+    'WorkStats is a dashboard tool for engineers and project managers engaged in system development to visualize their productivity and contributions in numbers. It aggregates various numbers from the platforms used by members and teams, such as GitHub for source control, Jira and Asana for task management, and Slack for communication tools.';
   const contentShort =
-    'is a dashboard tool for engineers and PMs to quantify their productivity, aggregating various numbers from GitHub, Asana, Slack, etc.';
+    'A dashboard tool for engineers and PMs to quantify their productivity, aggregating various numbers from GitHub, Jira, Asana, Slack, Google Calendar.';
   const imageURL =
     'https://drive.google.com/uc?export=download&id=1oP-avBzGd6YCISYUia0XvklWuV3mOg3a';
 
