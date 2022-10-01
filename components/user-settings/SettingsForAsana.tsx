@@ -13,18 +13,21 @@ import {
   handleSubmitAsanaAccessToken,
   handleSubmitTaskTicket
 } from '../../services/setDocToFirestore';
-import { requestAsanaUserIdentity } from '../../services/asanaServices.client';
+import {
+  getWorkspaces,
+  requestAsanaUserIdentity
+} from '../../services/asanaServices.client';
 import { UserType } from '../../config/firebaseTypes';
 
 interface SettingsForAsanaProps {
   uid: string;
-  userDoc: UserType | null;
+  userDocState: UserType;
   isAsanaAuthenticated: boolean;
 }
 
 const SettingsForAsana = ({
   uid,
-  userDoc,
+  userDocState,
   isAsanaAuthenticated
 }: SettingsForAsanaProps) => {
   // If a user click 'Connect with xxxxx' button to agree to authenticate WorkStats with xxxxx scopes, a code will be passed to the redirect URL.
@@ -34,8 +37,13 @@ const SettingsForAsana = ({
     : undefined;
 
   // If asanaCode is defined and isAsanaAuthenticatedState is false, call /api/get-asana-access-token to exchange the code for a Asana access token
+  const [userDoc, setUserDoc] = useState<UserType>(userDocState);
   const [isAsanaAuthenticatedState, setIsAsanaAuthenticatedState] =
     useState(isAsanaAuthenticated);
+  useEffect(() => {
+    if (userDocState) setUserDoc(userDocState);
+    setIsAsanaAuthenticatedState(isAsanaAuthenticated);
+  }, [isAsanaAuthenticated, userDocState]);
   const [asanaAccessToken, setAsanaAccessToken] = useState('');
   const [asanaRefreshToken, setAsanaRefreshToken] = useState('');
   const [asanaUserId, setAsanaUserId] = useState('');
@@ -80,7 +88,13 @@ const SettingsForAsana = ({
       ).then(() => {
         setIsAsanaAuthenticatedState(true);
         alert('Asana and WorkStats are successfully connected.');
-        window.location.replace(window.location.pathname);
+
+        // Remove the code from the URL without reloading the page
+        window.history.replaceState(
+          {}, // state object
+          document.title, // 'User Settings - WorkStats' in this case
+          window.location.pathname // '/user-settings' in this case
+        );
       });
     }
   }, [
@@ -91,8 +105,27 @@ const SettingsForAsana = ({
     uid
   ]);
 
+  // List Asana Workspaces for the user to choose
+  const [asanaWorkspaces, setAsanaWorkspaces] = useState<string[]>([]);
+  useEffect(() => {
+    if (uid && userDoc?.asana?.accessToken && userDoc?.asana?.refreshToken) {
+      getWorkspaces(
+        uid,
+        userDoc?.asana?.accessToken,
+        userDoc?.asana?.refreshToken
+      )
+        .then((res) => {
+          const workspaces = res.data.map((workspace) => workspace.name);
+          return workspaces;
+        })
+        .then((workspaces) => {
+          setAsanaWorkspaces(workspaces);
+        });
+    }
+  }, [uid, userDoc?.asana?.accessToken, userDoc?.asana?.refreshToken]);
+
   return (
-    <div id='task-control'>
+    <div id='asana'>
       <div className='h-9 md:h-10'></div>
       <div className='flex flex-wrap'>
         <h2 className='text-xl mb-2 md:mb-0 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
@@ -104,6 +137,7 @@ const SettingsForAsana = ({
             label='Disconnect with Asana'
             uid={uid}
             refreshToken={userDoc?.asana?.refreshToken}
+            setState={setAsanaAccessToken}
           />
         ) : (
           <RequestOAuthButton
@@ -128,6 +162,8 @@ const SettingsForAsana = ({
             inputType={'number'}
             placeholder={'1200781652740141'}
             value={userDoc?.asana?.userId}
+            disabled={true}
+            bgColor={'bg-gray-200'}
           />
           <InputBox
             label={'Access Token'}
@@ -159,12 +195,15 @@ const SettingsForAsana = ({
             inputType={'number'}
             placeholder={'1234567890123456'}
             value={userDoc?.asana?.workspace?.[0]?.workspaceId}
+            disabled={true}
+            bgColor={'bg-gray-200'}
           />
           <InputBox
             label={'Workspace Name'}
             name={'asanaWorkspaceName1'}
             placeholder={'Suchica'}
             value={userDoc?.asana?.workspace?.[0]?.workspaceName}
+            listValues={asanaWorkspaces}
           />
         </div>
         <div className='h-3 md:h-0'></div>

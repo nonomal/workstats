@@ -1,4 +1,4 @@
-import { Timestamp } from 'firebase/firestore';
+import { FieldValue } from 'firebase/firestore';
 
 interface UserType extends Record<string, unknown> {
   asana?: {
@@ -9,6 +9,8 @@ interface UserType extends Record<string, unknown> {
       workspaceId?: string;
       workspaceName?: string;
     }>;
+    createdAt?: FieldValue; // When accessToken was created
+    updatedAt?: FieldValue; // When accessToken was updated
   };
   assessor?: string;
   assignedPj?: string;
@@ -20,9 +22,11 @@ interface UserType extends Record<string, unknown> {
       organizationId?: string;
       organizationName?: string;
     }>;
+    createdAt?: FieldValue; // When accessToken was created
+    updatedAt?: FieldValue; // When accessToken was updated
   };
   avatarUrl?: string;
-  birth?: Timestamp | number; // DB has Timestamp type but birth could be converted to number
+  birth?: FieldValue | number; // DB has Timestamp type but birth could be converted to number
   company?: string;
   country?: string;
   department?: string;
@@ -38,8 +42,8 @@ interface UserType extends Record<string, unknown> {
     userId?: number;
     userName?: string;
     accessToken?: string;
-    createdAt?: Timestamp; // When accessToken was created
-    updatedAt?: Timestamp; // When accessToken was updated
+    createdAt?: FieldValue; // When accessToken was created
+    updatedAt?: FieldValue; // When accessToken was updated
   };
   google?: {
     workspace?: Array<{
@@ -48,6 +52,8 @@ interface UserType extends Record<string, unknown> {
       refreshToken?: string;
       userName?: string;
     }>;
+    createdAt?: FieldValue; // When accessToken was created
+    updatedAt?: FieldValue; // When accessToken was updated
   };
   lastName?: string;
   middleName?: string;
@@ -64,6 +70,8 @@ interface UserType extends Record<string, unknown> {
       memberId?: string;
       workspaceName?: string;
     }>;
+    createdAt?: FieldValue; // When accessToken was created
+    updatedAt?: FieldValue; // When accessToken was updated
   };
   supervisor?: string;
 }
@@ -98,6 +106,8 @@ interface NumbersType extends Record<string, unknown> {
     velocityPerDay?: NumbersByPeriodType;
     velocityPerWeek?: NumbersByPeriodType;
     estimatedCompletionDate?: StringsByPeriodType;
+    createdAt?: FieldValue; // When accessToken was created
+    updatedAt?: FieldValue; // When accessToken was updated
   };
   github?: {
     numberOfCommits?: NumbersByPeriodType;
@@ -105,10 +115,14 @@ interface NumbersType extends Record<string, unknown> {
     numberOfReviews?: NumbersByPeriodType;
     numberOfLinesAdded?: NumbersByPeriodType;
     numberOfLinesDeleted?: NumbersByPeriodType;
+    createdAt?: FieldValue; // When accessToken was created
+    updatedAt?: FieldValue; // When accessToken was updated
   };
   googleCalendar?: {
     numberOfEvents?: NumbersByPeriodType;
     totalTimeOfEvents?: NumbersByPeriodType;
+    createdAt?: FieldValue; // When accessToken was created
+    updatedAt?: FieldValue; // When accessToken was updated
   };
   jira?: {
     numberOfIssues?: NumbersByPeriodType;
@@ -117,12 +131,16 @@ interface NumbersType extends Record<string, unknown> {
     velocityPerBizDay?: NumbersByPeriodType;
     velocityPerWeek?: NumbersByPeriodType;
     estimatedCompletionDate?: StringsByPeriodType;
+    createdAt?: FieldValue; // When accessToken was created
+    updatedAt?: FieldValue; // When accessToken was updated
   };
   slack?: {
     numberOfMentioned?: NumbersByPeriodType;
     numberOfNewSent?: NumbersByPeriodType;
     numberOfTotalSent?: NumbersByPeriodType;
     numberOfReplies?: NumbersByPeriodType;
+    createdAt?: FieldValue; // When accessToken was created
+    updatedAt?: FieldValue; // When accessToken was updated
   };
 }
 

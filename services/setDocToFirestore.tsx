@@ -1,6 +1,7 @@
-import { doc, serverTimestamp, setDoc, Timestamp } from 'firebase/firestore';
+import { doc, FieldValue, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseClient';
 import { NumbersType, UserType } from '../config/firebaseTypes';
+import { getWorkspaces } from './asanaServices.client';
 import { getUserInfo } from './getDocFromFirestore';
 import { GetTheRepository } from './githubServices.client';
 
@@ -82,7 +83,7 @@ const handleSubmitGithubAccessToken = async (
   accessToken: string,
   userId: number | string,
   userName: string,
-  createdAt?: Timestamp | undefined | boolean
+  createdAt?: FieldValue | undefined | boolean
 ) => {
   const docRef = doc(db, 'users', docId);
   // If createdAt is truthy, which means GitHub has been connected with WorkStats at least once before, then go to ?, otherwise go to :
@@ -179,7 +180,8 @@ const handleSubmitAtlassianAccessToken = async (
                 organizationId: cloudId,
                 organizationName: cloudName
               }
-            ]
+            ],
+            updatedAt: serverTimestamp()
           }
         }
       : {
@@ -192,9 +194,32 @@ const handleSubmitAtlassianAccessToken = async (
                 organizationId: cloudId,
                 organizationName: cloudName
               }
-            ]
+            ],
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
           }
         };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+const deleteAtlassianAccessToken = async (docId: string) => {
+  const docRef = doc(db, 'users', docId);
+  const docData: UserType = {
+    atlassian: {
+      accessToken: '',
+      accountId: '',
+      refreshToken: '',
+      organization: [
+        {
+          organizationId: '',
+          organizationName: ''
+        }
+      ],
+      updatedAt: serverTimestamp()
+    }
+  };
   const option = { merge: true };
   await setDoc(docRef, docData, option);
   return;
@@ -210,7 +235,8 @@ const updateAtlassianTokens = async (
   const docData: UserType = {
     atlassian: {
       accessToken: accessToken,
-      refreshToken: refreshToken
+      refreshToken: refreshToken,
+      updatedAt: serverTimestamp()
     }
   };
   const option = { merge: true };
@@ -230,16 +256,34 @@ const handleSubmitAsanaAccessToken = async (
     !refreshToken && refreshToken !== ''
       ? {
           asana: {
-            accessToken: accessToken
+            accessToken: accessToken,
+            updatedAt: serverTimestamp()
           }
         }
       : {
           asana: {
             accessToken: accessToken,
             refreshToken: refreshToken,
-            userId: userId
+            userId: userId,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
           }
         };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+const deleteAsanaAccessToken = async (docId: string) => {
+  const docRef = doc(db, 'users', docId);
+  const docData: UserType = {
+    asana: {
+      accessToken: '',
+      refreshToken: '',
+      userId: '',
+      updatedAt: serverTimestamp()
+    }
+  };
   const option = { merge: true };
   await setDoc(docRef, docData, option);
   return;
@@ -250,18 +294,36 @@ const handleSubmitTaskTicket = async (
   docId: string
 ) => {
   event.preventDefault();
+  const workspaceName1 = event.currentTarget.asanaWorkspaceName1.value || '';
+
+  // Get the workspace id using the input fields.
+  const workspaceId1 = workspaceName1
+    ? await getWorkspaces(
+        docId,
+        event.currentTarget.asanaAccessToken.value,
+        event.currentTarget.asanaRefreshToken.value
+      )
+        .then((res) => {
+          if (res) {
+            const workspace = res.data.find(
+              (workspace) => workspace.name === workspaceName1
+            );
+            return workspace?.gid || '';
+          } else return '';
+        })
+        .catch((err) => {
+          console.log(err);
+          return '';
+        })
+    : '';
+
   const docRef = doc(db, 'users', docId);
   const docData: UserType = {
     asana: {
-      userId: event.currentTarget.asanaUserId.value,
       workspace: [
         {
-          workspaceId: event.currentTarget.asanaWorkspaceId1.value,
-          workspaceName: event.currentTarget.asanaWorkspaceName1.value
-        },
-        {
-          workspaceId: event.currentTarget.asanaWorkspaceId2.value,
-          workspaceName: event.currentTarget.asanaWorkspaceName2.value
+          workspaceId: workspaceId1,
+          workspaceName: workspaceName1
         }
       ]
     }
@@ -288,7 +350,28 @@ const handleSubmitSlackAccessToken = async (
           memberId: userId,
           workspaceName: workspaceName
         }
-      ]
+      ],
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    }
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+const deleteSlackAccessToken = async (docId: string) => {
+  const docRef = doc(db, 'users', docId);
+  const docData: UserType = {
+    slack: {
+      workspace: [
+        {
+          accessToken: '',
+          memberId: '',
+          workspaceName: ''
+        }
+      ],
+      updatedAt: serverTimestamp()
     }
   };
   const option = { merge: true };
@@ -338,7 +421,8 @@ const handleSubmitGoogleAccessToken = async (
               {
                 accessToken
               }
-            ]
+            ],
+            updatedAt: serverTimestamp()
           }
         }
       : {
@@ -348,9 +432,29 @@ const handleSubmitGoogleAccessToken = async (
                 accessToken,
                 refreshToken
               }
-            ]
+            ],
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
           }
         };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+const deleteGoogleAccessToken = async (docId: string) => {
+  const docRef = doc(db, 'users', docId);
+  const docData: UserType = {
+    google: {
+      workspace: [
+        {
+          accessToken: '',
+          refreshToken: ''
+        }
+      ],
+      updatedAt: serverTimestamp()
+    }
+  };
   const option = { merge: true };
   await setDoc(docRef, docData, option);
   return;
@@ -595,6 +699,10 @@ const UpdInsGoogleCalendarNumbers = async ({
 export {
   createNumbersDoc,
   createUserDoc,
+  deleteAsanaAccessToken,
+  deleteAtlassianAccessToken,
+  deleteGoogleAccessToken,
+  deleteSlackAccessToken,
   handleSubmitBasicInfo,
   handleSubmitGithubAccessToken,
   handleSubmitSourceCode,

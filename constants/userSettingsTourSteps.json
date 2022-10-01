@@ -18,28 +18,35 @@
     "position": "right"
   },
   {
-    "element": "#source-control",
+    "element": "#github",
     "title": "Source Control (GitHub)",
     "intro":
       "Here&apos;s the setup for aggregating from GitHub. First, just hit the 'Connect with GitHub' button! Then fill in a name of a repository you want to retrieve, and its owner name. Of course, you can disconnect it later. Click '?' icon for more information.",
     "position": "bottom"
   },
   {
-    "element": "#task-control",
+    "element": "#jira",
+    "title": "Task Control (Jira)",
+    "intro":
+      "Here&apos;s the setup for aggregating from Jira. First, just hit the 'Connect with Jira' button! That's it! Of course, you can disconnect it later. Click '?' icon for YouTube demo.",
+    "position": "bottom"
+  },
+  {
+    "element": "#asana",
     "title": "Task Control (Asana)",
     "intro":
       "Here&apos;s the setup for aggregating from Asana. First, just hit the 'Connect with Asana' button! Then fill in your user ID, workspace ID you want to retrieve, and its name. Of course, you can disconnect it later. Click '?' icon for more information.",
     "position": "bottom"
   },
   {
-    "element": "#communication-activity-slack",
+    "element": "#slack",
     "title": "Communication Activity (Slack)",
     "intro":
       "Here&apos;s the setup for aggregating from Slack. Just hit the 'Connect with Slack' button. That's it!! Of course, you can disconnect it later. Click '?' icon for more information.",
     "position": "bottom"
   },
   {
-    "element": "#communication-activity-google",
+    "element": "#google",
     "title": "Communication Activity (Google)",
     "intro":
       "Here&apos;s the setup for aggregating from Google. Just hit the 'Connect with Google' button. That's it!! Of course, you can disconnect it later. Click '?' icon for more information.",

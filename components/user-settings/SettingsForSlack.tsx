@@ -17,13 +17,13 @@ import { UserType } from '../../config/firebaseTypes';
 
 interface SettingsForSlackProps {
   uid: string;
-  userDoc: UserType | null;
+  userDocState: UserType;
   isSlackAuthenticated: boolean;
 }
 
 const SettingsForSlack = ({
   uid,
-  userDoc,
+  userDocState,
   isSlackAuthenticated
 }: SettingsForSlackProps) => {
   // If a user click 'Connect with xxxxx' button to agree to authenticate WorkStats with xxxxx scopes, a code will be passed to the redirect URL.
@@ -33,8 +33,13 @@ const SettingsForSlack = ({
     : undefined;
 
   // If slackCode is defined and isSlackAuthenticatedState is false, call /api/get-slack-access-token to exchange the code for a Slack access token
+  const [userDoc, setUserDoc] = useState<UserType>(userDocState);
   const [isSlackAuthenticatedState, setIsSlackAuthenticatedState] =
     useState(isSlackAuthenticated);
+  useEffect(() => {
+    if (userDocState) setUserDoc(userDocState);
+    setIsSlackAuthenticatedState(isSlackAuthenticated);
+  }, [isSlackAuthenticated, userDocState]);
   const [slackAccessToken, setSlackAccessToken] = useState('');
   const [slackUserId, setSlackUserId] = useState('');
   const [slackWorkspaceName, setSlackWorkspaceName] = useState('');
@@ -78,7 +83,13 @@ const SettingsForSlack = ({
       ).then(() => {
         setIsSlackAuthenticatedState(true);
         alert('Slack and WorkStats are successfully connected.');
-        window.location.replace(window.location.pathname);
+
+        // Remove the code from the URL without reloading the page
+        window.history.replaceState(
+          {}, // state object
+          document.title, // 'User Settings - WorkStats' in this case
+          window.location.pathname // '/user-settings' in this case
+        );
       });
     }
   }, [
@@ -90,7 +101,7 @@ const SettingsForSlack = ({
   ]);
 
   return (
-    <div id='communication-activity-slack'>
+    <div id='slack'>
       <div className='h-9 md:h-10'></div>
       <div className='flex flex-wrap'>
         <h2 className='text-xl mb-2 md:mb-0 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
@@ -102,6 +113,7 @@ const SettingsForSlack = ({
             label='Disconnect with Slack'
             uid={uid}
             accessToken={userDoc?.slack?.workspace?.[0]?.accessToken}
+            setState={setSlackAccessToken}
           />
         ) : (
           <RequestOAuthButton

@@ -46,7 +46,7 @@ const InputBox = ({
       <input
         type={inputType}
         id={name}
-        list={name}
+        list={'list for ' + name} // Must match the id in datalist
         max={max}
         min={min}
         name={name}
@@ -57,7 +57,8 @@ const InputBox = ({
         onChange={(e) => handleInputOnChange(e)}
       />
       {listValues && (
-        <datalist id={name}>
+        // Must not match the input tag id or any other id
+        <datalist id={'list for ' + name}>
           {listValue?.map((item, index) => (
             <option key={index} value={item} />
           ))}

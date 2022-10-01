@@ -14,13 +14,13 @@ import { UserType } from '../../config/firebaseTypes';
 
 interface SettingsForAtlassianProps {
   uid: string;
-  userDoc: UserType | null;
+  userDocState: UserType;
   isAtlassianAuthenticated: boolean;
 }
 
 const SettingsForAtlassian = ({
   uid,
-  userDoc,
+  userDocState,
   isAtlassianAuthenticated
 }: SettingsForAtlassianProps) => {
   // If a user click 'Connect with xxxxx' button to agree to authenticate WorkStats with xxxxx scopes, a code will be passed to the redirect URL.
@@ -31,8 +31,13 @@ const SettingsForAtlassian = ({
     : undefined;
 
   // If atlassianCode is defined and isAtlassianAuthenticatedState is false, call /api/get-atlassian-access-token to exchange the code for an Atlassian access token
+  const [userDoc, setUserDoc] = useState<UserType>(userDocState);
   const [isAtlassianAuthenticatedState, setIsAtlassianAuthenticatedState] =
     useState(isAtlassianAuthenticated);
+  useEffect(() => {
+    if (userDocState) setUserDoc(userDocState);
+    setIsAtlassianAuthenticatedState(isAtlassianAuthenticated);
+  }, [isAtlassianAuthenticated, userDocState]);
   const [atlassianAccessToken, setAtlassianAccessToken] = useState('');
   const [atlassianRefreshToken, setAtlassianRefreshToken] = useState('');
   const [atlassianAccountId, setAtlassianAccountId] = useState('');
@@ -123,7 +128,13 @@ const SettingsForAtlassian = ({
       ).then(() => {
         setIsAtlassianAuthenticatedState(true);
         alert('Jira (Atlassian) and WorkStats are successfully connected.');
-        window.location.replace(window.location.pathname);
+
+        // Remove the code from the URL without reloading the page
+        window.history.replaceState(
+          {}, // state object
+          document.title, // 'User Settings - WorkStats' in this case
+          window.location.pathname // '/user-settings' in this case
+        );
       });
     }
   }, [
@@ -137,7 +148,7 @@ const SettingsForAtlassian = ({
   ]);
 
   return (
-    <div id='task-control-atlassian'>
+    <div id='jira'>
       <div className='h-9 md:h-10'></div>
       <div className='flex flex-wrap'>
         <h2 className='text-xl mb-2 md:mb-0 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
@@ -148,6 +159,7 @@ const SettingsForAtlassian = ({
           <DisconnectWithAtlassianButton
             label='Disconnect with Atlassian'
             uid={uid}
+            setState={setAtlassianAccessToken}
           />
         ) : (
           <RequestOAuthButton

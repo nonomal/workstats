@@ -1,13 +1,19 @@
 import React from 'react';
-import { handleSubmitAsanaAccessToken } from '../../services/setDocToFirestore';
+import { deleteAsanaAccessToken } from '../../services/setDocToFirestore';
 
 interface PropTypes {
   label: string;
   uid: string;
   refreshToken: string | undefined;
+  setState: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const DisconnectWithAsanaButton = ({ label, uid, refreshToken }: PropTypes) => {
+const DisconnectWithAsanaButton = ({
+  label,
+  uid,
+  refreshToken,
+  setState
+}: PropTypes) => {
   const url = '/api/revoke-asana-refresh-token';
   const body = {
     uid,
@@ -18,7 +24,8 @@ const DisconnectWithAsanaButton = ({ label, uid, refreshToken }: PropTypes) => {
     <button
       className='w-auto h-7 bg-red-600 hover:bg-red-700 text-white font-semibold px-3 ml-3 mt-1 md:mt-0 rounded-lg inline-block align-middle'
       onClick={async () => {
-        await handleSubmitAsanaAccessToken(uid, '', '', '');
+        setState('');
+        await deleteAsanaAccessToken(uid);
         // Deauthorize Asana
         const response = await fetch(url, {
           method: 'POST',
@@ -29,7 +36,6 @@ const DisconnectWithAsanaButton = ({ label, uid, refreshToken }: PropTypes) => {
         });
         if (response.status === 200) {
           alert('Asana has been deauthorized');
-          window.location.replace(window.location.pathname);
         }
       }}
     >

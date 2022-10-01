@@ -14,13 +14,13 @@ import { UserType } from '../../config/firebaseTypes';
 
 interface SettingsForGoogleProps {
   uid: string;
-  userDoc: UserType | null;
+  userDocState: UserType;
   isGoogleAuthenticated: boolean;
 }
 
 const SettingsForGoogle = ({
   uid,
-  userDoc,
+  userDocState,
   isGoogleAuthenticated
 }: SettingsForGoogleProps) => {
   // If a user click 'Connect with xxxxx' button to agree to authenticate WorkStats with xxxxx scopes, a code will be passed to the redirect URL.
@@ -30,9 +30,14 @@ const SettingsForGoogle = ({
     : undefined;
 
   // If googleAccessToken is defined and isGoogleAuthenticatedState is false, update/insert the access token to Firestore
+  const [userDoc, setUserDoc] = useState<UserType>(userDocState);
   const [isGoogleAuthenticatedState, setIsGoogleAuthenticatedState] = useState(
     isGoogleAuthenticated
   );
+  useEffect(() => {
+    if (userDocState) setUserDoc(userDocState);
+    setIsGoogleAuthenticatedState(isGoogleAuthenticated);
+  }, [isGoogleAuthenticated, userDocState]);
   const [googleAccessToken, setGoogleAccessToken] = useState('');
   const [googleRefreshToken, setGoogleRefreshToken] = useState('');
   useEffect(() => {
@@ -74,13 +79,19 @@ const SettingsForGoogle = ({
       ).then(() => {
         setIsGoogleAuthenticatedState(true);
         alert('Google and WorkStats are successfully connected.');
-        window.location.replace(window.location.pathname);
+
+        // Remove the code from the URL without reloading the page
+        window.history.replaceState(
+          {}, // state object
+          document.title, // 'User Settings - WorkStats' in this case
+          window.location.pathname // '/user-settings' in this case
+        );
       });
     }
   }, [googleAccessToken, googleRefreshToken, isGoogleAuthenticatedState, uid]);
 
   return (
-    <div id='communication-activity-google'>
+    <div id='google'>
       <div className='h-9 md:h-10'></div>
       <div className='flex flex-wrap'>
         <h2 className='text-xl mb-2 md:mb-0 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
@@ -92,6 +103,7 @@ const SettingsForGoogle = ({
             label='Disconnect with Google'
             uid={uid}
             accessToken={userDoc?.google?.workspace?.[0]?.accessToken}
+            setState={setGoogleAccessToken}
           />
         ) : (
           <RequestGoogleOAuthButton
@@ -115,7 +127,7 @@ const SettingsForGoogle = ({
         <div className='flex items-center'>
           <h3 className='hidden md:block md:ml-6 md:w-28'>Workspace 1 :</h3>
           <div className='flex flex-wrap'>
-            <InputBox
+            {/* <InputBox
               label={'Gmail'}
               name={'gmail1'}
               placeholder={'nishio.hiroshi@suchica.com'}
@@ -130,7 +142,7 @@ const SettingsForGoogle = ({
               value={userDoc?.google?.workspace?.[0]?.userName}
               disabled={true}
               bgColor={'bg-gray-200'}
-            />
+            /> */}
             <InputBox
               label={'Access Token'}
               name={'googleAccessToken1'}

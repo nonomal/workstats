@@ -188,14 +188,16 @@ const HowToGetAsanaInfo = () => {
           className='w-full'
         />
         <h3 className='text-xl py-4'>2-3. Asana Personal Access Token</h3>
-        <p className='py-1 pb-4'>
+        <p className='py-1'>
           The Asana API is used to aggregate numbers from the Asana application.
           At the time of writing, the following two authentication methods are
           available for using this API.
-          <ul className='py-3 list-disc list-inside' role='list'>
-            <li>Personal access token</li>
-            <li>OAuth 2.0</li>
-          </ul>
+        </p>
+        <ul className='py-1 list-disc list-inside' role='list'>
+          <li>Personal access token</li>
+          <li>OAuth 2.0</li>
+        </ul>
+        <p className='py-1'>
           The former is used to call apps and APIs created by users themselves,
           and the latter is used by third-party apps such as this app to obtain
           information on behalf of users. For more information, please refer to
@@ -212,7 +214,7 @@ const HowToGetAsanaInfo = () => {
           call APIs using the latter OAuth 2.0, but at this time, please note
           that the API calls are made using personal access tokens.
         </p>
-        <p className='py-1 pb-4'>
+        <p className='py-1'>
           Now that you understand the above, let&apos;s actually get your
           personal access token. You can use the link{' '}
           <a
@@ -224,13 +226,15 @@ const HowToGetAsanaInfo = () => {
             here
           </a>{' '}
           to access your developer console or follow the steps below:
-          <ul className='py-3 list-disc list-inside' role='list'>
-            <li>Click your profile photo from the topbar</li>
-            <li>Select My Settings</li>
-            <li>Open the Apps tab</li>
-            <li>Click Manage Developer Apps</li>
-            <li>Click + New Access Token</li>
-          </ul>
+        </p>
+        <ul className='py-1 list-disc list-inside' role='list'>
+          <li>Click your profile photo from the topbar</li>
+          <li>Select My Settings</li>
+          <li>Open the Apps tab</li>
+          <li>Click Manage Developer Apps</li>
+          <li>Click + New Access Token</li>
+        </ul>
+        <p className='py-1 pb-4'>
           Then you can find a button to generate your personal access token.
         </p>
         <Image

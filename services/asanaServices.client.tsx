@@ -51,6 +51,50 @@ const requestAsanaUserIdentity = () => {
   window.location.href = url;
 };
 
+// Get Asana Workspaces
+// See https://developers.asana.com/docs/get-multiple-workspaces
+interface GetWorkspacesResponse {
+  data: Array<{
+    gid: string;
+    name: string;
+    resource_type: string;
+  }>;
+}
+
+const getWorkspaces = async (
+  uid: string,
+  asanaAccessToken: string,
+  asanaRefreshToken: string
+): Promise<GetWorkspacesResponse> => {
+  const url = 'https://app.asana.com/api/1.0/workspaces';
+  const headers = new Headers();
+  headers.append('Authorization', `Bearer ${asanaAccessToken}`);
+  headers.append('Accept', 'application/json');
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: headers
+  });
+
+  // If the access token is expired, refresh it and try again
+  if (response.status === 401 && asanaRefreshToken && uid) {
+    return refreshAccessToken(asanaRefreshToken)
+      .then(async (res) => {
+        await handleSubmitAsanaAccessToken(uid, res.access_token);
+        headers.set('Authorization', 'Bearer ' + res.access_token);
+      })
+      .then(async () => {
+        return await fetch(url, {
+          method: 'GET',
+          headers: headers
+        }).then((response) => response.json());
+      });
+  }
+
+  // If the access token is not expired, return the response
+  const output = await response.json();
+  return output;
+};
+
 type ResponseData = {
   access_token: string;
   expires_in: number;
@@ -115,6 +159,7 @@ const useNumberOfTasks = ({
   params.assignee = asanaUserId;
   params.opt_fields = 'completed,completed_at,created_at';
   params.completed_since = since;
+  params.limit = '100'; // Default is 20. Max is 100. https://developers.asana.com/docs/pagination
 
   interface item {
     completed: boolean;
@@ -127,44 +172,53 @@ const useNumberOfTasks = ({
 
   // The official document is here: https://swr.vercel.app/docs/data-fetching
   const fetcher = async (url: string) => {
-    const response = await fetch(url, {
-      headers: myHeaders
-    })
-      .then(async (res) => {
-        // if res.status is 401, which means Unauthorized, then refresh the access token and try again
-        if (res.status === 401 && asanaRefreshToken && uid) {
-          return refreshAccessToken(asanaRefreshToken)
-            .then(async (res) => {
-              newAsanaAccessToken = res.access_token;
-              await handleSubmitAsanaAccessToken(uid, res.access_token);
-              myHeaders.set('Authorization', 'Bearer ' + res.access_token);
-            })
-            .then(async () => {
-              return await fetch(url, {
-                headers: myHeaders
-              }).then((res) => res.json());
-            });
-        }
-        return res.json();
+    const responseData = [];
+    do {
+      const response = await fetch(url, {
+        headers: myHeaders
       })
-      .catch((err) => console.log({ err }));
+        .then(async (res) => {
+          // if res.status is 401, which means Unauthorized, then refresh the access token and try again
+          if (res.status === 401 && asanaRefreshToken && uid) {
+            return refreshAccessToken(asanaRefreshToken)
+              .then(async (res) => {
+                newAsanaAccessToken = res.access_token;
+                await handleSubmitAsanaAccessToken(uid, res.access_token);
+                myHeaders.set('Authorization', 'Bearer ' + res.access_token);
+              })
+              .then(async () => {
+                return await fetch(url, {
+                  headers: myHeaders
+                }).then((res) => res.json());
+              });
+          }
+          return res.json();
+        })
+        .catch((err) => console.log({ err }));
+
+      // If there is no next page, then response.next_page will be falsy
+      if (response?.next_page?.uri) {
+        url = response.next_page.uri;
+      } else {
+        url = '';
+      }
+      responseData.push(...response.data);
+    } while (url);
 
     // Aggregate the number of tasks
-    const numberOfAll: number = response.data?.length
-      ? response.data.length
-      : 0;
+    const numberOfAll: number = responseData?.length ? responseData.length : 0;
     const numberOfClosed: number =
-      response.data?.filter((item: item) => {
+      responseData?.filter((item: item) => {
         return item.completed === true && item.completed_at <= until;
       })?.length || 0;
     const numberOfOpened: number =
-      response.data?.filter((item: item) => {
+      responseData?.filter((item: item) => {
         return item.completed === false;
       })?.length || 0;
 
     // Calculate velocity and estimated completion date
     const now = moment().toISOString();
-    const earliestCreatedAt: string = response.data?.reduce(
+    const earliestCreatedAt: string = responseData?.reduce(
       (earliest: string, item: item) => {
         if (item.created_at < earliest) return item.created_at;
         return earliest;
@@ -238,4 +292,4 @@ const useNumberOfTasks = ({
   }
 };
 
-export { requestAsanaUserIdentity, useNumberOfTasks };
+export { getWorkspaces, requestAsanaUserIdentity, useNumberOfTasks };

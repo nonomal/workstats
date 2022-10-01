@@ -84,22 +84,22 @@ const useUserSettings = () => {
       />
       <SettingsForAtlassian
         uid={uid}
-        userDoc={userDoc}
+        userDocState={userDoc}
         isAtlassianAuthenticated={isAtlassianAuthenticated}
       />
       <SettingsForAsana
         uid={uid}
-        userDoc={userDoc}
+        userDocState={userDoc}
         isAsanaAuthenticated={isAsanaAuthenticated}
       />
       <SettingsForSlack
         uid={uid}
-        userDoc={userDoc}
+        userDocState={userDoc}
         isSlackAuthenticated={isSlackAuthenticated}
       />
       <SettingsForGoogle
         uid={uid}
-        userDoc={userDoc}
+        userDocState={userDoc}
         isGoogleAuthenticated={isGoogleAuthenticated}
       />
       <JumpToCancelMembership />

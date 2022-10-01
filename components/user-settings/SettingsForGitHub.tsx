@@ -19,13 +19,12 @@ import {
   requestGithubUserIdentity
 } from '../../services/githubServices.client';
 import { UserType } from '../../config/firebaseTypes';
-import { Timestamp } from 'firebase/firestore';
+import { FieldValue } from 'firebase/firestore';
 
 interface SettingsForGitHubProps {
   uid: string;
   userDocState: UserType;
   isGithubAuthenticated: boolean;
-  // setState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SettingsForGitHub = ({
@@ -41,7 +40,7 @@ const SettingsForGitHub = ({
 
   // Initialize states
   const [userDoc, setUserDoc] = useState<UserType>(userDocState);
-  const [createdAt, setCreatedAt] = useState<Timestamp | undefined>(undefined);
+  const [createdAt, setCreatedAt] = useState<FieldValue | undefined>(undefined);
   const [isGithubAuthenticatedState, setIsGithubAuthenticatedState] = useState(
     isGithubAuthenticated
   );
@@ -123,7 +122,7 @@ const SettingsForGitHub = ({
   }, [userDoc?.github?.accessToken]);
 
   return (
-    <div id='source-control'>
+    <div id='github'>
       <div className='h-9 md:h-10'></div>
       <div className='flex flex-wrap'>
         <h2 className='text-xl mb-2 md:mb-0 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
