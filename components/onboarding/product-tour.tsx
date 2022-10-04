@@ -63,12 +63,18 @@ const Onboarding = ({
         newNumberOfTimesCompleted
       );
     }
+
+    // Go to the user settings page in another tab, which is the next thing to do
+    if (window.location.pathname === '/dashboard')
+      // eslint-disable-next-line quotes
+      confirm("Let's set it up right away!") &&
+        window.open('/user-settings', '_blank');
   };
   const onBeforeExit = (stepIndex: number) => {
     // For some reason, onExit is called when index = 0, and because of that, for some reason, step 1 is displayed twice, so prevent it. Instead, users cannot leave by pressing the escape button or off-screen during the first pop-up
     // Also added undefined. Couldn't figure out why, but it makes the behavior more stable.
     if (stepIndex === undefined || stepIndex === 0) return false;
-    return true;
+    return;
   };
   // For testing purposes
   // const onAfterChange = (newStepIndex: number) => {
