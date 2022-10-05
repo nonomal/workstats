@@ -2,6 +2,7 @@ import InputBox from '../../components/boxes/InputBox';
 import SubmitButton from '../../components/buttons/SubmitButton';
 import { UserType } from '../../config/firebaseTypes';
 import { handleSubmitBasicInfo } from '../../services/setDocToFirestore';
+import SelectBox from '../boxes/SelectBox';
 
 interface SettingsForBasicInfoProps {
   uid: string;
@@ -9,6 +10,20 @@ interface SettingsForBasicInfoProps {
 }
 
 const SettingsForBasicInfo = ({ uid, userDoc }: SettingsForBasicInfoProps) => {
+  // List country names using browser API
+  const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const B = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const countryObject = new Intl.DisplayNames(['en'], { type: 'region' });
+  const countryCodes = A.map((a) => B.map((b) => a + b)).flat();
+  const countryNames = countryCodes
+    .map((code) => {
+      const name = countryObject.of(code);
+      if (name !== code) return name;
+    })
+    .filter((name) => name !== undefined)
+    .filter((item, index, self) => self.indexOf(item) === index)
+    .sort() as string[];
+
   return (
     <div id='basic-info' className='w-full'>
       <h2 className='text-xl mt-8 mb-2 ml-2 md:ml-3 pl-1 underline underline-offset-4'>
@@ -90,11 +105,11 @@ const SettingsForBasicInfo = ({ uid, userDoc }: SettingsForBasicInfoProps) => {
           placeholder={'Suchica, Inc.'}
           value={userDoc?.company}
         />
-        <InputBox
-          label={'Country'}
+        <SelectBox
+          label={'Country or Region'}
           name={'country'}
-          placeholder={'United States of America'}
           value={userDoc?.country}
+          listValues={countryNames}
         />
         <div className='ml-2 pl-1 md:ml-2 md:pl-4'></div>
         <SubmitButton />
