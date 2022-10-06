@@ -112,7 +112,7 @@ const CardListForSlack = ({
         <GearIconLink
           mt={5}
           mb={2}
-          href='/user-settings'
+          href='/user-settings#slack'
           alt='Gear icon links to user settings'
         />
       </div>

@@ -83,7 +83,7 @@ const CardListForGoogleCalendar = ({
         <GearIconLink
           mt={5}
           mb={2}
-          href='/user-settings'
+          href='/user-settings#google'
           alt='Gear icon links to user settings'
         />
       </div>
