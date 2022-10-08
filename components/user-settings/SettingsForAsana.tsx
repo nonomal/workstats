@@ -146,6 +146,17 @@ const SettingsForAsana = ({
           />
         )}
       </div>
+      <p className='py-1 ml-3 pl-1'>
+        Follow the steps below to tally your numbers.
+      </p>
+      <ol className='py-1 ml-3 pl-1 list-decimal list-inside' role='list'>
+        <li key={1}>Press the &quot;Connect with Asana&quot; button.</li>
+        <li key={2}>
+          According to the dialog, login to Asana, check the scopes and
+          authenticate them.
+        </li>
+        <li key={3}>Register a workspace you want to aggregate below.</li>
+      </ol>
       <form
         name='task-ticket'
         onSubmit={(e) => handleSubmitTaskTicket(e, uid)}
@@ -153,7 +164,6 @@ const SettingsForAsana = ({
         target='_self'
         autoComplete='off'
       >
-        <div className='h-3 md:h-3'></div>
         <div className='flex flex-wrap items-center'>
           <div className='md:ml-6 md:w-28'></div>
           <InputBox
@@ -234,6 +244,11 @@ const SettingsForAsana = ({
           <SubmitButton />
         </div>
       </form>
+      <p className='py-1 ml-3 pl-1'>
+        Press &quot;Disconnect with Asana&quot; to disconnect at any time. If
+        you have any concerns or requests, please feel free to ask us through
+        the &quot;Contact Us&quot; link in the side menu.
+      </p>
     </div>
   );
 };
