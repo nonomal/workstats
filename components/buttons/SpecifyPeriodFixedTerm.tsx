@@ -54,6 +54,20 @@ const SpecifyPeriodFixedTerm = ({
           until: moment().subtract(1, 'year').endOf('year')
         });
         break;
+      case 'Last 6 Months':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: moment().subtract(6, 'month').startOf('month'),
+          until: moment().subtract(1, 'month').endOf('month')
+        });
+        break;
+      case 'Last 3 Months':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: moment().subtract(3, 'month').startOf('month'),
+          until: moment().subtract(1, 'month').endOf('month')
+        });
+        break;
       case 'This Month':
         currentTimeframe?.setTimeFrame({
           label: label,
