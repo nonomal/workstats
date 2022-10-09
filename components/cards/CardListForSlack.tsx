@@ -53,9 +53,14 @@ const CardListForSlack = ({
   // Set time period from global state
   const since =
     currentTimeframe?.timeframe.since?.format('YYYY-MM-DD') || '2000-01-01';
-  const until =
+  const preUntil =
     currentTimeframe?.timeframe.until?.format('YYYY-MM-DD') ||
     moment().format('YYYY-MM-DD');
+  // If it is Sunday, this week set a same date to since and until, then it does not work properly in Slack API due to its specification.
+  const until =
+    preUntil === since
+      ? moment(preUntil).add(1, 'days').format('YYYY-MM-DD')
+      : preUntil;
 
   // Aggregate numbers from slack
   const numberOfTotalSentCalc = useSlackSearch({
