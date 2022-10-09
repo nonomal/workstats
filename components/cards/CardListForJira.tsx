@@ -99,9 +99,11 @@ const CardListForJira = ({
 
         // Update the access token and refresh token in the database and cache.
         // This is done in the background, so it doesn't need to be awaited.
-        updateAtlassianTokens(uid, newAccessToken, newRefreshToken);
-        setAtlassianAccessToken(newAccessToken);
-        setAtlassianRefreshToken(newRefreshToken);
+        if (uid && newAccessToken && newRefreshToken) {
+          updateAtlassianTokens(uid, newAccessToken, newRefreshToken);
+          setAtlassianAccessToken(newAccessToken);
+          setAtlassianRefreshToken(newRefreshToken);
+        }
       }
 
       // Otherwise, update the number of issues
