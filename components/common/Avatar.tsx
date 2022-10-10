@@ -19,7 +19,7 @@ const Avatar = ({ userId, isUploaded }: AvatarProps) => {
   }, [userId, isUploaded]);
 
   return (
-    <div className='hidden md:block md:object-center md:m-4 md:mb-0 md:w-64 md:h-60'>
+    <div className='hidden md:block md:object-center md:m-4 md:mb-0 md:mr-0 md:w-48 md:h-44'>
       <Image
         className='inline object-cover rounded-full'
         src={photoURL}

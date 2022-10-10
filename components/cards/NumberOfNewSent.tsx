@@ -1,10 +1,10 @@
 // @ts-ignore
 const NumberOfNewSent = ({ data }) => {
   return (
-    <div className='bg-white shadow rounded-lg px-3 py-3 md:px-4 md:py-4 hover:bg-slate-200'>
-      <div className='flex space-x-2 md:space-x-4 items-center'>
+    <div className='bg-white shadow rounded-lg px-3 py-3 md:px-3 md:py-4 hover:bg-slate-200'>
+      <div className='flex space-x-2 md:space-x-3 items-center'>
         <div>
-          <div className='bg-sky-50 rounded-full w-5 h-5 md:w-12 md:h-12 text-sky-400 flex justify-center items-center'>
+          <div className='bg-sky-50 rounded-full w-5 h-5 md:w-10 md:h-10 text-sky-400 flex justify-center items-center'>
             <svg
               width='30'
               height='30'
@@ -24,10 +24,8 @@ const NumberOfNewSent = ({ data }) => {
           </div>
         </div>
         <div>
-          <div className='text-gray-400 text-sm md:text-base'>
-            # of new sent
-          </div>
-          <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
+          <div className='text-gray-400 text-sm md:text-sm'># of new sent</div>
+          <div className='hidden md:contents md:text-xl md:font-bold md:text-gray-900'>
             {data.toLocaleString()} times
           </div>
         </div>

@@ -50,7 +50,10 @@ const CardList = ({
   uid
 }: PropTypes) => {
   return (
-    <div id='card-list' className='container max-w-6xl px-5 my-1 md:my-1'>
+    <div
+      id='card-list'
+      className='container max-w-6xl px-5 md:px-0 my-1 md:my-1'
+    >
       <CardListForGithub
         githubOwnerName={githubOwnerName}
         githubRepoName={githubRepoName}

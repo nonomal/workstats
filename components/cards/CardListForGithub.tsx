@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 
 // import components
-import NumberOfCommits from './NumberOfCommits';
+// import NumberOfCommits from './NumberOfCommits';
 import NumberOfLinesAdded from './NumberOfLinesAdded';
 import NumberOfLinesDeleted from './NumberOfLinesDeleted';
 import NumberOfPullRequests from './NumberOfPullRequests';
@@ -159,8 +159,8 @@ const CardListForGithub = ({
           id='gear-icon'
         />
       </div>
-      <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
-        <NumberOfCommits data={numberOfCommits} />
+      <div className='grid gap-3 md:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 md:mr-5'>
+        {/* <NumberOfCommits data={numberOfCommits} /> */}
         <NumberOfPullRequests data={numberOfPullRequests} />
         <NumberOfReviews data={numberOfReviews} />
         <NumberOfLinesAdded data={numberOfLinesAdded} />

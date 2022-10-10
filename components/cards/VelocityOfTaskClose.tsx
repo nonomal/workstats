@@ -5,13 +5,13 @@ interface PropTypes {
 
 const VelocityOfTaskClose = ({ unit, number }: PropTypes) => {
   return (
-    <div className='bg-white shadow rounded-lg px-3 py-3 md:pl-4 md:pr-3 md:py-4 hover:bg-slate-200'>
-      <div className='flex space-x-2 md:space-x-4 items-center'>
+    <div className='bg-white shadow rounded-lg px-3 py-3 md:pl-3 md:pr-3 md:py-4 hover:bg-slate-200'>
+      <div className='flex space-x-2 md:space-x-3 items-center'>
         <div>
-          <div className='bg-pink-50 rounded-full w-5 h-5 md:w-12 md:h-12 text-pink-400 flex justify-center items-center'>
+          <div className='bg-pink-50 rounded-full w-5 h-5 md:w-10 md:h-10 text-pink-400 flex justify-center items-center'>
             <svg
-              width='30px'
-              height='30px'
+              width='25px'
+              height='25px'
               viewBox='0 0 24 24'
               role='img'
               xmlns='http://www.w3.org/2000/svg'
@@ -29,12 +29,12 @@ const VelocityOfTaskClose = ({ unit, number }: PropTypes) => {
           </div>
         </div>
         <div>
-          <div className='text-gray-400 text-sm md:text-base'>
+          <div className='text-gray-400 text-sm md:text-sm'>
             Closing velocity
           </div>
-          <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
+          <div className='hidden md:contents md:text-xl md:font-bold md:text-gray-900'>
             {number ? number.toLocaleString() : 0}{' '}
-            <span className='md:text-xl'>{unit}</span>
+            <span className='md:text-lg'>{unit}</span>
           </div>
         </div>
       </div>

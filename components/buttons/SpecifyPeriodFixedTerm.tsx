@@ -105,7 +105,7 @@ const SpecifyPeriodFixedTerm = ({
     <button
       onClick={handleOnClick}
       disabled={disabled}
-      className={`rounded-lg ${bgColor} shadow text-${textColor} text-sm md:text-base px-2 md:px-3 py-1 mx-1 md:mx-2 my-1`}
+      className={`rounded-lg ${bgColor} shadow text-${textColor} text-sm md:text-base px-2 md:px-3 py-1 mx-1 md:mr-4 md:ml-0 my-1`}
     >
       {label}
     </button>

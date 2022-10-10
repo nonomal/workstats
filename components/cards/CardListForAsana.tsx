@@ -124,7 +124,7 @@ const CardListForAsana = ({
           alt='Gear icon links to user settings'
         />
       </div>
-      <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
+      <div className='grid gap-3 md:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 md:mr-5'>
         <NumberOfCloseTasks
           label='# of closed tasks'
           unit='tasks'
