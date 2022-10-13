@@ -105,6 +105,7 @@ const SettingsForGitHub = ({
         (res) => {
           const ownerList: string[] = [];
           const repoList: string[] = [];
+          if (res?.message?.includes('API rate limit exceeded')) return;
           // @ts-ignore
           res.map((repo) => {
             if (!ownerList.includes(repo.owner.login)) {

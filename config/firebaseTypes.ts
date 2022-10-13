@@ -144,4 +144,25 @@ interface NumbersType extends Record<string, unknown> {
   };
 }
 
-export type { UserType, NumbersType, NumbersByPeriodType, StringsByPeriodType };
+interface PullRequestsType extends Record<string, unknown> {
+  id?: number; // Pull Request ID
+  number?: number; // Pull Request Number
+  title?: string;
+  state?: string; // open or closed
+  createdAt: string; // ISO 8601. Removed ? because it is required by the following code
+  updatedAt?: string; // ISO 8601
+  closedAt?: string; // ISO 8601
+  mergedAt?: string; // ISO 8601
+  leadTimeSinceLastPR?: number; // Lead time since last PR in milliseconds
+  movingAverageLeadTimeSinceLastPR?: number; // Moving average lead time since last PR in milliseconds
+  user?: string; // User Name
+  repositoryUrl?: string;
+}
+
+export type {
+  UserType,
+  NumbersType,
+  NumbersByPeriodType,
+  PullRequestsType,
+  StringsByPeriodType
+};

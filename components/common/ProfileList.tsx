@@ -9,7 +9,7 @@ const ProfileList = ({ profileList }) => {
       <div>
         {profileList.firstName} {profileList.middleName} {profileList.lastName}
       </div>
-      <div>email :</div>
+      <div>E-mail :</div>
       <div>{profileList.email}</div>
       <div>Assigned :</div>
       <div>{profileList.assignedPj}</div>

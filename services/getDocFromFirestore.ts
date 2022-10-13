@@ -1,6 +1,6 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseClient';
-import { UserType } from '../config/firebaseTypes';
+import { PullRequestsType, UserType } from '../config/firebaseTypes';
 
 const getAUserDoc = async (docId: string) => {
   const docRef = doc(db, 'users', docId);
@@ -51,4 +51,16 @@ const getANumbersDoc = async (docId: string) => {
   return docSnap.data();
 };
 
-export { getANumbersDoc, getAUserDoc, getPhotoURL, getUserInfo };
+const getPullRequests = async (docId: string) => {
+  const docRef = doc(db, 'github-pull-requests', docId);
+  const docSnap = await getDoc(docRef);
+  return docSnap?.data()?.pullRequests as PullRequestsType[];
+};
+
+export {
+  getANumbersDoc,
+  getAUserDoc,
+  getPhotoURL,
+  getPullRequests,
+  getUserInfo
+};

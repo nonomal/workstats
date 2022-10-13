@@ -1,3 +1,46 @@
+// The official document is here https://docs.github.com/en/rest/reference/search#search-issues-and-pull-requests
+interface GitHubSearchTypes {
+  searchWhere:
+    | 'code'
+    | 'commits'
+    | 'issues'
+    | 'labels'
+    | 'repositories'
+    | 'topics'
+    | 'users';
+  searchQuery: string;
+  accessToken?: string; // Required for private repositories
+}
+
+interface SearchParamTypes {
+  q: string; // Search query, see the details: https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests
+  sort?: string; // Default is 'best match', can be one of: comments, reactions, reactions-+1, reactions--1, reactions-smile, reactions-thinking_face, reactions-heart, reactions-tada, interactions, created, updated
+  order?: string; // Default is 'desc', can be 'asc' or 'desc'
+  per_page: string; // Default is 30, max is 100
+  page: string; // Default is 1
+  [key: string]: string | undefined; // To avoid type error ts(7053) in params[key]
+}
+
+interface SearchResultItemTypes {
+  id: number;
+  number: number;
+  title: string;
+  body: string;
+  state: string;
+  comments: number;
+  created_at: string;
+  updated_at: string;
+  closed_at: string;
+  user: {
+    login: string;
+    id: number;
+  };
+  pull_request: {
+    merged_at: string;
+  };
+  repository_url: string;
+}
+
 // See this for more details: https://docs.github.com/en/rest/reference/pulls#list-pull-requests
 interface ListPullRequestArgTypes {
   owner: string;
@@ -78,10 +121,13 @@ interface ListPullRequestsFilesResponseItemTypes
 }
 
 export type {
+  GitHubSearchTypes,
   ListPullRequestArgTypes,
   ListPullRequestParamTypes,
   ListPullRequestResponseItemTypes,
   ListPullRequestsFilesPramTypes,
   ListPullRequestsFilesQueryTypes,
-  ListPullRequestsFilesResponseItemTypes
+  ListPullRequestsFilesResponseItemTypes,
+  SearchParamTypes,
+  SearchResultItemTypes
 };

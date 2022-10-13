@@ -1,6 +1,10 @@
 import { doc, FieldValue, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseClient';
-import { NumbersType, UserType } from '../config/firebaseTypes';
+import {
+  NumbersType,
+  PullRequestsType,
+  UserType
+} from '../config/firebaseTypes';
 import { getWorkspaces } from './asanaServices.client';
 import { getUserInfo } from './getDocFromFirestore';
 import { GetTheRepository } from './githubServices.client';
@@ -696,6 +700,21 @@ const UpdInsGoogleCalendarNumbers = async ({
   return;
 };
 
+interface UpdInsGitHubPullRequestsProps {
+  docId: string;
+  pullRequests: PullRequestsType[];
+}
+const UpdInsGitHubPullRequests = async ({
+  docId,
+  pullRequests
+}: UpdInsGitHubPullRequestsProps) => {
+  const docRef = doc(db, 'github-pull-requests', docId);
+  const docData = { pullRequests };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 export {
   createNumbersDoc,
   createUserDoc,
@@ -718,6 +737,7 @@ export {
   updateAtlassianTokens,
   UpdInsAsanaNumbers,
   UpdInsGithubNumbers,
+  UpdInsGitHubPullRequests,
   UpdInsGoogleCalendarNumbers,
   UpdInsJiraNumbers,
   UpdInsSlackNumbers

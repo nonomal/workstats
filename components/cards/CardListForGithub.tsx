@@ -23,6 +23,7 @@ import {
   useGitHubSearch
 } from '../../services/githubServices.client';
 import { UpdInsGithubNumbers } from '../../services/setDocToFirestore';
+import ChartIconLink from '../common/ChartIcon';
 
 interface PropTypes {
   githubOwnerName: string;
@@ -157,6 +158,13 @@ const CardListForGithub = ({
           href='/user-settings#github'
           alt='Gear icon links to user settings'
           id='gear-icon'
+        />
+        <ChartIconLink
+          mt={5}
+          mb={2}
+          href='/charts/github'
+          alt='Chart icon links to GitHub charts page'
+          id='chart-icon'
         />
       </div>
       <div className='grid gap-3 md:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 md:mr-5'>
