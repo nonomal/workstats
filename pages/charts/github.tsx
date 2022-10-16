@@ -29,11 +29,16 @@ import { SearchGitHubWithDetails } from '../../services/githubServices.client';
 import ButtonList from '../../components/buttons/ButtonList';
 import { UpdInsGitHubPullRequests } from '../../services/setDocToFirestore';
 import { getPullRequests } from '../../services/getDocFromFirestore';
+import {
+  LineChartData,
+  LineChartOptions
+} from '../../services/chartServices.client';
 
 export default function GitHubCharts() {
   // Global timestamp button context
   const globalState: GlobalContextObjectType = useGlobalContext();
   const currentTimeframe = globalState.currentTimeframe;
+
   // Set time period from global state
   const oldest = '*';
   const latest = moment().format('YYYY-MM-DD');
@@ -41,8 +46,28 @@ export default function GitHubCharts() {
     currentTimeframe?.timeframe.since?.format('YYYY-MM-DD') || '*';
   const createdUntil =
     currentTimeframe?.timeframe.until?.format('YYYY-MM-DD') || '*';
-  const createdSinceUnix = currentTimeframe?.timeframe.since?.valueOf();
-  const createdUntilUnix = currentTimeframe?.timeframe.until?.valueOf();
+  const createdSinceUnix = currentTimeframe?.timeframe.since?.valueOf(); // milliseconds
+  const createdUntilUnix = currentTimeframe?.timeframe.until?.valueOf(); // milliseconds
+  const durationUnix =
+    createdUntilUnix && createdSinceUnix && createdUntilUnix - createdSinceUnix;
+
+  // Set sub time period for comparison
+  const createdSinceForComp =
+    createdSince !== '*'
+      ? moment(createdSince)?.subtract(durationUnix, 'ms')?.format('YYYY-MM-DD')
+      : '*';
+  const createdUntilForComp =
+    createdUntil !== '*'
+      ? moment(createdUntil)?.subtract(durationUnix, 'ms')?.format('YYYY-MM-DD')
+      : '*';
+  const createdSinceUnixForComp =
+    createdSince !== '*'
+      ? moment(createdSince)?.subtract(durationUnix, 'ms').valueOf()
+      : undefined; // milliseconds
+  const createdUntilUnixForComp =
+    createdSince !== '*'
+      ? moment(createdUntil)?.subtract(durationUnix, 'ms').valueOf()
+      : undefined; // milliseconds
 
   // @ts-ignore
   const { currentUser } = useAuth();
@@ -73,14 +98,14 @@ export default function GitHubCharts() {
   }, [uid, userDoc?.github, latest]);
 
   // Get Pull Requests data from pullRequests collection from Firestore
-  const [pullRequests, setPullRequests] = useState<{ x: string; y: number }[]>(
-    []
-  );
+  const [pullRequests1, setPullRequests1] = useState<
+    { x: number; y: number }[]
+  >([]);
   useEffect(() => {
     if (uid)
       getPullRequests(uid).then((res) => {
-        // Convert data to {x: string, y: number}[]
-        const pullRequests = res
+        // Convert data to {x: number, y: number}[] for main chart
+        const pullRequests1 = res
           ? res
               ?.filter(
                 (pr) =>
@@ -95,17 +120,46 @@ export default function GitHubCharts() {
               })
           : [];
         // @ts-ignore
-        if (pullRequests) setPullRequests(pullRequests);
+        if (pullRequests1) setPullRequests1(pullRequests1);
       });
   }, [uid, createdSince, createdUntil]);
 
-  // Aggregate "Lead time since last pull request created" data from pullRequests collection from Firestore
-  const [leadTime, setLeadTime] = useState<{ x: string; y: number }[]>([]);
+  // Get Pull Requests data from pullRequests collection from Firestore
+  const [pullRequests2, setPullRequests2] = useState<
+    { x: number; y: number }[]
+  >([]);
   useEffect(() => {
     if (uid)
       getPullRequests(uid).then((res) => {
-        // Convert data to {x: string, y: number}[]
-        const leadTime = res
+        // Convert data to {x: number, y: number}[] for sub chart
+        const pullRequests2 =
+          res && createdSinceForComp != '*'
+            ? res
+                ?.filter(
+                  (pr) =>
+                    pr?.createdAt >= createdSinceForComp &&
+                    pr?.createdAt <= createdUntilForComp
+                )
+                ?.map((pr, index) => {
+                  if (pr.createdAt)
+                    return {
+                      x: moment(pr.createdAt).valueOf(),
+                      y: index + 1
+                    };
+                })
+            : [];
+        // @ts-ignore
+        if (pullRequests2) setPullRequests2(pullRequests2);
+      });
+  }, [uid, createdSinceForComp, createdUntilForComp]);
+
+  // Aggregate "Lead time since last pull request created" data from pullRequests collection from Firestore
+  const [leadTime1, setLeadTime1] = useState<{ x: number; y: number }[]>([]);
+  useEffect(() => {
+    if (uid)
+      getPullRequests(uid).then((res) => {
+        // Convert data to {x: number, y: number}[]
+        const leadTime1 = res
           ? res
               ?.filter(
                 (pr) =>
@@ -123,198 +177,108 @@ export default function GitHubCharts() {
               .filter((pr) => pr !== undefined)
           : [];
         // @ts-ignore
-        if (leadTime) setLeadTime(leadTime);
+        if (leadTime1) setLeadTime1(leadTime1);
       });
   }, [uid, createdSince, createdUntil]);
+
+  const [leadTime2, setLeadTime2] = useState<{ x: number; y: number }[]>([]);
+  useEffect(() => {
+    if (uid)
+      getPullRequests(uid).then((res) => {
+        // Convert data to {x: number, y: number}[]
+        const leadTime2 =
+          res && createdSinceForComp != '*'
+            ? res
+                ?.filter(
+                  (pr) =>
+                    pr?.createdAt >= createdSinceForComp &&
+                    pr?.createdAt <= createdUntilForComp
+                )
+                ?.map((pr) => {
+                  if (pr.createdAt && pr.movingAverageLeadTimeSinceLastPR)
+                    return {
+                      x: moment(pr.createdAt).valueOf(), // Unix timestamp in milliseconds
+                      y: Math.round(
+                        pr.movingAverageLeadTimeSinceLastPR / 1000 / 3600
+                      ) // Moving average lead time in hours
+                    };
+                })
+                .filter((pr) => pr !== undefined)
+            : [];
+        // @ts-ignore
+        if (leadTime2) setLeadTime2(leadTime2);
+      });
+  }, [uid, createdSinceForComp, createdUntilForComp]);
 
   const content =
     'Chart GitHub-related numbers. These include the number of commits, pull requests, reviews, lines of code added, lines of code deleted, etc.';
 
   // Dataset for line chart. https://www.chartjs.org/docs/latest/charts/line.html
-  const dataset1 = {
+  const dataset1_1 = LineChartData({
     label: 'Pull Requests',
-    fill: false,
-    lineTension: 0.3, // The more the value is, the more the curve is.
-    // cubicInterpolationMode: 'monotone', // default or monotone
-    backgroundColor: 'rgba(75,192,192,0.4)',
-    borderColor: 'rgba(75,192,192,1)',
-    // borderCapStyle: 'butt',
-    // borderDash: [],
-    // borderDashOffset: 0.0,
-    // borderJoinStyle: 'miter',
-    pointBorderColor: 'rgba(75,192,192,1)',
-    pointBackgroundColor: '#fff',
-    pointBorderWidth: 2, // Pixels.
-    pointHoverRadius: 5,
-    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-    pointHoverBorderColor: 'rgba(220,220,220,1)',
-    pointHoverBorderWidth: 2,
-    pointRadius: 5,
-    // pointHitRadius: 10,
-    data: pullRequests
-    // yAxisID: 'y1' // If you want to use a different y-axis, uncomment this line.
-  };
-  const dataset2 = {
-    label: 'Moving Average of LT',
-    fill: false,
-    lineTension: 0.3, // The more the value is, the more the curve is.
-    // cubicInterpolationMode: 'monotone', // default or monotone
-    backgroundColor: 'rgba(255, 99, 132, 0.4)',
+    data: pullRequests1,
+    xAxisID: 'x1',
+    // contrast color of dataset1_2
+    backgroundColor: 'rgba(255, 99, 132, 0.2)',
     borderColor: 'rgba(255, 99, 132, 1)',
-    // borderCapStyle: 'butt',
-    // borderDash: [],
-    // borderDashOffset: 0.0,
-    // borderJoinStyle: 'miter',
     pointBorderColor: 'rgba(255, 99, 132, 1)',
-    pointBackgroundColor: '#fff',
-    pointBorderWidth: 2, // Pixels.
-    pointHoverRadius: 5,
-    pointHoverBackgroundColor: 'rgba(255, 99, 132, 1)',
-    pointHoverBorderColor: 'rgba(220,220,220,1)',
-    pointHoverBorderWidth: 2,
-    pointRadius: 5,
-    // pointHitRadius: 10,
-    data: leadTime
-    // yAxisID: 'y2' // If you want to use a different y-axis, uncomment this line.
-  };
+    pointHoverBackgroundColor: 'rgba(255, 99, 132, 1)'
+  });
+  const dataset1_2 = LineChartData({
+    label: 'Previous One',
+    data: pullRequests2,
+    xAxisID: 'x2',
+    backgroundColor: 'rgba(192, 75, 75, 0.4)',
+    borderColor: 'rgba(192, 75, 75, 1)',
+    pointBorderColor: 'rgba(192, 75, 75, 1)',
+    pointHoverBackgroundColor: 'rgba(192, 75, 75, 1)',
+    borderDash: [5, 5]
+  });
+  const dataset2_1 = LineChartData({
+    label: 'Moving Average of LT',
+    data: leadTime1,
+    xAxisID: 'x1',
+    backgroundColor: 'rgba(255, 159, 64, 0.4)',
+    borderColor: 'rgba(255, 159, 64, 1)',
+    pointBorderColor: 'rgba(255, 159, 64, 1)',
+    pointHoverBackgroundColor: 'rgba(255, 159, 64, 1)'
+  });
+  const dataset2_2 = LineChartData({
+    label: 'Previous One',
+    data: leadTime2,
+    xAxisID: 'x2',
+    backgroundColor: 'rgba(255, 206, 86, 0.4)',
+    borderColor: 'rgba(255, 206, 86, 1)',
+    pointBorderColor: 'rgba(255, 206, 86, 1)',
+    pointHoverBackgroundColor: 'rgba(255, 206, 86, 1)',
+    borderDash: [5, 5]
+  });
   const data1 = {
     // labels: [], // Labels for the x-axis
-    datasets: [dataset1] // Data for the y-axis
+    datasets: [dataset1_1, dataset1_2] // Data for the y-axis
   };
   const data2 = {
     // labels: [], // Labels for the x-axis
-    datasets: [dataset2] // Data for the y-axis
+    datasets: [dataset2_1, dataset2_2] // Data for the y-axis
   };
 
   // Options for line chart
-  const options1 = {
-    maintainAspectRatio: false,
-    responsive: true, // Make the chart responsive
-    plugins: {
-      legend: {
-        labels: {
-          // https://www.chartjs.org/docs/latest/general/fonts.html
-          font: {
-            size: 18 // Default is 12px.
-          }
-        },
-        position: 'top' as const // 'top', 'bottom', 'left', 'right'
-      },
-      title: {
-        display: false, // true, false
-        text: 'GitHub Line Chart' // string
-      }
-    },
-    // https://www.chartjs.org/docs/latest/axes/
-    // https://www.chartjs.org/docs/latest/axes/cartesian/time.html#configuration-options
-    scales: {
-      x: {
-        display: true, // true, false
-        type: 'time' as const, // 'linear', 'logarithmic', 'time', 'category', 'timeseries'
-        time: {
-          unit: 'day' as const, // 'millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'. https://www.chartjs.org/docs/latest/axes/cartesian/time.html#time-units
-          // parser: 'x', // means Unix Timestamp without milliseconds. https://www.chartjs.org/docs/latest/axes/cartesian/time.html#parsing-callbacks
-          // round: false, // If it's true, dates will be rounded to the start of this unit.
-          // stepSize: 1, // The number of units between grid lines.
-          displayFormats: {
-            day: 'MMM D, YY' // https://momentjs.com/docs/#/displaying/format/
-          },
-          tooltipFormat: 'llll' // Tue, Oct 11, 2022 2:52 PM. https://momentjs.com/
-        },
-        suggestedMin: createdSinceUnix || pullRequests[0]?.x,
-        suggestedMax: createdUntilUnix,
-        ticks: {
-          font: {
-            size: 18 // Default is 12px.
-          }
-        }
-      },
-      y: {
-        display: true, // true, false
-        type: 'linear' as const, // 'linear', 'logarithmic', 'time', 'category', 'timeseries'
-        position: 'left' as const, // 'left', 'right'
-        title: {
-          display: true, // true, false
-          text: 'Total PRs (#)',
-          font: {
-            size: 18 // Default is 12px.
-          }
-        },
-        suggestedMin: 0, // Minimum value to display on the y-axis
-        ticks: {
-          font: {
-            size: 18 // Default is 12px.
-          }
-        }
-      }
-    }
-  };
-
-  const options2 = {
-    maintainAspectRatio: false,
-    responsive: true, // Make the chart responsive
-    plugins: {
-      legend: {
-        labels: {
-          // https://www.chartjs.org/docs/latest/general/fonts.html
-          font: {
-            size: 18 // Default is 12px.
-          }
-        },
-        position: 'top' as const // 'top', 'bottom', 'left', 'right'
-      },
-      title: {
-        display: false, // true, false
-        text: 'GitHub Line Chart' // string
-      }
-    },
-    // https://www.chartjs.org/docs/latest/axes/
-    // https://www.chartjs.org/docs/latest/axes/cartesian/time.html#configuration-options
-    scales: {
-      x: {
-        display: true, // true, false
-        type: 'time' as const, // 'linear', 'logarithmic', 'time', 'category', 'timeseries'
-        time: {
-          unit: 'day' as const, // 'millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'. https://www.chartjs.org/docs/latest/axes/cartesian/time.html#time-units
-          // parser: 'x', // means Unix Timestamp without milliseconds. https://www.chartjs.org/docs/latest/axes/cartesian/time.html#parsing-callbacks
-          // round: false, // If it's true, dates will be rounded to the start of this unit.
-          // stepSize: 1, // The number of units between grid lines.
-          displayFormats: {
-            day: 'MMM D, YY' // https://momentjs.com/docs/#/displaying/format/
-          },
-          tooltipFormat: 'llll' // Tue, Oct 11, 2022 2:52 PM. https://momentjs.com/
-        },
-        suggestedMin: createdSinceUnix || leadTime[0]?.x,
-        suggestedMax: createdUntilUnix,
-        ticks: {
-          font: {
-            size: 18 // Default is 12px.
-          }
-        }
-      },
-      y: {
-        display: true, // true, false
-        type: 'linear' as const, // 'linear', 'logarithmic', 'time', 'category', 'timeseries'
-        position: 'left' as const, // 'left', 'right'
-        title: {
-          display: true, // true, false
-          text: 'Lead Time (Hours)',
-          font: {
-            size: 18 // Default is 12px.
-          }
-        },
-        suggestedMin: 0, // Minimum value to display on the y-axis
-        ticks: {
-          font: {
-            size: 18 // Default is 12px.
-          }
-        }
-        // grid: {
-        //   drawOnChartArea: false // false, true
-        // }
-      }
-    }
-  };
+  const options1 = LineChartOptions({
+    chartTitle: 'Pull Requests from GitHub',
+    y1Title: 'Total PRs (#)',
+    x1SuggestedMin: createdSinceUnix || pullRequests1[0]?.x,
+    x1SuggestedMax: createdUntilUnix,
+    x2SuggestedMin: createdSinceUnixForComp || pullRequests2[0]?.x,
+    x2SuggestedMax: createdUntilUnixForComp
+  });
+  const options2 = LineChartOptions({
+    chartTitle: 'Moving Average of Lead Time',
+    y1Title: 'Lead Time (hours)',
+    x1SuggestedMin: createdSinceUnix || leadTime1[0]?.x,
+    x1SuggestedMax: createdUntilUnix,
+    x2SuggestedMin: createdSinceUnixForComp || leadTime2[0]?.x,
+    x2SuggestedMax: createdUntilUnixForComp
+  });
 
   // Register the chart plugins
   Chart.register(
@@ -349,6 +313,14 @@ export default function GitHubCharts() {
             </div>
             <div className='h-80 md:h-104'>
               <Line options={options2} data={data2} />
+            </div>
+          </div>
+          <div className='md:grid md:grid-cols-2 md:gap-4'>
+            <div className='hidden md:block'></div>
+            <div className='px-5'>
+              *Moving Average of LT: Moving average over the last 10 pull
+              requests of the lead time (hours) between the creation date of a
+              pull request and the previous one.
             </div>
           </div>
           <h2 className='text-xl mt-2 md:mt-4 md:mb-2 px-5 md:px-0'>
