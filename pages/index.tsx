@@ -7,8 +7,6 @@ import LinkButton from '../components/buttons/LinkButton';
 import ProductHuntVote from '../components/buttons/ProductHunt';
 
 // Pictures
-import Dashboard from '../public/home-page/WorkStats_Dashboard2.png';
-import Dashboard_Mobile from '../public/home-page/WorkStats_Dashboard_Mobile.png';
 import JiraIcon from '../public/home-page/Jira-Logo.png';
 import AsanaIcon from '../public/home-page/Asana-Official-Logo.png';
 import SlackIcon from '../public/slack-svgrepo-com.svg';
@@ -39,18 +37,18 @@ export default function HomePage() {
       </Head>
       <div className='h-6 md:h-14'></div>
       <div className='md:flex'>
-        <div className='grid gap-3 md:gap-4 md:w-5/12 p-2 m-2 text-center content-center place-items-center'>
+        <div className='grid gap-3 md:gap-4 md:w-4/12 p-2 m-2 text-center content-center place-items-center'>
           <h2 className='text-3xl md:text-5xl font-bold text-grey-800'>
-            WorkStats is...
+            WorkStats...
           </h2>
           <div className='text-2xl md:text-3xl text-grey-800'>
-            <p className='md:p-0.5'>a dashboard tool</p>
+            <p className='md:p-0.5'>assists you & your team</p>
             {/* <p className='md:p-0.5'>
               for engineers and project managers
             </p> */}
-            <p className='md:p-0.5'>to quantify your productivity</p>
-            <p className='md:p-0.5'>by visualizing numbers</p>
-            <p className='md:p-0.5'>from services such as;</p>
+            <p className='md:p-0.5'>to check and improve</p>
+            <p className='md:p-0.5'>your work quantitatively,</p>
+            <p className='md:p-0.5'>aggregated from</p>
           </div>
           <div className='flex gap-3'>
             <Image
@@ -106,29 +104,25 @@ export default function HomePage() {
           </div>
           <LinkButton href='/dashboard' label='Try For Free' />
         </div>
-        <div className='hidden md:block md:w-8/12 m-4 rounded-2xl border border-slate-300'>
-          <Image
-            src={Dashboard}
-            alt='A dashboard'
-            layout='responsive'
-            objectFit='contain'
-            quality={100}
-            priority={true}
-            placeholder='empty'
-            className='rounded-2xl'
-          />
+        <div className='hidden md:block md:w-8/12 md:h-103 m-4'>
+          <iframe
+            src='https://www.youtube.com/embed/vBTGarbKpUE?autoplay=1&mute=1&loop=1&playlist=vBTGarbKpUE'
+            width='100%'
+            height='100%'
+            frameBorder='0'
+            allow='autoplay; fullscreen; picture-in-picture'
+            title='WorkStats Demo'
+          ></iframe>
         </div>
-        <div className='md:hidden m-4 rounded-2xl border border-slate-300'>
-          <Image
-            src={Dashboard_Mobile}
-            alt='A dashboard'
-            layout='responsive'
-            objectFit='contain'
-            quality={100}
-            priority={true}
-            placeholder='empty'
-            className='rounded-2xl'
-          />
+        <div className='md:hidden h-136'>
+          <iframe
+            src='https://www.youtube.com/embed/4YwH8GpK2a8?autoplay=1&mute=1&loop=1&playlist=4YwH8GpK2a8' // 'shorts' should be replaced with 'embed' in the url. And autoplay does not work on mobile due to Google and Apple's policies. https://developers.google.com/youtube/iframe_api_reference#Autoplay_and_scripted_playback
+            width='100%'
+            height='100%'
+            frameBorder='0'
+            allow='autoplay; fullscreen; picture-in-picture'
+            title='WorkStats Demo for Mobile'
+          ></iframe>
         </div>
       </div>
       <div className='h-12 md:h-32'></div>
@@ -459,7 +453,7 @@ export default function HomePage() {
       <div className='h-4 md:h-10'></div>
       <div className='text-xl md:text-3xl text-grey-800 p-2 m-2 text-center content-center place-items-center'>
         <p className='p-1 md:p-2'>
-          WorkStats visitors come from 55 countries worldwide.
+          WorkStats visitors come from 58 countries worldwide.
         </p>
       </div>
       <div className='flex place-content-center'>
