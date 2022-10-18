@@ -18,6 +18,8 @@ import A_1on1_Meeting from '../public/home-page/A-1on1-meeting.jpg';
 import Issue1 from '../public/home-page/WorkStats_Dashboard_Issue1.png';
 import Issue2 from '../public/home-page/WorkStats_Dashboard_Issue2.png';
 import Issue3 from '../public/home-page/WorkStats_Dashboard_Issue3.png';
+import Team_Using_Workstats from '../public/home-page/Team-Using-Workstats.jpg';
+import AGIcon from '../public/home-page/the-american-genius-main-lo.png';
 import WorkStats_Visitors_By_Country from '../public/home-page/workstats-visitors-by-country.png';
 import ProductHunt from '../public/home-page/Logo_ProductHunt.png';
 import BetaList from '../public/home-page/Logo_BetaList.png';
@@ -38,10 +40,10 @@ export default function HomePage() {
       <div className='h-6 md:h-14'></div>
       <div className='md:flex'>
         <div className='grid gap-3 md:gap-4 md:w-4/12 p-2 m-2 text-center content-center place-items-center'>
-          <h2 className='text-3xl md:text-5xl font-bold text-grey-800'>
+          <h2 className='text-3xl md:text-5xl font-bold text-gray-800'>
             WorkStats...
           </h2>
-          <div className='text-2xl md:text-3xl text-grey-800'>
+          <div className='text-2xl md:text-3xl text-gray-800'>
             <p className='md:p-0.5'>assists you & your team</p>
             {/* <p className='md:p-0.5'>
               for engineers and project managers
@@ -126,11 +128,11 @@ export default function HomePage() {
         </div>
       </div>
       <div className='h-12 md:h-32'></div>
-      <h2 className='text-3xl md:text-5xl font-bold text-grey-800 text-center'>
+      <h2 className='text-3xl md:text-5xl font-bold text-gray-800 text-center'>
         Issues we think
       </h2>
       <div className='h-4 md:h-10'></div>
-      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-grey-800'>
+      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-gray-800'>
         <h3>1. For weekly project meetings &quot;without numbers&quot;</h3>
       </div>
       <div className='md:flex'>
@@ -159,11 +161,11 @@ export default function HomePage() {
           />
         </div>
         <div className='grid gap-2 md:gap-4 md:w-7/12 p-2 m-2 text-center content-center place-items-center'>
-          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-grey-800'>
+          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-gray-800'>
             <h3>1. For weekly project meetings</h3>
             <h3>&quot;without numbers&quot;</h3>
           </div>
-          <div className='text-lg md:text-2xl text-grey-800'>
+          <div className='text-lg md:text-2xl text-gray-800'>
             <p className='p-1 md:p-2'>
               <b className='text-gray-800'>Velocity</b> for each member is often{' '}
               <b className='text-gray-800'>not quantified</b>. (ex: average 8.2
@@ -182,7 +184,7 @@ export default function HomePage() {
         {/* <div className='md:w-20'></div> */}
       </div>
       <div className='h-8 md:h-20'></div>
-      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-grey-800'>
+      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-gray-800'>
         <h3>2. For monthly 1-on-1 meetings &quot;without numbers&quot;</h3>
       </div>
       <div className='md:flex'>
@@ -199,11 +201,11 @@ export default function HomePage() {
           />
         </div>
         <div className='grid gap-2 md:gap-4 md:w-7/12 p-2 m-2 text-center content-center place-items-center'>
-          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-grey-800'>
+          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-gray-800'>
             <h3>2. For monthly 1-on-1 meetings</h3>
             <h3>&quot;without numbers&quot;</h3>
           </div>
-          <div className='text-lg md:text-2xl text-grey-800'>
+          <div className='text-lg md:text-2xl text-gray-800'>
             <p className='p-1 md:p-2'>
               <b className='text-gray-800'>Qualitative</b> 1-on-1s are{' '}
               <b className='text-gray-800'>fine as long as</b> the relationship
@@ -232,7 +234,7 @@ export default function HomePage() {
         </div>
       </div>
       <div className='h-8 md:h-20'></div>
-      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-grey-800'>
+      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-gray-800'>
         <h3>
           3. For half-year evaluation meetings &quot;without numbers&quot;
         </h3>
@@ -263,11 +265,11 @@ export default function HomePage() {
           />
         </div>
         <div className='grid gap-2 md:gap-4 md:w-7/12 p-2 m-2 text-center content-center place-items-center'>
-          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-grey-800'>
+          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-gray-800'>
             <h3>3. For half-year evaluation meetings</h3>
             <h3>&quot;without numbers&quot;</h3>
           </div>
-          <div className='text-lg md:text-2xl text-grey-800'>
+          <div className='text-lg md:text-2xl text-gray-800'>
             <p className='p-1 md:p-2'>
               When a company size grows, it goes{' '}
               <b className='text-gray-800'>difficult</b> for a evaluator to
@@ -288,11 +290,11 @@ export default function HomePage() {
         </div>
       </div>
       <div className='h-12 md:h-32'></div>
-      <h2 className='text-3xl md:text-5xl font-bold text-grey-800 text-center'>
+      <h2 className='text-3xl md:text-5xl font-bold text-gray-800 text-center'>
         How we solve the issues
       </h2>
       <div className='h-4 md:h-10'></div>
-      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-grey-800'>
+      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-gray-800'>
         <h3>1. For weekly project meetings</h3>
       </div>
       <div className='md:flex'>
@@ -321,10 +323,10 @@ export default function HomePage() {
           />
         </div>
         <div className='grid gap-2 md:gap-4 md:w-7/12 p-2 m-2 text-center content-center place-items-center'>
-          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-grey-800'>
+          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-gray-800'>
             <h3>1. For weekly project meetings</h3>
           </div>
-          <div className='text-lg md:text-2xl text-grey-800'>
+          <div className='text-lg md:text-2xl text-gray-800'>
             <p className='p-1 md:p-2'>
               For example, <b className='text-gray-800'>compare</b> velocities
               within your team.
@@ -343,7 +345,7 @@ export default function HomePage() {
         </div>
       </div>
       <div className='h-8 md:h-20'></div>
-      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-grey-800'>
+      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-gray-800'>
         <h3>2. For monthly 1-on-1 meetings</h3>
       </div>
       <div className='md:flex'>
@@ -360,10 +362,10 @@ export default function HomePage() {
           />
         </div>
         <div className='grid gap-2 md:gap-4 md:w-7/12 p-2 m-2 text-center content-center place-items-center'>
-          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-grey-800'>
+          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-gray-800'>
             <h3>2. For monthly 1-on-1 meetings</h3>
           </div>
-          <div className='text-lg md:text-2xl text-grey-800'>
+          <div className='text-lg md:text-2xl text-gray-800'>
             <p className='p-1 md:p-2'>
               For example, <b className='text-gray-800'>compare</b> the number
               of outgoing messages within the team.
@@ -394,7 +396,7 @@ export default function HomePage() {
         </div>
       </div>
       <div className='h-8 md:h-20'></div>
-      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-grey-800'>
+      <div className='text-center md:hidden p-2 m-2 text-2xl font-semibold text-gray-800'>
         <h3>3. For half-year evaluation meetings</h3>
       </div>
       <div className='md:flex'>
@@ -423,10 +425,10 @@ export default function HomePage() {
           />
         </div>
         <div className='grid gap-2 md:gap-4 md:w-7/12 p-2 m-2 text-center content-center place-items-center'>
-          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-grey-800'>
+          <div className='hidden md:block text-2xl md:text-4xl font-semibold text-gray-800'>
             <h3>3. For half-year evaluation meetings</h3>
           </div>
-          <div className='text-lg md:text-2xl text-grey-800'>
+          <div className='text-lg md:text-2xl text-gray-800'>
             <p className='p-1 md:p-2'>
               For example, <b className='text-gray-800'>compare</b> a manager’s
               number of code reviews with others’.
@@ -447,11 +449,11 @@ export default function HomePage() {
         </div>
       </div>
       <div className='h-12 md:h-32'></div>
-      <h2 className='text-3xl md:text-5xl font-bold text-grey-800 text-center'>
+      <h2 className='text-3xl md:text-5xl font-bold text-gray-800 text-center'>
         Customers by country
       </h2>
       <div className='h-4 md:h-10'></div>
-      <div className='text-xl md:text-3xl text-grey-800 p-2 m-2 text-center content-center place-items-center'>
+      <div className='text-xl md:text-3xl text-gray-800 p-2 m-2 text-center content-center place-items-center'>
         <p className='p-1 md:p-2'>
           WorkStats visitors come from 58 countries worldwide.
         </p>
@@ -471,12 +473,76 @@ export default function HomePage() {
         </div>
       </div>
       <div className='h-12 md:h-32'></div>
-      <h2 className='text-3xl md:text-5xl font-bold text-grey-800 text-center'>
-        Media coverage
+      <h2 className='text-3xl md:text-5xl font-bold text-gray-800 text-center'>
+        News Media
+      </h2>
+      <div className='h-4 md:h-10'></div>
+      <a
+        href='https://theamericangenius.com/tech-news/workstats-pulls-data-to-measure-productivity/'
+        target='_blank'
+        rel='noopener noreferrer'
+        className=''
+      >
+        <div className='md:flex hover:bg-amber-50 rounded-xl m-4'>
+          <div className='hidden md:block md:w-7/12 md:h-5/6 rounded-2xl border border-slate-300'>
+            <Image
+              src={Team_Using_Workstats}
+              alt='A team using Workstats'
+              layout='responsive'
+              objectFit='cover' // contain, cover, fill, none, scale-down
+              quality={100}
+              priority={true}
+              placeholder='empty'
+              className='rounded-2xl'
+            />
+          </div>
+          <div className='md:hidden rounded-2xl border border-slate-300'>
+            <Image
+              src={Team_Using_Workstats}
+              alt='A team using Workstats'
+              layout='responsive'
+              objectFit='cover'
+              quality={100}
+              priority={true}
+              placeholder='empty'
+              className='rounded-2xl object-cover h-10'
+            />
+          </div>
+          <div className='h-4 md:w-10'></div>
+          <div>
+            <div className='w-56'>
+              <Image
+                src={AGIcon}
+                alt='The American Genius logo'
+                layout='responsive'
+                objectFit='cover'
+                quality={100}
+                priority={true}
+                placeholder='empty'
+              />
+            </div>
+            <p className='text-lg md:text-xl text-gray-600 py-1.5 md:py-1'>
+              September 20, 2022
+            </p>
+            <p className='font-semibold md:font-medium text-xl md:text-2xl text-gray-800 py-1.5 md:py-1'>
+              WorkStats pulls data from your team&apos;s tools to measure
+              productivity
+            </p>
+            <p className='text-lg md:text-xl text-gray-800 py-1.5 md:py-1'>
+              One of the most genius tools to date - WorkStats compiles data
+              from your internal tools like GitHub, Asana, and Slack to measure
+              productivity.
+            </p>
+          </div>
+        </div>
+      </a>
+      <div className='h-12 md:h-32'></div>
+      <h2 className='text-3xl md:text-5xl font-bold text-gray-800 text-center'>
+        Content Curation
       </h2>
       <div className='h-8 md:h-20'></div>
       <div className='flex place-content-center'>
-        <div className='grid grid-cols-5 gap-y-2 gap-x-4 md:gap-y-2 md:gap-x-14 w-9/12 md:w-6/12 text-center text-xl md:text-2xl text-grey-800'>
+        <div className='grid grid-cols-5 gap-y-2 gap-x-4 md:gap-y-2 md:gap-x-14 w-9/12 md:w-6/12 text-center text-xl md:text-2xl text-gray-800'>
           <a
             href='https://www.producthunt.com/products/workstats#workstats'
             target='_blank'
@@ -569,11 +635,28 @@ export default function HomePage() {
         <ProductHuntVote />
       </div>
       <div className='h-12 md:h-32'></div>
-      <h2 className='text-3xl md:text-5xl font-bold text-grey-800 text-center'>
+      <h2 className='text-3xl md:text-5xl font-bold text-gray-800 text-center'>
+        Tweets from WorkStats
+      </h2>
+      <div className='h-4 md:h-10'></div>
+      <a
+        className='twitter-timeline'
+        href='https://twitter.com/workstatsdev?ref_src=twsrc%5Etfw'
+        // https://developer.twitter.com/en/docs/twitter-for-websites/timelines/guides/parameter-reference
+        data-tweet-limit='3' // Range: 1-20
+        data-chrome=''
+      ></a>
+      <script
+        async
+        src='https://platform.twitter.com/widgets.js'
+        charSet='utf-8'
+      ></script>
+      <div className='h-12 md:h-32'></div>
+      <h2 className='text-3xl md:text-5xl font-bold text-gray-800 text-center'>
         Try WorkStats today
       </h2>
       <div className='h-4 md:h-10'></div>
-      <div className='text-xl md:text-3xl text-grey-800 p-2 m-2 text-center content-center place-items-center'>
+      <div className='text-xl md:text-3xl text-gray-800 p-2 m-2 text-center content-center place-items-center'>
         <p className='p-1 md:p-2'>Know your numbers.</p>
         <p className='p-1 md:p-2'>Keep tracking your numbers.</p>
         <p className='p-1 md:p-2'>Take action to drive your numbers.</p>
