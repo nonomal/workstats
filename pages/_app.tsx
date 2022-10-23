@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const contentShort =
     'A dashboard tool for engineers and PMs to quantify their productivity, aggregating various numbers from GitHub, Jira, Asana, Slack, Google Calendar.';
   const imageURL =
-    'https://drive.google.com/uc?export=download&id=1a96zX_cxg0TjNa-nKX_RSMjky_OQEcxz';
+    'https://drive.google.com/uc?export=download&id=1a7fIv2AG96Wkdp_Hy5Ykcs-FR8Yw443a';
 
   return (
     <>
