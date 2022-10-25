@@ -1,3 +1,4 @@
+import moment from 'moment';
 import useSWR from 'swr';
 
 // This is useSWR's options, the document is here: https://swr.vercel.app/docs/options
@@ -45,12 +46,13 @@ const requestSlackUserIdentity = () => {
   window.location.href = url;
 };
 
-// Aggregate how many times a user is mentioned or a user replied in a workspace
+// Aggregate how many times a user is posted or a user replied in a workspace
 // Slack API must be used in a server-side, so we call this method in a browser first then call Next.js API which wraps Slack API
+// https://api.slack.com/methods/search.messages
 interface SlackSearchTypes {
   slackMemberId: string;
   slackAccessToken: string;
-  searchMode: 'mentioned' | 'sent' | 'replies';
+  searchMode: 'mentioned' | 'sent' | 'replies' | 'new-sent';
   since: string;
   until: string;
 }
@@ -91,6 +93,89 @@ const useSlackSearch = ({
   } else {
     return data;
   }
+};
+
+// Search and get slack messages
+const SearchSlackMessages = async ({
+  slackMemberId,
+  slackAccessToken,
+  searchMode,
+  since,
+  until
+}: SlackSearchTypes) => {
+  const apiEndPoint = `/api/search-slack-${searchMode}`;
+  const headers = new Headers();
+  headers.append('Accept', 'application/json');
+  headers.append('Content-Type', 'application/json');
+  const body = {
+    slackMemberId,
+    slackAccessToken,
+    since,
+    until,
+    count: 100, // The maximum number of messages that can be obtained at once is 100
+    // cursor: '*', // The cursor is used to get the next 100 messages
+    page: 1 // The page is used to get the next 100 messages
+  };
+  const fetchOptions = {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body)
+  };
+
+  // Loop until all messages are acquired
+  const messages = [];
+  let hasMore = true;
+  while (hasMore) {
+    const response = await fetch(apiEndPoint, fetchOptions);
+    const json = await response.json();
+    const matches = json.messages.matches;
+    // @ts-ignore
+    const matchMessages = matches.map((match) => {
+      return {
+        ts: +match.ts, // Timestamp like 1659341178.411509 as a number in seconds
+        date: moment(+match.ts * 1000).format(), // 2022-08-23T07:59:38+09:00
+        postedById: match.user, // U02DK80DN9H
+        postedByName: match.username, // nishio.hiroshi
+        channelId: match.channel.id, // C03PMQR3FSL
+        channelName: match.channel.name // accounting-and-tax
+      };
+    });
+    messages.push(...matchMessages);
+    body.page = body.page + 1;
+    fetchOptions.body = JSON.stringify(body);
+    hasMore = body.page <= json.messages.paging.pages;
+  }
+
+  // Append some data to the messages array
+  const messagesWithData = messages
+    .map((message, index, array) => {
+      // Check the elements of the messages array in order, and uniquely count how many kinds of "postedByName" values were found in the elements up to that index.
+      const uniqueCountOfPostedByName = new Set(
+        array.slice(0, index + 1).map((message) => message.postedByName)
+      ).size;
+      // Calculate duration time from the previous timestamp to the current timestamp
+      const durationTimestamp =
+        index === 0 ? 0 : message.ts - array[index - 1].ts;
+      return {
+        ...message,
+        durationTimestamp,
+        uniqueCountOfPostedByName
+      };
+    })
+    .map((message, index, array) => {
+      // Calculate moving average of duration time over the last 20 mentions
+      const movingAverageDurationTimestamp =
+        array
+          .slice(Math.max(index - 19, 0), index + 1)
+          .reduce((acc, cur) => acc + cur.durationTimestamp, 0) /
+        Math.min(index + 1, 20);
+      return {
+        ...message,
+        movingAverageDurationTimestamp
+      };
+    });
+
+  return messagesWithData;
 };
 
 // Get a Slack channel list in a workspace
@@ -169,5 +254,6 @@ export {
   getSlackNumberOfNewSent,
   useSlackChannelList,
   useSlackSearch,
-  requestSlackUserIdentity
+  requestSlackUserIdentity,
+  SearchSlackMessages
 };

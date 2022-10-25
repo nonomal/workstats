@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import NumberOfMentioned from './NumberOfMentioned';
 import NumberOfNewSent from './NumberOfNewSent';
 import NumberOfReplies from './NumberOfReplies';
+import ChartIconLink from '../common/ChartIcon';
 
 // import configs and contexts
 import { NumbersType } from '../../config/firebaseTypes';
@@ -119,6 +120,13 @@ const CardListForSlack = ({
           mb={2}
           href='/user-settings#slack'
           alt='Gear icon links to user settings'
+        />
+        <ChartIconLink
+          mt={5}
+          mb={2}
+          href='/charts/slack'
+          alt='Chart icon links to Slack charts page'
+          id='chart-icon'
         />
       </div>
       <div className='grid gap-3 md:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 md:mr-5'>

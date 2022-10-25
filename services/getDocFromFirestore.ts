@@ -1,6 +1,10 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseClient';
-import { PullRequestsType, UserType } from '../config/firebaseTypes';
+import {
+  PullRequestsType,
+  SlackSearchResultsType,
+  UserType
+} from '../config/firebaseTypes';
 
 const getAUserDoc = async (docId: string) => {
   const docRef = doc(db, 'users', docId);
@@ -57,10 +61,31 @@ const getPullRequests = async (docId: string) => {
   return docSnap?.data()?.pullRequests as PullRequestsType[];
 };
 
+const getMentionedMessages = async (docId: string) => {
+  const docRef = doc(db, 'slack-mentioned-messages', docId);
+  const docSnap = await getDoc(docRef);
+  return docSnap?.data()?.messages as SlackSearchResultsType[];
+};
+
+const getRepliesMessages = async (docId: string) => {
+  const docRef = doc(db, 'slack-replies-messages', docId);
+  const docSnap = await getDoc(docRef);
+  return docSnap?.data()?.messages as SlackSearchResultsType[];
+};
+
+const getNewSentMessages = async (docId: string) => {
+  const docRef = doc(db, 'slack-new-sent-messages', docId);
+  const docSnap = await getDoc(docRef);
+  return docSnap?.data()?.messages as SlackSearchResultsType[];
+};
+
 export {
   getANumbersDoc,
   getAUserDoc,
+  getMentionedMessages,
+  getNewSentMessages,
   getPhotoURL,
   getPullRequests,
+  getRepliesMessages,
   getUserInfo
 };

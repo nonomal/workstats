@@ -159,10 +159,21 @@ interface PullRequestsType extends Record<string, unknown> {
   repositoryUrl?: string;
 }
 
+interface SlackSearchResultsType extends Record<string, unknown> {
+  ts: number; // Timestamp like 1659341178.411509
+  postedById?: string; // User ID like U02DK80DN9H
+  postedByName?: string; // User Name like @yamada
+  channelId?: string; // Channel ID like C03PMQR3FSL
+  channelName?: string; // Channel Name like #general
+  durationTimestamps?: number; // Duration between the timestamp and the previous timestamp in seconds
+  movingAverageDurationTimestamp: number; // Moving average duration between the timestamp and the previous timestamp in seconds
+}
+
 export type {
   UserType,
   NumbersType,
   NumbersByPeriodType,
   PullRequestsType,
+  SlackSearchResultsType,
   StringsByPeriodType
 };

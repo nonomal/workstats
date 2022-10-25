@@ -83,18 +83,22 @@ export default function GitHubCharts() {
   }, [uid]);
 
   // Get Pull Requests data from GitHub and store them in Firestore
+  const [isUpdatedForPullRequests, setIsUpdatedForPullRequests] =
+    useState(false);
   useEffect(() => {
     if (userDoc?.github?.accessToken)
       SearchGitHubWithDetails({
         searchWhere: 'issues',
         searchQuery: `is:pr repo:${userDoc?.github?.repositories?.[0]?.owner}/${userDoc?.github?.repositories?.[0]?.repo} author:${userDoc?.github?.userName} created:${oldest}..${latest}`,
         accessToken: userDoc?.github?.accessToken
-      }).then((res: PullRequestsType[]) => {
-        UpdInsGitHubPullRequests({
-          docId: uid,
-          pullRequests: res
-        });
-      });
+      })
+        .then((res: PullRequestsType[]) => {
+          UpdInsGitHubPullRequests({
+            docId: uid,
+            pullRequests: res
+          });
+        })
+        .then(() => setIsUpdatedForPullRequests(true));
   }, [uid, userDoc?.github, latest]);
 
   // Get Pull Requests data from pullRequests collection from Firestore
@@ -122,7 +126,7 @@ export default function GitHubCharts() {
         // @ts-ignore
         if (pullRequests1) setPullRequests1(pullRequests1);
       });
-  }, [uid, createdSince, createdUntil]);
+  }, [uid, createdSince, createdUntil, isUpdatedForPullRequests]);
 
   // Get Pull Requests data from pullRequests collection from Firestore
   const [pullRequests2, setPullRequests2] = useState<
@@ -151,7 +155,7 @@ export default function GitHubCharts() {
         // @ts-ignore
         if (pullRequests2) setPullRequests2(pullRequests2);
       });
-  }, [uid, createdSinceForComp, createdUntilForComp]);
+  }, [uid, createdSinceForComp, createdUntilForComp, isUpdatedForPullRequests]);
 
   // Aggregate "Lead time since last pull request created" data from pullRequests collection from Firestore
   const [leadTime1, setLeadTime1] = useState<{ x: number; y: number }[]>([]);
@@ -179,7 +183,7 @@ export default function GitHubCharts() {
         // @ts-ignore
         if (leadTime1) setLeadTime1(leadTime1);
       });
-  }, [uid, createdSince, createdUntil]);
+  }, [uid, createdSince, createdUntil, isUpdatedForPullRequests]);
 
   const [leadTime2, setLeadTime2] = useState<{ x: number; y: number }[]>([]);
   useEffect(() => {
@@ -208,14 +212,14 @@ export default function GitHubCharts() {
         // @ts-ignore
         if (leadTime2) setLeadTime2(leadTime2);
       });
-  }, [uid, createdSinceForComp, createdUntilForComp]);
+  }, [uid, createdSinceForComp, createdUntilForComp, isUpdatedForPullRequests]);
 
   const content =
     'Chart GitHub-related numbers. These include the number of commits, pull requests, reviews, lines of code added, lines of code deleted, etc.';
 
   // Dataset for line chart. https://www.chartjs.org/docs/latest/charts/line.html
   const dataset1_1 = LineChartData({
-    label: 'Pull Requests',
+    label: 'Current period',
     data: pullRequests1,
     xAxisID: 'x1',
     // contrast color of dataset1_2
@@ -225,7 +229,7 @@ export default function GitHubCharts() {
     pointHoverBackgroundColor: 'rgba(255, 99, 132, 1)'
   });
   const dataset1_2 = LineChartData({
-    label: 'Previous One',
+    label: 'Previous one',
     data: pullRequests2,
     xAxisID: 'x2',
     backgroundColor: 'rgba(192, 75, 75, 0.4)',
@@ -235,7 +239,7 @@ export default function GitHubCharts() {
     borderDash: [5, 5]
   });
   const dataset2_1 = LineChartData({
-    label: 'Moving Average of LT',
+    label: 'Current period',
     data: leadTime1,
     xAxisID: 'x1',
     backgroundColor: 'rgba(255, 159, 64, 0.4)',
@@ -244,7 +248,7 @@ export default function GitHubCharts() {
     pointHoverBackgroundColor: 'rgba(255, 159, 64, 1)'
   });
   const dataset2_2 = LineChartData({
-    label: 'Previous One',
+    label: 'Previous one',
     data: leadTime2,
     xAxisID: 'x2',
     backgroundColor: 'rgba(255, 206, 86, 0.4)',
@@ -255,11 +259,11 @@ export default function GitHubCharts() {
   });
   const data1 = {
     // labels: [], // Labels for the x-axis
-    datasets: [dataset1_1, dataset1_2] // Data for the y-axis
+    datasets: createdSince !== oldest ? [dataset1_1, dataset1_2] : [dataset1_1] // Datasets for the y-axis
   };
   const data2 = {
     // labels: [], // Labels for the x-axis
-    datasets: [dataset2_1, dataset2_2] // Data for the y-axis
+    datasets: createdSince !== oldest ? [dataset2_1, dataset2_2] : [dataset2_1] // Datasets for the y-axis
   };
 
   // Options for line chart
@@ -307,11 +311,13 @@ export default function GitHubCharts() {
           <h2 className='text-xl mt-2 md:mt-4 md:mb-2 px-5 md:px-0'>
             GitHub charts
           </h2>
-          <div className='md:grid md:grid-cols-2 md:gap-4'>
-            <div className='h-80 md:h-104'>
+          <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 place-items-center md:place-items-stretch'>
+            <div className='h-92 w-11/12 md:h-108 md:w-auto'>
+              {/* @ts-ignore */}
               <Line options={options1} data={data1} />
             </div>
-            <div className='h-80 md:h-104'>
+            <div className='h-92 w-11/12 md:h-108 md:w-auto'>
+              {/* @ts-ignore */}
               <Line options={options2} data={data2} />
             </div>
           </div>

@@ -3,6 +3,7 @@ import { db } from '../config/firebaseClient';
 import {
   NumbersType,
   PullRequestsType,
+  SlackSearchResultsType,
   UserType
 } from '../config/firebaseTypes';
 import { getWorkspaces } from './asanaServices.client';
@@ -709,7 +710,61 @@ const UpdInsGitHubPullRequests = async ({
   pullRequests
 }: UpdInsGitHubPullRequestsProps) => {
   const docRef = doc(db, 'github-pull-requests', docId);
-  const docData = { pullRequests };
+  const docData = {
+    pullRequests,
+    // createdAt: serverTimestamp(), // CreatedAt is recorded only for the first time
+    updatedAt: serverTimestamp()
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+// Update or Insert Slack Search Results for mentioned to firestore
+interface UpdInsSlackSearchResultProps {
+  docId: string;
+  messages: SlackSearchResultsType[];
+}
+const UpdInsSlackMentionedMessages = async ({
+  docId,
+  messages
+}: UpdInsSlackSearchResultProps) => {
+  const docRef = doc(db, 'slack-mentioned-messages', docId);
+  const docData = {
+    messages,
+    // createdAt: serverTimestamp(), // CreatedAt is recorded only for the first time
+    updatedAt: serverTimestamp()
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+const UpdInsSlackRepliesMessages = async ({
+  docId,
+  messages
+}: UpdInsSlackSearchResultProps) => {
+  const docRef = doc(db, 'slack-replies-messages', docId);
+  const docData = {
+    messages,
+    // createdAt: serverTimestamp(), // CreatedAt is recorded only for the first time
+    updatedAt: serverTimestamp()
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+const UpdInsSlackNewSentMessages = async ({
+  docId,
+  messages
+}: UpdInsSlackSearchResultProps) => {
+  const docRef = doc(db, 'slack-new-sent-messages', docId);
+  const docData = {
+    messages,
+    // createdAt: serverTimestamp(), // CreatedAt is recorded only for the first time
+    updatedAt: serverTimestamp()
+  };
   const option = { merge: true };
   await setDoc(docRef, docData, option);
   return;
@@ -740,5 +795,8 @@ export {
   UpdInsGitHubPullRequests,
   UpdInsGoogleCalendarNumbers,
   UpdInsJiraNumbers,
-  UpdInsSlackNumbers
+  UpdInsSlackNumbers,
+  UpdInsSlackMentionedMessages,
+  UpdInsSlackNewSentMessages,
+  UpdInsSlackRepliesMessages
 };

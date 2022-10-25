@@ -3,20 +3,36 @@ interface LineChartDatasetProps {
   label: string;
   data: { x: number; y: number }[];
   xAxisID?: string;
+  mainColor?: string;
+  subColor?: string;
   backgroundColor?: string;
   borderColor?: string;
   pointBorderColor?: string;
   pointHoverBackgroundColor?: string;
+  pointStyle?:
+    | 'circle'
+    | 'cross'
+    | 'crossRot'
+    | 'dash'
+    | 'line'
+    | 'rect'
+    | 'rectRounded'
+    | 'rectRot'
+    | 'star'
+    | 'triangle';
   borderDash?: number[];
 }
 const LineChartData = ({
   label,
   data,
   xAxisID,
+  mainColor,
+  subColor,
   backgroundColor,
   borderColor,
   pointBorderColor,
   pointHoverBackgroundColor,
+  pointStyle,
   borderDash
 }: LineChartDatasetProps) => {
   return {
@@ -24,20 +40,21 @@ const LineChartData = ({
     fill: false,
     lineTension: 0.3, // The more the value is, the more the curve is.
     // cubicInterpolationMode: 'monotone', // default or monotone
-    backgroundColor: backgroundColor,
-    borderColor: borderColor,
+    backgroundColor: subColor || backgroundColor,
+    borderColor: mainColor || borderColor,
     // borderCapStyle: 'butt',
     borderDash: borderDash,
     // borderDashOffset: 0.0,
     // borderJoinStyle: 'miter',
-    pointBorderColor: pointBorderColor,
+    pointBorderColor: mainColor || pointBorderColor,
     pointBackgroundColor: '#fff',
-    pointBorderWidth: 2, // Pixels.
+    pointBorderWidth: 1.5, // Pixels.
     pointHoverRadius: 5,
-    pointHoverBackgroundColor: pointHoverBackgroundColor,
+    pointHoverBackgroundColor: mainColor || pointHoverBackgroundColor,
     pointHoverBorderColor: 'rgba(220,220,220,1)',
     pointHoverBorderWidth: 2,
     pointRadius: 5,
+    pointStyle: pointStyle,
     // pointHitRadius: 10,
     data: data,
     xAxisID: xAxisID
@@ -62,6 +79,13 @@ const LineChartOptions = ({
   x2SuggestedMax
 }: LineChartOptionsProps) => {
   return {
+    // For performance. https://www.chartjs.org/docs/latest/general/performance.html
+    animation: false, // False makes the chart render faster. Invalid for option type
+    parsing: false, // False makes the chart render faster. Invalid for option type
+    normalized: true, // True makes the chart render faster.
+    spanGaps: true, // True makes the chart render faster.
+
+    // For settings
     maintainAspectRatio: false,
     responsive: true, // Make the chart responsive
     plugins: {
@@ -69,13 +93,18 @@ const LineChartOptions = ({
         labels: {
           // https://www.chartjs.org/docs/latest/general/fonts.html
           font: {
+            // padding: 10,
             size: 18 // Default is 12px.
           }
         },
-        position: 'top' as const // 'top', 'bottom', 'left', 'right'
+        position: 'bottom' as const // 'top', 'bottom', 'left', 'right'
       },
       title: {
-        display: false, // true, false
+        display: true, // true, false
+        font: {
+          weight: 'normal', // 'normal', 'bold', 'bolder', 'lighter', 100, 200, 300, 400, 500, 600, 700, 800, 900. https://www.chartjs.org/docs/latest/general/fonts.html
+          size: 18 // Default is 12px.
+        },
         text: chartTitle // string
       }
     },

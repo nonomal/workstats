@@ -8,6 +8,7 @@ import NumberOfLinesAdded from './NumberOfLinesAdded';
 import NumberOfLinesDeleted from './NumberOfLinesDeleted';
 import NumberOfPullRequests from './NumberOfPullRequests';
 import NumberOfReviews from './NumberOfReview';
+import ChartIconLink from '../common/ChartIcon';
 
 // import configs and contexts
 import { NumbersType } from '../../config/firebaseTypes';
@@ -23,7 +24,6 @@ import {
   useGitHubSearch
 } from '../../services/githubServices.client';
 import { UpdInsGithubNumbers } from '../../services/setDocToFirestore';
-import ChartIconLink from '../common/ChartIcon';
 
 interface PropTypes {
   githubOwnerName: string;
