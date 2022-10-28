@@ -144,6 +144,12 @@ const SearchSlackMessages = async ({
     body.page = body.page + 1;
     fetchOptions.body = JSON.stringify(body);
     hasMore = body.page <= json.messages.paging.pages;
+
+    // This search API can only be called up to 20 times per minute, so for every 20 calls, it waits one minute, which is 60000 milliseconds.
+    // https://api.slack.com/docs/rate-limits#tier_t2
+    if (hasMore && body.page > 20 && body.page % 20 === 1) {
+      await new Promise((resolve) => setTimeout(resolve, 60000));
+    }
   }
 
   // Append some data to the messages array
