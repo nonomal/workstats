@@ -47,7 +47,7 @@ export default function SlackCharts() {
   const currentTimeframe = globalState.currentTimeframe;
 
   // Set time period from global state
-  const oldest = '2000-01-01';
+  const oldest = moment().subtract(2, 'years').format('YYYY-MM-DD'); // Since exceeding 10,000 cases would be unstable, the period is set at 2 years for now.
   const latest = moment().format('YYYY-MM-DD');
   const createdSince =
     currentTimeframe?.timeframe.since?.format('YYYY-MM-DD') || oldest;
