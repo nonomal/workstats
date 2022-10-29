@@ -132,10 +132,10 @@ const SearchSlackMessages = async ({
     const matchMessages = matches.map((match) => {
       return {
         // Commented out some of them to reduce the size of the data
-        ts: Math.round(+match.ts), // Timestamp like 1659341178.411509 as a number in seconds
+        ts: Math.round(+match.ts) // Timestamp like 1659341178 as a number in seconds
         // date: moment(+match.ts * 1000).format(), // 2022-08-23T07:59:38+09:00
         // postedById: match.user // U02DK80DN9H
-        postName: match.username // nishio.hiroshi.
+        // postName: match.username // nishio.hiroshi.
         // channelId: match.channel.id, // C03PMQR3FSL
         // channelName: match.channel.name // accounting-and-tax
       };
@@ -169,17 +169,18 @@ const SearchSlackMessages = async ({
     })
     .map((message, index, array) => {
       // Calculate moving average of duration time over the last 20 mentions
-      const aveInterval =
+      const aveIntvl =
         Math.round(
           array
             .slice(Math.max(index - 19, 0), index + 1)
             .reduce((acc, cur) => acc + cur.interval, 0) /
-            Math.min(index + 1, 20)
-        ) || 0;
+            Math.min(index + 1, 20) /
+            360
+        ) / 10 || 0; // in hours
       return {
         ts: message.ts,
-        postName: message.postName,
-        aveInterval
+        // postName: message.postName,
+        aveIntvl
       };
     });
 
