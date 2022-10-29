@@ -210,7 +210,7 @@ export default function SlackCharts() {
               )
               ?.map((message) => ({
                 x: message.ts * 1000, // Convert to milliseconds
-                y: Math.round(message.movingAverageDurationTimestamp / 3600) // Convert to hours
+                y: Math.round(message.aveInterval / 360) / 10 // Convert to hours
               }))
           : [];
 
@@ -225,7 +225,7 @@ export default function SlackCharts() {
                 )
                 ?.map((message) => ({
                   x: message.ts * 1000, // Convert to milliseconds
-                  y: Math.round(message.movingAverageDurationTimestamp / 3600) // Convert to hours
+                  y: Math.round(message.aveInterval / 360) / 10 // Convert to hours
                 }))
             : [];
 
@@ -311,7 +311,7 @@ export default function SlackCharts() {
               )
               ?.map((message) => ({
                 x: message.ts * 1000, // Convert to milliseconds
-                y: Math.round(message.movingAverageDurationTimestamp / 360) / 10 // Convert to hours and round to 1 decimal place
+                y: Math.round(message.aveInterval / 360) / 10 // Convert to hours and round to 1 decimal place
               }))
           : [];
 
@@ -326,9 +326,7 @@ export default function SlackCharts() {
                 )
                 ?.map((message) => ({
                   x: message.ts * 1000, // Convert to milliseconds
-                  y:
-                    Math.round(message.movingAverageDurationTimestamp / 360) /
-                    10 // Convert to hours and round to 1 decimal place
+                  y: Math.round(message.aveInterval / 360) / 10 // Convert to hours and round to 1 decimal place
                 }))
             : [];
 
@@ -412,7 +410,7 @@ export default function SlackCharts() {
               )
               ?.map((message) => ({
                 x: message.ts * 1000, // Convert to milliseconds
-                y: Math.round(message.movingAverageDurationTimestamp / 360) / 10 // Convert to hours and round to 1 decimal place
+                y: Math.round(message.aveInterval / 360) / 10 // Convert to hours and round to 1 decimal place
               }))
           : [];
 
@@ -427,9 +425,7 @@ export default function SlackCharts() {
                 )
                 ?.map((message) => ({
                   x: message.ts * 1000, // Convert to milliseconds
-                  y:
-                    Math.round(message.movingAverageDurationTimestamp / 360) /
-                    10 // Convert to hours and round to 1 decimal place
+                  y: Math.round(message.aveInterval / 360) / 10 // Convert to hours and round to 1 decimal place
                 }))
             : [];
 
