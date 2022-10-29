@@ -1,4 +1,3 @@
-import moment from 'moment';
 import useSWR from 'swr';
 
 // This is useSWR's options, the document is here: https://swr.vercel.app/docs/options
@@ -132,12 +131,13 @@ const SearchSlackMessages = async ({
     // @ts-ignore
     const matchMessages = matches.map((match) => {
       return {
-        ts: +match.ts, // Timestamp like 1659341178.411509 as a number in seconds
-        date: moment(+match.ts * 1000).format(), // 2022-08-23T07:59:38+09:00
-        postedById: match.user, // U02DK80DN9H
-        postedByName: match.username, // nishio.hiroshi
-        channelId: match.channel.id, // C03PMQR3FSL
-        channelName: match.channel.name // accounting-and-tax
+        // Commented out some of them to reduce the size of the data
+        ts: Math.round(+match.ts), // Timestamp like 1659341178.411509 as a number in seconds
+        // date: moment(+match.ts * 1000).format(), // 2022-08-23T07:59:38+09:00
+        // postedById: match.user // U02DK80DN9H
+        postName: match.username // nishio.hiroshi.
+        // channelId: match.channel.id, // C03PMQR3FSL
+        // channelName: match.channel.name // accounting-and-tax
       };
     });
     messages.push(...matchMessages);
@@ -155,29 +155,31 @@ const SearchSlackMessages = async ({
   // Append some data to the messages array
   const messagesWithData = messages
     .map((message, index, array) => {
-      // Check the elements of the messages array in order, and uniquely count how many kinds of "postedByName" values were found in the elements up to that index.
-      const uniqueCountOfPostedByName = new Set(
-        array.slice(0, index + 1).map((message) => message.postedByName)
-      ).size;
+      // Check the elements of the messages array in order, and uniquely count how many kinds of "postName" values were found in the elements up to that index.
+      // const uniqueCountOfPostName = new Set(
+      //   array.slice(0, index + 1).map((message) => message.postName)
+      // ).size;
       // Calculate duration time from the previous timestamp to the current timestamp
-      const durationTimestamp =
-        index === 0 ? 0 : message.ts - array[index - 1].ts;
+      const interval = index === 0 ? 0 : message.ts - array[index - 1].ts;
       return {
         ...message,
-        durationTimestamp,
-        uniqueCountOfPostedByName
+        interval
+        // uniqueCountOfPostName
       };
     })
     .map((message, index, array) => {
       // Calculate moving average of duration time over the last 20 mentions
-      const movingAverageDurationTimestamp =
-        array
-          .slice(Math.max(index - 19, 0), index + 1)
-          .reduce((acc, cur) => acc + cur.durationTimestamp, 0) /
-        Math.min(index + 1, 20);
+      const aveInterval =
+        Math.round(
+          array
+            .slice(Math.max(index - 19, 0), index + 1)
+            .reduce((acc, cur) => acc + cur.interval, 0) /
+            Math.min(index + 1, 20)
+        ) || 0;
       return {
-        ...message,
-        movingAverageDurationTimestamp
+        ts: message.ts,
+        postName: message.postName,
+        aveInterval
       };
     });
 
