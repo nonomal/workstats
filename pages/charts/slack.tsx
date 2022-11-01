@@ -47,26 +47,39 @@ export default function SlackCharts() {
   const currentTimeframe = globalState.currentTimeframe;
 
   // Set time period from global state
-  const oldest = moment().subtract(2, 'years').format('YYYY-MM-DD'); // Since exceeding 10,000 cases would be unstable, the period is set at 2 years for now.
-  const latest = moment().format('YYYY-MM-DD');
-  const createdSince =
+  // Slack search query "before" means "less than" so add 1 day and "after" means "greater than" so subtract 1 day
+  const oldest = moment().subtract(10, 'years').format('YYYY-MM-DD'); // 10 years for now.
+  const latest = moment().add(1, 'days').format('YYYY-MM-DD');
+  const since =
     currentTimeframe?.timeframe.since?.format('YYYY-MM-DD') || oldest;
-  const createdUntil =
-    currentTimeframe?.timeframe.until?.format('YYYY-MM-DD') || latest;
-  const createdSinceUnix = moment(createdSince).unix(); // Unix timestamp in seconds
+  const until = currentTimeframe?.timeframe.until?.format('YYYY-MM-DD');
+  const createdSince = since
+    ? moment(since).subtract(1, 'days').format('YYYY-MM-DD')
+    : oldest;
+  const createdUntil = until
+    ? moment(until).add(1, 'days').format('YYYY-MM-DD')
+    : latest;
+  const sinceUnix = moment(since).unix(); // Unix timestamp in seconds
+  const untilUnix = moment(until).unix(); // Unix timestamp in seconds
+  // const createdSinceUnix = moment(createdSince).unix(); // Unix timestamp in seconds
   const createdUntilUnix = moment(createdUntil).unix(); // Unix timestamp in seconds
-  const durationUnix =
-    createdUntilUnix && createdSinceUnix && createdUntilUnix - createdSinceUnix; // Unix timestamp in seconds
+  const durationUnix = untilUnix && sinceUnix && untilUnix - sinceUnix; // Unix timestamp in seconds
 
   // Set sub time period for comparison
-  const createdSinceForComp = moment(createdSince)
+  const createdUntilForComp = since;
+  const untilForComp = createdSince;
+  const sinceForComp = moment(untilForComp)
     ?.subtract(durationUnix, 'seconds')
-    ?.format('YYYY-MM-DD');
-  const createdUntilForComp = moment(createdUntil)
-    ?.subtract(durationUnix, 'seconds')
-    ?.format('YYYY-MM-DD');
-  const createdSinceUnixForComp =
-    createdSince !== oldest ? moment(createdSinceForComp).unix() : undefined; // Seconds
+    .format('YYYY-MM-DD');
+  // const createdSinceForComp = moment(createdUntilForComp)
+  //   ?.subtract(durationUnix, 'seconds')
+  //   ?.format('YYYY-MM-DD');
+  const sinceUnixForComp =
+    createdSince !== oldest ? moment(sinceForComp).unix() : undefined; // Seconds
+  const untilUnixForComp =
+    createdSince !== oldest ? moment(untilForComp).unix() : undefined; // Seconds
+  // const createdSinceUnixForComp =
+  //   createdSince !== oldest ? moment(createdSinceForComp).unix() : undefined; // Seconds
   const createdUntilUnixForComp =
     createdSince !== oldest ? moment(createdUntilForComp).unix() : undefined; // Seconds
 
@@ -142,7 +155,7 @@ export default function SlackCharts() {
         })
         .then(() => setIsUpdatedForNewSent(true));
     }
-  }, [latest, uid, userDoc?.slack?.workspace]);
+  }, [latest, oldest, uid, userDoc?.slack?.workspace]);
 
   // Get main & sub number of mentioned data from slack-mentioned-messages collection from Firestore
   const [mentioned1, setMentioned1] = useState<{ x: number; y: number }[]>([]);
@@ -154,9 +167,7 @@ export default function SlackCharts() {
         const messagesForMain = res
           ? res
               ?.filter(
-                (message) =>
-                  message.ts >= createdSinceUnix &&
-                  message.ts <= createdUntilUnix
+                (message) => message.ts >= sinceUnix && message.ts <= untilUnix
               )
               ?.map((message, index) => ({
                 x: message.ts * 1000, // Convert to milliseconds
@@ -166,12 +177,12 @@ export default function SlackCharts() {
         if (messagesForMain) setMentioned1(messagesForMain);
 
         const messagesForComp =
-          res && createdSinceUnixForComp && createdUntilUnixForComp
+          res && sinceUnixForComp && untilUnixForComp
             ? res
                 ?.filter(
                   (message) =>
-                    message.ts >= createdSinceUnixForComp &&
-                    message.ts <= createdUntilUnixForComp
+                    message.ts >= sinceUnixForComp &&
+                    message.ts <= untilUnixForComp
                 )
                 ?.map((message, index) => ({
                   x: message.ts * 1000, // Convert to milliseconds
@@ -182,12 +193,12 @@ export default function SlackCharts() {
       });
     }
   }, [
-    createdSinceUnix,
-    createdUntilUnix,
     uid,
     isUpdatedForMentioned,
-    createdSinceUnixForComp,
-    createdUntilUnixForComp
+    sinceUnixForComp,
+    untilUnixForComp,
+    sinceUnix,
+    untilUnix
   ]);
 
   // Moving average of the interval from the last mentioned to the current mentioned over the past 20 mentioned.
@@ -204,9 +215,7 @@ export default function SlackCharts() {
         const intervalsForMentioned1 = res
           ? res
               ?.filter(
-                (message) =>
-                  message.ts >= createdSinceUnix &&
-                  message.ts <= createdUntilUnix
+                (message) => message.ts >= sinceUnix && message.ts <= untilUnix
               )
               ?.map((message) => ({
                 x: message.ts * 1000, // Convert to milliseconds
@@ -216,12 +225,12 @@ export default function SlackCharts() {
 
         // Filter and convert data to {x: number, y: number}[] for comparison chart
         const intervalsForMentioned2 =
-          res && createdSinceUnixForComp && createdUntilUnixForComp
+          res && sinceUnixForComp && untilUnixForComp
             ? res
                 ?.filter(
                   (message) =>
-                    message.ts >= createdSinceUnixForComp &&
-                    message.ts <= createdUntilUnixForComp
+                    message.ts >= sinceUnixForComp &&
+                    message.ts <= untilUnixForComp
                 )
                 ?.map((message) => ({
                   x: message.ts * 1000, // Convert to milliseconds
@@ -237,12 +246,12 @@ export default function SlackCharts() {
       });
     }
   }, [
-    createdSinceUnix,
-    createdSinceUnixForComp,
-    createdUntilUnix,
-    createdUntilUnixForComp,
     uid,
-    isUpdatedForMentioned
+    isUpdatedForMentioned,
+    sinceUnixForComp,
+    untilUnixForComp,
+    sinceUnix,
+    untilUnix
   ]);
 
   // Get main & sub number of replies data from slack-replies-messages collection from Firestore
@@ -255,9 +264,7 @@ export default function SlackCharts() {
         const messagesForMain = res
           ? res
               ?.filter(
-                (message) =>
-                  message.ts >= createdSinceUnix &&
-                  message.ts <= createdUntilUnix
+                (message) => message.ts >= sinceUnix && message.ts <= untilUnix
               )
               ?.map((message, index) => ({
                 x: message.ts * 1000, // Convert to milliseconds
@@ -267,12 +274,12 @@ export default function SlackCharts() {
         if (messagesForMain) setReplies1(messagesForMain);
 
         const messagesForComp =
-          res && createdSinceUnixForComp && createdUntilUnixForComp
+          res && sinceUnixForComp && untilUnixForComp
             ? res
                 ?.filter(
                   (message) =>
-                    message.ts >= createdSinceUnixForComp &&
-                    message.ts <= createdUntilUnixForComp
+                    message.ts >= sinceUnixForComp &&
+                    message.ts <= untilUnixForComp
                 )
                 ?.map((message, index) => ({
                   x: message.ts * 1000, // Convert to milliseconds
@@ -283,12 +290,12 @@ export default function SlackCharts() {
       });
     }
   }, [
-    createdSinceUnix,
-    createdUntilUnix,
     uid,
     isUpdatedForReplies,
-    createdSinceUnixForComp,
-    createdUntilUnixForComp
+    sinceUnixForComp,
+    untilUnixForComp,
+    sinceUnix,
+    untilUnix
   ]);
 
   // Moving average of the interval from the last replies to the current replies over the past 20 replies.
@@ -305,9 +312,7 @@ export default function SlackCharts() {
         const intervalsForReplies1 = res
           ? res
               ?.filter(
-                (message) =>
-                  message.ts >= createdSinceUnix &&
-                  message.ts <= createdUntilUnix
+                (message) => message.ts >= sinceUnix && message.ts <= untilUnix
               )
               ?.map((message) => ({
                 x: message.ts * 1000, // Convert to milliseconds
@@ -317,12 +322,12 @@ export default function SlackCharts() {
 
         // Filter and convert data to {x: number, y: number}[] for comparison chart
         const intervalsForReplies2 =
-          res && createdSinceUnixForComp && createdUntilUnixForComp
+          res && sinceUnixForComp && untilUnixForComp
             ? res
                 ?.filter(
                   (message) =>
-                    message.ts >= createdSinceUnixForComp &&
-                    message.ts <= createdUntilUnixForComp
+                    message.ts >= sinceUnixForComp &&
+                    message.ts <= untilUnixForComp
                 )
                 ?.map((message) => ({
                   x: message.ts * 1000, // Convert to milliseconds
@@ -336,12 +341,12 @@ export default function SlackCharts() {
       });
     }
   }, [
-    createdSinceUnix,
-    createdSinceUnixForComp,
-    createdUntilUnix,
-    createdUntilUnixForComp,
     uid,
-    isUpdatedForReplies
+    isUpdatedForReplies,
+    sinceUnixForComp,
+    untilUnixForComp,
+    sinceUnix,
+    untilUnix
   ]);
 
   // Get main & sub number of new sent data from slack-new-sent-messages collection from Firestore
@@ -354,9 +359,7 @@ export default function SlackCharts() {
         const messagesForMain = res
           ? res
               ?.filter(
-                (message) =>
-                  message.ts >= createdSinceUnix &&
-                  message.ts <= createdUntilUnix
+                (message) => message.ts >= sinceUnix && message.ts <= untilUnix
               )
               ?.map((message, index) => ({
                 x: message.ts * 1000, // Convert to milliseconds
@@ -366,12 +369,12 @@ export default function SlackCharts() {
         if (messagesForMain) setNewSent1(messagesForMain);
 
         const messagesForComp =
-          res && createdSinceUnixForComp && createdUntilUnixForComp
+          res && sinceUnixForComp && untilUnixForComp
             ? res
                 ?.filter(
                   (message) =>
-                    message.ts >= createdSinceUnixForComp &&
-                    message.ts <= createdUntilUnixForComp
+                    message.ts >= sinceUnixForComp &&
+                    message.ts <= untilUnixForComp
                 )
                 ?.map((message, index) => ({
                   x: message.ts * 1000, // Convert to milliseconds
@@ -382,12 +385,12 @@ export default function SlackCharts() {
       });
     }
   }, [
-    createdSinceUnix,
-    createdUntilUnix,
     uid,
     isUpdatedForNewSent,
-    createdSinceUnixForComp,
-    createdUntilUnixForComp
+    sinceUnixForComp,
+    untilUnixForComp,
+    sinceUnix,
+    untilUnix
   ]);
 
   // Moving average of the interval from the last new sent to the current new sent over the past 20 new sent.
@@ -404,9 +407,7 @@ export default function SlackCharts() {
         const intervalsForNewSent1 = res
           ? res
               ?.filter(
-                (message) =>
-                  message.ts >= createdSinceUnix &&
-                  message.ts <= createdUntilUnix
+                (message) => message.ts >= sinceUnix && message.ts <= untilUnix
               )
               ?.map((message) => ({
                 x: message.ts * 1000, // Convert to milliseconds
@@ -416,12 +417,12 @@ export default function SlackCharts() {
 
         // Filter and convert data to {x: number, y: number}[] for comparison chart
         const intervalsForNewSent2 =
-          res && createdSinceUnixForComp && createdUntilUnixForComp
+          res && sinceUnixForComp && untilUnixForComp
             ? res
                 ?.filter(
                   (message) =>
-                    message.ts >= createdSinceUnixForComp &&
-                    message.ts <= createdUntilUnixForComp
+                    message.ts >= sinceUnixForComp &&
+                    message.ts <= untilUnixForComp
                 )
                 ?.map((message) => ({
                   x: message.ts * 1000, // Convert to milliseconds
@@ -435,12 +436,12 @@ export default function SlackCharts() {
       });
     }
   }, [
-    createdSinceUnix,
-    createdSinceUnixForComp,
-    createdUntilUnix,
-    createdUntilUnixForComp,
     uid,
-    isUpdatedForNewSent
+    isUpdatedForNewSent,
+    sinceUnixForComp,
+    untilUnixForComp,
+    sinceUnix,
+    untilUnix
   ]);
 
   const content =
@@ -478,22 +479,19 @@ export default function SlackCharts() {
     borderDash: [5, 5]
   });
   const data1 = {
-    datasets: createdSince !== oldest ? [dataset1_1, dataset1_2] : [dataset1_1] // Datasets for the y-axis
+    datasets: since !== oldest ? [dataset1_1, dataset1_2] : [dataset1_1] // Datasets for the y-axis
   };
   const data2 = {
-    datasets: createdSince !== oldest ? [dataset2_1, dataset2_2] : [dataset2_1] // Datasets for the y-axis
+    datasets: since !== oldest ? [dataset2_1, dataset2_2] : [dataset2_1] // Datasets for the y-axis
   };
 
   // Options for line chart for number of mentioned
   const options1 = LineChartOptions({
     chartTitle: '# of times you have been mentioned',
     y1Title: '# of times',
-    x1SuggestedMin:
-      createdSince !== oldest ? createdSinceUnix * 1000 : undefined,
+    x1SuggestedMin: since !== oldest ? sinceUnix * 1000 : undefined,
     x1SuggestedMax: createdUntilUnix * 1000,
-    x2SuggestedMin: createdSinceUnixForComp
-      ? createdSinceUnixForComp * 1000
-      : undefined,
+    x2SuggestedMin: sinceUnixForComp ? sinceUnixForComp * 1000 : undefined,
     x2SuggestedMax: createdUntilUnixForComp
       ? createdUntilUnixForComp * 1000
       : undefined
@@ -501,12 +499,9 @@ export default function SlackCharts() {
   const options2 = LineChartOptions({
     chartTitle: 'Intervals you have been mentioned*',
     y1Title: 'Hours',
-    x1SuggestedMin:
-      createdSince !== oldest ? createdSinceUnix * 1000 : undefined,
+    x1SuggestedMin: since !== oldest ? sinceUnix * 1000 : undefined,
     x1SuggestedMax: createdUntilUnix * 1000,
-    x2SuggestedMin: createdSinceUnixForComp
-      ? createdSinceUnixForComp * 1000
-      : undefined,
+    x2SuggestedMin: sinceUnixForComp ? sinceUnixForComp * 1000 : undefined,
     x2SuggestedMax: createdUntilUnixForComp
       ? createdUntilUnixForComp * 1000
       : undefined
@@ -544,22 +539,19 @@ export default function SlackCharts() {
     borderDash: [5, 5]
   });
   const data3 = {
-    datasets: createdSince !== oldest ? [dataset3_1, dataset3_2] : [dataset3_1] // Datasets for the y-axis
+    datasets: since !== oldest ? [dataset3_1, dataset3_2] : [dataset3_1] // Datasets for the y-axis
   };
   const data4 = {
-    datasets: createdSince !== oldest ? [dataset4_1, dataset4_2] : [dataset4_1] // Datasets for the y-axis
+    datasets: since !== oldest ? [dataset4_1, dataset4_2] : [dataset4_1] // Datasets for the y-axis
   };
 
   // Options for line chart for number of replies
   const options3 = LineChartOptions({
     chartTitle: '# of times you have replied',
     y1Title: '# of times',
-    x1SuggestedMin:
-      createdSince !== oldest ? createdSinceUnix * 1000 : undefined,
+    x1SuggestedMin: since !== oldest ? sinceUnix * 1000 : undefined,
     x1SuggestedMax: createdUntilUnix * 1000,
-    x2SuggestedMin: createdSinceUnixForComp
-      ? createdSinceUnixForComp * 1000
-      : undefined,
+    x2SuggestedMin: sinceUnixForComp ? sinceUnixForComp * 1000 : undefined,
     x2SuggestedMax: createdUntilUnixForComp
       ? createdUntilUnixForComp * 1000
       : undefined
@@ -567,12 +559,9 @@ export default function SlackCharts() {
   const options4 = LineChartOptions({
     chartTitle: 'Intervals you have replied*',
     y1Title: 'Hours',
-    x1SuggestedMin:
-      createdSince !== oldest ? createdSinceUnix * 1000 : undefined,
+    x1SuggestedMin: since !== oldest ? sinceUnix * 1000 : undefined,
     x1SuggestedMax: createdUntilUnix * 1000,
-    x2SuggestedMin: createdSinceUnixForComp
-      ? createdSinceUnixForComp * 1000
-      : undefined,
+    x2SuggestedMin: sinceUnixForComp ? sinceUnixForComp * 1000 : undefined,
     x2SuggestedMax: createdUntilUnixForComp
       ? createdUntilUnixForComp * 1000
       : undefined
@@ -610,22 +599,19 @@ export default function SlackCharts() {
     borderDash: [5, 5]
   });
   const data5 = {
-    datasets: createdSince !== oldest ? [dataset5_1, dataset5_2] : [dataset5_1] // Datasets for the y-axis
+    datasets: since !== oldest ? [dataset5_1, dataset5_2] : [dataset5_1] // Datasets for the y-axis
   };
   const data6 = {
-    datasets: createdSince !== oldest ? [dataset6_1, dataset6_2] : [dataset6_1] // Datasets for the y-axis
+    datasets: since !== oldest ? [dataset6_1, dataset6_2] : [dataset6_1] // Datasets for the y-axis
   };
 
   // Options for line chart for number of replies
   const options5 = LineChartOptions({
     chartTitle: '# of times you have sent new messages',
     y1Title: '# of times',
-    x1SuggestedMin:
-      createdSince !== oldest ? createdSinceUnix * 1000 : undefined,
+    x1SuggestedMin: since !== oldest ? sinceUnix * 1000 : undefined,
     x1SuggestedMax: createdUntilUnix * 1000,
-    x2SuggestedMin: createdSinceUnixForComp
-      ? createdSinceUnixForComp * 1000
-      : undefined,
+    x2SuggestedMin: sinceUnixForComp ? sinceUnixForComp * 1000 : undefined,
     x2SuggestedMax: createdUntilUnixForComp
       ? createdUntilUnixForComp * 1000
       : undefined
@@ -633,12 +619,9 @@ export default function SlackCharts() {
   const options6 = LineChartOptions({
     chartTitle: 'Intervals you have sent new messages*',
     y1Title: 'Hours',
-    x1SuggestedMin:
-      createdSince !== oldest ? createdSinceUnix * 1000 : undefined,
+    x1SuggestedMin: since !== oldest ? sinceUnix * 1000 : undefined,
     x1SuggestedMax: createdUntilUnix * 1000,
-    x2SuggestedMin: createdSinceUnixForComp
-      ? createdSinceUnixForComp * 1000
-      : undefined,
+    x2SuggestedMin: sinceUnixForComp ? sinceUnixForComp * 1000 : undefined,
     x2SuggestedMax: createdUntilUnixForComp
       ? createdUntilUnixForComp * 1000
       : undefined
@@ -671,11 +654,23 @@ export default function SlackCharts() {
             Slack charts
           </h2>
           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 place-items-center md:place-items-stretch'>
-            <div className='h-92 w-11/12 md:h-108 md:w-auto'>
+            <div
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
+            >
               {/* @ts-ignore */}
               <Line options={options1} data={data1} />
             </div>
-            <div className='h-92 w-11/12 md:h-108 md:w-auto'>
+            <div
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
+            >
               {/* @ts-ignore */}
               <Line options={options2} data={data2} />
             </div>
@@ -688,21 +683,45 @@ export default function SlackCharts() {
             </div>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 place-items-center md:place-items-stretch'>
-            <div className='h-92 w-11/12 md:h-108 md:w-auto'>
+            <div
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
+            >
               {/* @ts-ignore */}
               <Line options={options3} data={data3} />
             </div>
-            <div className='h-92 w-11/12 md:h-108 md:w-auto'>
+            <div
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
+            >
               {/* @ts-ignore */}
               <Line options={options4} data={data4} />
             </div>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 place-items-center md:place-items-stretch'>
-            <div className='h-92 w-11/12 md:h-108 md:w-auto'>
+            <div
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
+            >
               {/* @ts-ignore */}
               <Line options={options5} data={data5} />
             </div>
-            <div className='h-92 w-11/12 md:h-108 md:w-auto'>
+            <div
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
+            >
               {/* @ts-ignore */}
               <Line options={options6} data={data6} />
             </div>

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import useSWR from 'swr';
 
 // This is useSWR's options, the document is here: https://swr.vercel.app/docs/options
@@ -54,6 +55,7 @@ interface SlackSearchTypes {
   searchMode: 'mentioned' | 'sent' | 'replies' | 'new-sent';
   since: string;
   until: string;
+  count?: number; // Between 1 and 100
 }
 
 const useSlackSearch = ({
@@ -100,7 +102,8 @@ const SearchSlackMessages = async ({
   slackAccessToken,
   searchMode,
   since,
-  until
+  until,
+  count
 }: SlackSearchTypes) => {
   const apiEndPoint = `/api/search-slack-${searchMode}`;
   const headers = new Headers();
@@ -111,7 +114,7 @@ const SearchSlackMessages = async ({
     slackAccessToken,
     since,
     until,
-    count: 100, // The maximum number of messages that can be obtained at once is 100
+    count: count || 100, // The maximum number of messages that can be obtained at once is 100
     // cursor: '*', // The cursor is used to get the next 100 messages
     page: 1 // The page is used to get the next 100 messages
   };
@@ -124,32 +127,49 @@ const SearchSlackMessages = async ({
   // Loop until all messages are acquired
   const messages = [];
   let hasMore = true;
+  let lastTs = 0;
   while (hasMore) {
     const response = await fetch(apiEndPoint, fetchOptions);
     const json = await response.json();
-    const matches = json.messages.matches;
-    // @ts-ignore
-    const matchMessages = matches.map((match) => {
-      return {
-        // Commented out some of them to reduce the size of the data
-        ts: Math.round(+match.ts) // Timestamp like 1659341178 as a number in seconds
-        // date: moment(+match.ts * 1000).format(), // 2022-08-23T07:59:38+09:00
-        // postedById: match.user // U02DK80DN9H
-        // postName: match.username // nishio.hiroshi.
-        // channelId: match.channel.id, // C03PMQR3FSL
-        // channelName: match.channel.name // accounting-and-tax
-      };
-    });
-    messages.push(...matchMessages);
-    body.page = body.page + 1;
-    fetchOptions.body = JSON.stringify(body);
-    hasMore = body.page <= json.messages.paging.pages;
+    // Narrow down to data after the lastTs. This is because the same message may be returned multiple times.
+    const matches =
+      json?.messages?.matches?.filter(
+        (match: { ts: string }) => +match.ts > lastTs
+      ) || [];
+    const matchesLength = matches?.length ? matches.length : 0;
 
-    // This search API can only be called up to 20 times per minute, so for every 20 calls, it waits one minute, which is 60000 milliseconds.
-    // https://api.slack.com/docs/rate-limits#tier_t2
-    if (hasMore && body.page > 20 && body.page % 20 === 1) {
-      await new Promise((resolve) => setTimeout(resolve, 60000));
+    // If the lastTs time was at the end of the day, when resetting and retrieving from page 1, all 100 cases could be before the lastTs
+    if (matchesLength > 0) {
+      // @ts-ignore
+      const matchMessages = matches.map((match) => {
+        return {
+          // Commented out some of them to reduce the size of the data
+          ts: Math.round(+match.ts) // Timestamp like 1659341178 as a number in seconds
+          // date: moment(+match.ts * 1000).format(), // 2022-08-23T07:59:38+09:00
+          // postedById: match.user // U02DK80DN9H
+          // postName: match.username // nishio.hiroshi.
+          // channelId: match.channel.id, // C03PMQR3FSL
+          // channelName: match.channel.name // accounting-and-tax
+        };
+      });
+      messages.push(...matchMessages);
     }
+    hasMore = body.page < json.messages?.paging?.pages ? true : false;
+    if (hasMore && body.page === 100) {
+      // Get the last ts in the matchMessages array, which must be YYYY-MM-DD format
+      lastTs = +matches[matchesLength - 1].ts;
+      const lastTsSince = moment(lastTs * 1000)
+        .subtract(1, 'days') // after:A is not A≤, because A<, so subtract 1 day
+        .format('YYYY-MM-DD');
+      // Set the last ts as the new since
+      body.since = lastTsSince;
+      // Reset the page
+      body.page = 1;
+    } else {
+      body.page++;
+    }
+    // Update the request body
+    fetchOptions.body = JSON.stringify(body);
   }
 
   // Append some data to the messages array
@@ -168,13 +188,14 @@ const SearchSlackMessages = async ({
       };
     })
     .map((message, index, array) => {
-      // Calculate moving average of duration time over the last 20 mentions
+      // Calculate moving average of duration time over the last X messages
+      const numberOfMessages = 200; // should be multiple of 7
       const aveIntvl =
         Math.round(
           array
-            .slice(Math.max(index - 19, 0), index + 1)
+            .slice(Math.max(index + 1 - numberOfMessages, 0), index + 1)
             .reduce((acc, cur) => acc + cur.interval, 0) /
-            Math.min(index + 1, 20) /
+            Math.min(index + 1, numberOfMessages) /
             360
         ) / 10 || 0; // in hours
       return {

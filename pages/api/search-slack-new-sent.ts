@@ -3,33 +3,51 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // The official document is here: https://api.slack.com/methods/search.messages
 // Rate limit is Tier 2: 20+ requests per minute.
 const SearchSlack = async (req: NextApiRequest, res: NextApiResponse) => {
+  // Destructure the request body
+  const memberId = req.body.slackMemberId;
+  const since = req.body.since;
+  const until = req.body.until;
+  const count = req.body.count;
+  const page = req.body.page;
+
   // To know more query, see https://slack.com/help/articles/202528808-Search-in-Slack
-  const url = `https://slack.com/api/search.messages?query=from:@${
-    req.body.slackMemberId
-  }+after:${req.body.since}+before:${req.body.until}&count=${
-    req.body.count || 1
-  }&sort=timestamp&sort_dir=asc&page=${req.body.page || 1}`;
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Authorization: 'Bearer ' + req.body.slackAccessToken,
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  })
-    .then((res) => res.json())
-    // Narrow down to data that do not include "thread_ts" as a parameter in the permalink.
-    .then((data) => {
-      data.messages.matches = data.messages.matches.filter(
-        (match: { permalink: string }) =>
-          !match.permalink.includes('thread_ts=')
-      );
-      return data;
+  // -is:thread means that the search result includes only the new single messages and parent messages with replies. In other words, the search result does not include the messages in threads.
+  const url = `https://slack.com/api/search.messages?
+    query=from:@${memberId}+after:${since}+before:${until}+-is:thread&
+    count=${count || 1}&
+    sort=timestamp&
+    sort_dir=asc&
+    page=${page || 1}`;
+
+  // Retry fetching up to 3 times if the response status code is 429 (Too Many Requests) after waiting seconds specified in the Retry-After header.
+  // See https://api.slack.com/docs/rate-limits
+  do {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + req.body.slackAccessToken,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     })
-    .catch((err) => {
-      console.log({ err });
-      return err;
-    });
-  res.status(200).json(response);
+      .then((res) => res.json())
+      .catch((err) => {
+        console.log({ err });
+        return err;
+      });
+
+    // https://api.slack.com/methods/search.messages#errors
+    if (response.ok) {
+      res.status(200).json(response);
+      break;
+    } else if (response.error === 'ratelimited') {
+      await new Promise((resolve) =>
+        setTimeout(resolve, response.headers['Retry-After'] * 1000)
+      );
+    } else {
+      res.status(500).json(response);
+      break;
+    }
+  } while (true);
 };
 
 export default SearchSlack;

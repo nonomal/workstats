@@ -46,16 +46,16 @@ const LineChartData = ({
     borderDash: borderDash,
     // borderDashOffset: 0.0,
     // borderJoinStyle: 'miter',
+    pointRadius: 0, // If set to 0, the point is not rendered.
+    pointStyle: pointStyle,
+    // pointHitRadius: 10,
     pointBorderColor: mainColor || pointBorderColor,
-    pointBackgroundColor: '#fff',
+    pointBackgroundColor: mainColor || '#fff',
     pointBorderWidth: 1.5, // Pixels.
     pointHoverRadius: 5,
     pointHoverBackgroundColor: mainColor || pointHoverBackgroundColor,
     pointHoverBorderColor: 'rgba(220,220,220,1)',
     pointHoverBorderWidth: 2,
-    pointRadius: 5,
-    pointStyle: pointStyle,
-    // pointHitRadius: 10,
     data: data,
     xAxisID: xAxisID
     // yAxisID: 'y1' // If you want to use a different y-axis, uncomment this line.

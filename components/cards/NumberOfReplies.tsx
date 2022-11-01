@@ -1,7 +1,7 @@
 // @ts-ignore
 const NumberOfReplies = ({ data }) => {
   return (
-    <div className='bg-white shadow rounded-lg px-3 py-3 md:px-3 md:py-4 hover:bg-slate-200'>
+    <div className='bg-white shadow rounded-lg px-3 py-3 md:pl-3 md:pr-0 md:py-4 hover:bg-slate-200'>
       <div className='flex space-x-2 md:space-x-3 items-center'>
         <div>
           <div className='bg-orange-50 rounded-full w-5 h-5 md:w-10 md:h-10 text-orange-400 flex justify-center items-center'>

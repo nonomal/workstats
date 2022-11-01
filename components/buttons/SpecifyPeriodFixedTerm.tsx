@@ -85,15 +85,15 @@ const SpecifyPeriodFixedTerm = ({
       case 'This Week':
         currentTimeframe?.setTimeFrame({
           label: label,
-          since: moment().startOf('week'),
+          since: moment().startOf('isoWeek'), // isoWeek is Monday to Sunday
           until: moment()
         });
         break;
       case 'Last Week':
         currentTimeframe?.setTimeFrame({
           label: label,
-          since: moment().subtract(1, 'week').startOf('week'),
-          until: moment().subtract(1, 'week').endOf('week')
+          since: moment().subtract(1, 'week').startOf('isoWeek'), // isoWeek is Monday to Sunday
+          until: moment().subtract(1, 'week').endOf('isoWeek') // isoWeek is Monday to Sunday
         });
         break;
       default:
