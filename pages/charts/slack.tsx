@@ -40,7 +40,6 @@ import {
   LineChartOptions
 } from '../../services/chartServices.client';
 import { SearchSlackMessages } from '../../services/slackServices.client';
-import ProgressCircle from '../../components/charts/ProgressCircle';
 
 export default function SlackCharts() {
   // Global timestamp button context
@@ -101,9 +100,6 @@ export default function SlackCharts() {
   const [isUpdatedForMentioned, setIsUpdatedForMentioned] = useState(false);
   const [isUpdatedForReplies, setIsUpdatedForReplies] = useState(false);
   const [isUpdatedForNewSent, setIsUpdatedForNewSent] = useState(false);
-  const [progressForMentioned, setProgressForMentioned] = useState(0);
-  const [progressForReplies, setProgressForReplies] = useState(0);
-  const [progressForNewSent, setProgressForNewSent] = useState(0);
   useEffect(() => {
     const slackMemberId = userDoc?.slack?.workspace?.[0]?.memberId;
     const slackAccessToken = userDoc?.slack?.workspace?.[0]?.accessToken;
@@ -114,8 +110,7 @@ export default function SlackCharts() {
         slackAccessToken,
         searchMode: 'mentioned',
         since: oldest,
-        until: latest,
-        setProgress: setProgressForMentioned
+        until: latest
       })
         .then((res) => {
           if (res)
@@ -132,8 +127,7 @@ export default function SlackCharts() {
         slackAccessToken,
         searchMode: 'replies',
         since: oldest,
-        until: latest,
-        setProgress: setProgressForReplies
+        until: latest
       })
         .then((res) => {
           if (res)
@@ -150,8 +144,7 @@ export default function SlackCharts() {
         slackAccessToken,
         searchMode: 'new-sent',
         since: oldest,
-        until: latest,
-        setProgress: setProgressForNewSent
+        until: latest
       })
         .then((res) => {
           if (res)
@@ -662,38 +655,24 @@ export default function SlackCharts() {
           </h2>
           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 place-items-center md:place-items-stretch'>
             <div
-              className={`relative h-92 w-11/12 md:h-108 md:w-auto flex justify-center items-center ${
-                data1.datasets[0].data.length > 0 ? '' : 'animate-pulse'
-              }`}
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
             >
               {/* @ts-ignore */}
               <Line options={options1} data={data1} />
-              {data1.datasets[0].data.length === 0 ? (
-                <ProgressCircle
-                  // id='progress-circle-1'
-                  progress={progressForMentioned}
-                  size={100}
-                  strokeWidth={10}
-                  color='#1f2937' // Same as the sidebar bg color
-                />
-              ) : null}
             </div>
             <div
-              className={`relative h-92 w-11/12 md:h-108 md:w-auto flex justify-center items-center ${
-                data2.datasets[0].data.length > 0 ? '' : 'animate-pulse'
-              }`}
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
             >
               {/* @ts-ignore */}
               <Line options={options2} data={data2} />
-              {data2.datasets[0].data.length === 0 ? (
-                <ProgressCircle
-                  // id='progress-circle-2'
-                  progress={progressForMentioned}
-                  size={100}
-                  strokeWidth={10}
-                  color='#1f2937' // Same as the sidebar bg color
-                />
-              ) : null}
             </div>
           </div>
           <div className='md:grid md:grid-cols-2 md:gap-4'>
@@ -705,74 +684,46 @@ export default function SlackCharts() {
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 place-items-center md:place-items-stretch'>
             <div
-              className={`relative h-92 w-11/12 md:h-108 md:w-auto flex justify-center items-center ${
-                data3.datasets[0].data.length > 0 ? '' : 'animate-pulse'
-              }`}
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
             >
               {/* @ts-ignore */}
               <Line options={options3} data={data3} />
-              {data3.datasets[0].data.length === 0 ? (
-                <ProgressCircle
-                  // id='progress-circle-3'
-                  progress={progressForReplies}
-                  size={100}
-                  strokeWidth={10}
-                  color='#1f2937' // Same as the sidebar bg color
-                />
-              ) : null}
             </div>
             <div
-              className={`relative h-92 w-11/12 md:h-108 md:w-auto flex justify-center items-center ${
-                data4.datasets[0].data.length > 0 ? '' : 'animate-pulse'
-              }`}
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
             >
               {/* @ts-ignore */}
               <Line options={options4} data={data4} />
-              {data4.datasets[0].data.length === 0 ? (
-                <ProgressCircle
-                  // id='progress-circle-4'
-                  progress={progressForReplies}
-                  size={100}
-                  strokeWidth={10}
-                  color='#1f2937' // Same as the sidebar bg color
-                />
-              ) : null}
             </div>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 md:gap-4 place-items-center md:place-items-stretch'>
             <div
-              className={`relative h-92 w-11/12 md:h-108 md:w-auto flex justify-center items-center ${
-                data5.datasets[0].data.length > 0 ? '' : 'animate-pulse'
-              }`}
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
             >
               {/* @ts-ignore */}
               <Line options={options5} data={data5} />
-              {data5.datasets[0].data.length === 0 ? (
-                <ProgressCircle
-                  // id='progress-circle-5'
-                  progress={progressForNewSent}
-                  size={100}
-                  strokeWidth={10}
-                  color='#1f2937' // Same as the sidebar bg color
-                />
-              ) : null}
             </div>
             <div
-              className={`relative h-92 w-11/12 md:h-108 md:w-auto flex justify-center items-center ${
-                data6.datasets[0].data.length > 0 ? '' : 'animate-pulse'
-              }`}
+              className={
+                data1.datasets[0].data.length > 0
+                  ? 'h-92 w-11/12 md:h-108 md:w-auto'
+                  : 'h-92 w-11/12 md:h-108 md:w-auto animate-pulse'
+              }
             >
               {/* @ts-ignore */}
               <Line options={options6} data={data6} />
-              {data6.datasets[0].data.length === 0 ? (
-                <ProgressCircle
-                  // id='progress-circle-6'
-                  progress={progressForNewSent}
-                  size={100}
-                  strokeWidth={10}
-                  color='#1f2937' // Same as the sidebar bg color
-                />
-              ) : null}
             </div>
           </div>
           <h2 className='text-xl mt-2 md:mt-4 md:mb-2 px-5 md:px-0'>
