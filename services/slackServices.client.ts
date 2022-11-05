@@ -56,7 +56,6 @@ interface SlackSearchTypes {
   since: string;
   until: string;
   count?: number; // Between 1 and 100
-  setProgress?: React.Dispatch<React.SetStateAction<number>>; // Progress range is 0 to 100
 }
 
 const useSlackSearch = ({
@@ -104,8 +103,7 @@ const SearchSlackMessages = async ({
   searchMode,
   since,
   until,
-  count,
-  setProgress
+  count
 }: SlackSearchTypes) => {
   const apiEndPoint = `/api/search-slack-${searchMode}`;
   const headers = new Headers();
@@ -130,19 +128,9 @@ const SearchSlackMessages = async ({
   const messages = [];
   let hasMore = true;
   let lastTs = 0;
-  let totalPage = 0;
-  let currentPage = 0;
   while (hasMore) {
     const response = await fetch(apiEndPoint, fetchOptions);
     const json = await response.json();
-
-    // Set progress
-    const pages = json.messages?.paging?.pages || 0;
-    if (totalPage < pages) totalPage = pages;
-    currentPage++; // Page itself resets to 1 when the page reaches 100
-    if (setProgress)
-      setProgress(Math.floor((currentPage / totalPage) * 1000) / 10);
-
     // Narrow down to data after the lastTs. This is because the same message may be returned multiple times.
     const matches =
       json?.messages?.matches?.filter(
