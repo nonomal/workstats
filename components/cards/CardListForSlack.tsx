@@ -88,10 +88,12 @@ const CardListForSlack = ({
 
   // Update numbers in local state
   useEffect(() => {
-    setNumberOfMentioned(numberOfMentionedCalc);
-    setNumberOfTotalSent(numberOfTotalSentCalc);
-    setNumberOfReplies(numberOfRepliesCalc);
-    setNumberOfNewSent(numberOfTotalSentCalc - numberOfRepliesCalc);
+    if (numberOfMentionedCalc > 0) setNumberOfMentioned(numberOfMentionedCalc);
+    if (numberOfTotalSentCalc > 0) setNumberOfTotalSent(numberOfTotalSentCalc);
+    if (numberOfRepliesCalc > 0) setNumberOfReplies(numberOfRepliesCalc);
+    const numberOfNewSentCalc = numberOfTotalSentCalc - numberOfRepliesCalc;
+    if (numberOfNewSentCalc > 0)
+      setNumberOfNewSent(numberOfTotalSentCalc - numberOfRepliesCalc);
   }, [numberOfMentionedCalc, numberOfRepliesCalc, numberOfTotalSentCalc]);
 
   // Update numbers in Firestore

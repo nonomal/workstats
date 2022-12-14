@@ -38,7 +38,10 @@ const SearchSlack = async (req: NextApiRequest, res: NextApiResponse) => {
     if (response.ok) {
       res.status(200).json(response);
       break;
-    } else if (response.error === 'ratelimited') {
+    } else if (
+      response.error === 'ratelimited' &&
+      response.headers?.['Retry-After']
+    ) {
       await new Promise((resolve) =>
         setTimeout(resolve, response.headers['Retry-After'] * 1000)
       );
