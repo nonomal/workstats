@@ -9,35 +9,56 @@ interface SidebarProps {
 
 const Sidebar = ({ isMobile, handleClick }: SidebarProps) => {
   return (
-    <div className='sidebar fixed md:sticky top-0 z-10 bg-gray-800 text-blue-100 w-7/12 md:w-52 h-screen space-y-1 py-7 px-2 flex-none'>
+    <div className='sidebar fixed md:sticky top-0 z-10 bg-gray-800 text-blue-100 w-6/12 md:w-44 h-screen space-y-1 py-7 px-2 flex-none'>
       <div className='flex h-10'>
-        <a href='#' className='text-white text-2xl font-bold px-4'>
+        <a href='#' className='text-white text-xl font-bold px-4'>
           WorkStats
         </a>
-        <HamburgerButton
-          color='text-blue-100'
-          handleClick={handleClick}
-          margin='m-0.5'
-        />
+        <HamburgerButton color='text-blue-100' handleClick={handleClick} />
       </div>
       <nav>
+        {/* <Link href='/dashboard'> */}
+        <a role='link' aria-disabled='true' className='block py-1 px-4 rounded'>
+          Dashboards
+        </a>
+        {/* </Link> */}
         <Link href='/dashboard'>
           <a
-            className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'
+            className='block py-1 pl-7 rounded hover:bg-gray-700 hover:text-white'
             onClick={() => {
               if (isMobile) handleClick();
             }}
           >
-            Dashboard
+            - Summary
+          </a>
+        </Link>
+        <Link href='/charts/github'>
+          <a
+            className='block py-1 pl-7 rounded hover:bg-gray-700 hover:text-white'
+            onClick={() => {
+              if (isMobile) handleClick();
+            }}
+          >
+            - GitHub Charts
+          </a>
+        </Link>
+        <Link href='/charts/slack'>
+          <a
+            className='block py-1 pl-7 rounded hover:bg-gray-700 hover:text-white'
+            onClick={() => {
+              if (isMobile) handleClick();
+            }}
+          >
+            - Slack Charts
           </a>
         </Link>
         {/* <Link href="/personal-analysis">
-          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
+          <a className="block py-1 px-4 rounded hover:bg-gray-700 hover:text-white">
             Personal Analysis
           </a>
         </Link> */}
         {/* <Link href="/team-analysis">
-          <a className="block py-2 px-4 rounded hover:bg-gray-700 hover:text-white">
+          <a className="block py-1 px-4 rounded hover:bg-gray-700 hover:text-white">
             Team Analysis
           </a>
         </Link> */}
@@ -45,7 +66,7 @@ const Sidebar = ({ isMobile, handleClick }: SidebarProps) => {
         <a
           role='link'
           aria-disabled='true'
-          className='block py-2 px-4 rounded text-gray-500'
+          className='block py-1 px-4 rounded text-gray-500'
         >
           User List
         </a>
@@ -54,7 +75,7 @@ const Sidebar = ({ isMobile, handleClick }: SidebarProps) => {
         <a
           role='link'
           aria-disabled='true'
-          className='block py-2 px-4 rounded text-gray-500'
+          className='block py-1 px-4 rounded text-gray-500'
         >
           Team List
         </a>
@@ -62,7 +83,7 @@ const Sidebar = ({ isMobile, handleClick }: SidebarProps) => {
         <Link href='/user-settings'>
           <a
             id='user-settings'
-            className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'
+            className='block py-1 px-4 rounded hover:bg-gray-700 hover:text-white'
             onClick={() => {
               if (isMobile) handleClick();
             }}
@@ -74,7 +95,7 @@ const Sidebar = ({ isMobile, handleClick }: SidebarProps) => {
         <a
           role='link'
           aria-disabled='true'
-          className='block py-2 px-4 rounded text-gray-500'
+          className='block py-1 px-4 rounded text-gray-500'
         >
           Team Settings
         </a>
@@ -83,7 +104,7 @@ const Sidebar = ({ isMobile, handleClick }: SidebarProps) => {
         <a
           role='link'
           aria-disabled='true'
-          className='block py-2 px-4 rounded text-gray-500'
+          className='block py-1 px-4 rounded text-gray-500'
         >
           Invoices
         </a>
@@ -92,7 +113,7 @@ const Sidebar = ({ isMobile, handleClick }: SidebarProps) => {
         <a
           role='link'
           aria-disabled='true'
-          className='block py-2 px-4 rounded text-gray-500'
+          className='block py-1 px-4 rounded text-gray-500'
         >
           Usage Plan
         </a>
@@ -101,14 +122,14 @@ const Sidebar = ({ isMobile, handleClick }: SidebarProps) => {
         <a
           role='link'
           aria-disabled='true'
-          className='block py-2 px-4 rounded text-gray-500'
+          className='block py-1 px-4 rounded text-gray-500'
         >
           Payment Settings
         </a>
         {/* </Link> */}
         <Link href='/terms-of-service'>
           <a
-            className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'
+            className='block py-1 px-4 rounded hover:bg-gray-700 hover:text-white'
             target='_blank'
           >
             Terms of Service
@@ -116,19 +137,19 @@ const Sidebar = ({ isMobile, handleClick }: SidebarProps) => {
         </Link>
         <Link href='/privacy-policy'>
           <a
-            className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'
+            className='block py-1 px-4 rounded hover:bg-gray-700 hover:text-white'
             target='_blank'
           >
             Privacy Policy
           </a>
         </Link>
         <Link href='/'>
-          <a className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'>
+          <a className='block py-1 px-4 rounded hover:bg-gray-700 hover:text-white'>
             About
           </a>
         </Link>
         <a
-          className='block py-2 px-4 rounded hover:bg-gray-700 hover:text-white'
+          className='block py-1 px-4 rounded hover:bg-gray-700 hover:text-white'
           href='mailto: info@suchica.com?subject=WorkStats Feedback'
           target='_blank'
           rel='noreferrer noopener' // Must pair with target='_blank' when jumping to an external site

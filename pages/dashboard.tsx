@@ -209,7 +209,9 @@ export const getServerSideProps: GetServerSideProps = async (
       const slackMemberId = userDoc?.slack?.workspace?.[0]?.memberId
         ? userDoc.slack.workspace[0].memberId
         : null;
-      const slackAccessToken = `Bearer ${userDoc?.slack?.workspace?.[0]?.accessToken}`;
+      const slackAccessToken = userDoc?.slack?.workspace?.[0]?.accessToken
+        ? userDoc.slack.workspace[0].accessToken
+        : null;
 
       // Parameters for Google Calendar
       const googleAccessToken = userDoc?.google?.workspace?.[0]?.accessToken

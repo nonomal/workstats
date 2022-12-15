@@ -127,7 +127,7 @@ const Login = () => {
           content='WorkStats login page, you can login or sign in with your Google or GitHub account. If you would like to learn more before logging in, please click on the Product Hunt button to go to the introduction page.'
         />
       </Head>
-      <div className='grid gap-4 md:gap-6 h-screen bg-slate-800 content-center justify-center justify-items-center'>
+      <div className='grid gap-4 md:gap-6 h-screen bg-slate-100 content-center justify-center justify-items-center'>
         <div className='grid gap-1 md:gap-1 place-items-center'>
           <div className='w-72 md:w-96 h-auto'>
             <Image
@@ -140,14 +140,14 @@ const Login = () => {
               placeholder='empty'
             />
           </div>
-          <span className='text-green-300 text-base md:text-lg px-1.5 py-0 border-green-300 border rounded-md'>
+          <span className='text-green-300 text-base md:text-lg px-1.5 py-0 border-green-300 border rounded-md bg-slate-700'>
             Beta
           </span>
         </div>
-        <h1 className='text-white text-xl md:text-3xl text-center md:hidden'>
+        <h1 className='text-xl md:text-3xl text-center md:hidden'>
           Welcome to &quot;WorkStats&quot;
         </h1>
-        <p className='text-white px-4 text-lg md:text-2xl text-center'>
+        <p className='px-4 text-lg md:text-2xl text-center'>
           WorkStats visualizes contribution of you and your team in numbers!
           <br></br>
           Aggregates from the following services.
@@ -162,6 +162,7 @@ const Login = () => {
             quality={75}
             priority={false}
             placeholder='empty'
+            className='bg-black rounded-full border-white border-4'
           />
           <Image
             src={JiraIcon}
@@ -206,7 +207,7 @@ const Login = () => {
         </div>
         <div className='h-5 md:hidden'></div>
         <div className='grid gap-4 content-center justify-center justify-items-center'>
-          <p className='text-white px-4 text-lg md:text-2xl text-center'>
+          <p className='px-4 text-lg md:text-2xl text-center'>
             Both login and sign up here.
           </p>
           <button
@@ -217,7 +218,7 @@ const Login = () => {
             Login with Google
           </button>
           <button
-            className='flex text-slate-700 bg-white font-bold rounded-md w-56 h-10 place-items-center justify-center'
+            className='flex text-slate-700 bg-white font-bold rounded-md w-56 h-10 place-items-center justify-center border-slate-400 border'
             onClick={loginWithMicrosoft}
           >
             <Image
@@ -231,7 +232,7 @@ const Login = () => {
             <div className='w-2'></div>
             Login with Microsoft
           </button>
-          <p className='text-white px-4 text-sm md:text-lg text-center'>
+          <p className='px-4 text-sm md:text-lg text-center'>
             * No credit card is required for free plan.
           </p>
         </div>

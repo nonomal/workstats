@@ -1,11 +1,16 @@
+import moment from 'moment';
 import useSWR from 'swr';
+import { PullRequestsType } from '../config/firebaseTypes';
 import {
+  GitHubSearchTypes,
   ListPullRequestArgTypes,
   ListPullRequestParamTypes,
   ListPullRequestResponseItemTypes,
   ListPullRequestsFilesPramTypes,
   ListPullRequestsFilesQueryTypes,
-  ListPullRequestsFilesResponseItemTypes
+  ListPullRequestsFilesResponseItemTypes,
+  SearchParamTypes,
+  SearchResultItemTypes
 } from '../config/githubTypes';
 
 // HTTP endpoint v3 (REST API)
@@ -103,36 +108,16 @@ const ListRepositoriesForTheAuthenticatedUser = (accessToken: string) => {
   return response;
 };
 
-// Search for pull request data with reviewer
+// Search for pull request data
 // The official document is here https://docs.github.com/en/rest/reference/search#search-issues-and-pull-requests
-interface GitHubSearchTypes {
-  searchWhere:
-    | 'code'
-    | 'commits'
-    | 'issues'
-    | 'labels'
-    | 'repositories'
-    | 'topics'
-    | 'users';
-  searchQuery: string;
-  accessToken?: string; // Required for private repositories
-}
 const useGitHubSearch = ({
   searchWhere,
   searchQuery,
   accessToken
 }: GitHubSearchTypes): number => {
-  interface ParamsTypes {
-    q: string; // Search query, see the details: https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests
-    sort?: string; // Default is 'best match', can be one of: comments, reactions, reactions-+1, reactions--1, reactions-smile, reactions-thinking_face, reactions-heart, reactions-tada, interactions, created, updated
-    order?: string; // Default is 'desc', can be 'asc' or 'desc'
-    per_page?: string; // Default is 30, max is 100
-    page?: string; // Default is 1
-    [key: string]: string | number | undefined; // To avoid type error ts(7053) in params[key]
-  }
-  const params: ParamsTypes = {
+  const params: SearchParamTypes = {
     q: searchQuery, // `is:pr repo:${owner}/${repo} ${githubUserName} created:${createdSince}..${createdUntil}`, '..' means between
-    per_page: '100', // max = 100
+    per_page: '1', // max = 100. It is unnecessary to get each data this time
     page: '1'
   };
   // @ts-ignore
@@ -160,6 +145,99 @@ const useGitHubSearch = ({
   } else {
     return data;
   }
+};
+
+// Search for pull request data
+// The official document is here https://docs.github.com/en/rest/reference/search#search-issues-and-pull-requests
+const SearchGitHubWithDetails = async ({
+  searchWhere,
+  searchQuery,
+  accessToken
+}: GitHubSearchTypes): Promise<PullRequestsType[]> => {
+  const params: SearchParamTypes = {
+    q: searchQuery, // `is:pr repo:${owner}/${repo} ${githubUserName} created:${createdSince}..${createdUntil}`, '..' means between
+    sort: 'created',
+    order: 'asc',
+    per_page: '100', // max = 100. It is unnecessary to get each data this time
+    page: '1'
+  };
+  // @ts-ignore
+  const query = new URLSearchParams(params);
+  let url = `${baseURL}/search/${searchWhere}?${query}`;
+
+  const headers = new Headers();
+  headers.append('Accept', 'application/vnd.github.v3+json');
+  accessToken && accessToken !== ''
+    ? headers.append('Authorization', `token ${accessToken}`)
+    : null;
+  let numberOfItems = 0;
+  const preOutput: PullRequestsType[] = [];
+  do {
+    const response = await fetch(url, {
+      headers: headers
+    })
+      .then((res) => res.json())
+      .then((res) => res.items);
+    const mappedResponse: PullRequestsType[] = response?.map(
+      (item: SearchResultItemTypes) => {
+        return {
+          id: item.id,
+          number: item.number,
+          title: item.title,
+          state: item.state,
+          createdAt: item.created_at,
+          updatedAt: item.updated_at,
+          closedAt: item.closed_at,
+          mergedAt: item.pull_request.merged_at,
+          user: item.user.login,
+          repositoryUrl: item.repository_url
+        };
+      }
+    );
+
+    // Add mappedResponse to output
+    if (mappedResponse) preOutput.push(...mappedResponse);
+
+    // If there are more items, number of items will be equal to params.per_page
+    numberOfItems = response?.length;
+    params.page = (parseInt(params.page) + 1).toString();
+    // @ts-ignore
+    query = new URLSearchParams(params);
+    url = `${baseURL}/search/${searchWhere}?${query}`;
+  } while (numberOfItems === +params.per_page);
+
+  const output = preOutput
+    .map((item: PullRequestsType, index: number, array: PullRequestsType[]) => {
+      const leadTimeSinceLastPR =
+        index === 0
+          ? 0
+          : moment(item.createdAt).diff(
+              moment(array[index - 1]?.createdAt),
+              'milliseconds'
+            );
+      return {
+        ...item,
+        leadTimeSinceLastPR
+      };
+    })
+    // Add past 10 data points moving average of lead time. If there are less than 10 data points, use all available data points
+    .map((item: PullRequestsType, index: number, array: any) => {
+      const movingAverageLeadTimeSinceLastPR =
+        array
+          .slice(Math.max(index - 9, 0), index + 1)
+          .reduce(
+            (acc: number, cur: PullRequestsType) =>
+              acc + (cur.leadTimeSinceLastPR || 0),
+            0
+          ) /
+        (index + 1 - Math.max(index - 9, 0));
+      return {
+        ...item,
+        movingAverageLeadTimeSinceLastPR
+      };
+    });
+
+  return output;
 };
 
 // Create a list of pull request numbers
@@ -309,5 +387,6 @@ export {
   GetTheRepository,
   ListRepositoriesForTheAuthenticatedUser,
   requestGithubUserIdentity,
+  SearchGitHubWithDetails,
   useGitHubSearch
 };

@@ -99,9 +99,11 @@ const CardListForJira = ({
 
         // Update the access token and refresh token in the database and cache.
         // This is done in the background, so it doesn't need to be awaited.
-        updateAtlassianTokens(uid, newAccessToken, newRefreshToken);
-        setAtlassianAccessToken(newAccessToken);
-        setAtlassianRefreshToken(newRefreshToken);
+        if (uid && newAccessToken && newRefreshToken) {
+          updateAtlassianTokens(uid, newAccessToken, newRefreshToken);
+          setAtlassianAccessToken(newAccessToken);
+          setAtlassianRefreshToken(newRefreshToken);
+        }
       }
 
       // Otherwise, update the number of issues
@@ -232,11 +234,11 @@ const CardListForJira = ({
         <GearIconLink
           mt={5}
           mb={2}
-          href='/user-settings' // #task-control-atlassian
+          href='/user-settings#jira'
           alt='Gear icon links to user settings'
         />
       </div>
-      <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
+      <div className='grid gap-3 md:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 md:mr-5'>
         <NumberOfCloseTasks
           label='# of closed issues'
           unit='issues'

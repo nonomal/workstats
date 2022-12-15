@@ -10,7 +10,7 @@ const LinkButton = ({ href, label }: PropTypes) => {
   return (
     <button
       type='submit'
-      className='w-auto h-10 md:h-11 text-xl md:text-2xl bg-gray-800 text-blue-100 hover:bg-gray-700 hover:text-white font-semibold p-1 px-5 m-1 rounded-lg'
+      className='animate-pulse hover:animate-none w-auto h-10 md:h-11 text-xl md:text-2xl bg-gray-800 text-blue-100 hover:bg-gray-700 hover:text-green-200 font-semibold p-1 px-5 m-1 rounded-lg'
     >
       <Link href={href}>
         <a

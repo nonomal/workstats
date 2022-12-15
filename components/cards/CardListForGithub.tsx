@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 
 // import components
-import NumberOfCommits from './NumberOfCommits';
+// import NumberOfCommits from './NumberOfCommits';
 import NumberOfLinesAdded from './NumberOfLinesAdded';
 import NumberOfLinesDeleted from './NumberOfLinesDeleted';
 import NumberOfPullRequests from './NumberOfPullRequests';
 import NumberOfReviews from './NumberOfReview';
+import ChartIconLink from '../common/ChartIcon';
 
 // import configs and contexts
 import { NumbersType } from '../../config/firebaseTypes';
@@ -154,13 +155,20 @@ const CardListForGithub = ({
         <GearIconLink
           mt={5}
           mb={2}
-          href='/user-settings'
+          href='/user-settings#github'
           alt='Gear icon links to user settings'
           id='gear-icon'
         />
+        <ChartIconLink
+          mt={5}
+          mb={2}
+          href='/charts/github'
+          alt='Chart icon links to GitHub charts page'
+          id='chart-icon'
+        />
       </div>
-      <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
-        <NumberOfCommits data={numberOfCommits} />
+      <div className='grid gap-3 md:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 md:mr-5'>
+        {/* <NumberOfCommits data={numberOfCommits} /> */}
         <NumberOfPullRequests data={numberOfPullRequests} />
         <NumberOfReviews data={numberOfReviews} />
         <NumberOfLinesAdded data={numberOfLinesAdded} />

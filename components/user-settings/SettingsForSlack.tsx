@@ -122,6 +122,16 @@ const SettingsForSlack = ({
           />
         )}
       </div>
+      <p className='py-1 ml-3 pl-1'>
+        Follow the steps below to tally your numbers.
+      </p>
+      <ol className='py-1 ml-3 pl-1 list-decimal list-inside' role='list'>
+        <li key={1}>Press the &quot;Connect with Slack&quot; button.</li>
+        <li key={2}>
+          According to the dialog, login to Slack workspace, check the scopes
+          and authenticate them.
+        </li>
+      </ol>
       <form
         name='communication-activity'
         onSubmit={(e) => handleSubmitCommunicationActivity(e, uid)}
@@ -129,7 +139,6 @@ const SettingsForSlack = ({
         target='_self'
         autoComplete='off'
       >
-        <div className='h-3 md:h-3'></div>
         <h3 className='md:hidden text-lg ml-2 pl-1 w-32 underline underline-offset-1'>
           Workspace 1 :
         </h3>
@@ -198,6 +207,11 @@ const SettingsForSlack = ({
           </div>
         </div>
       </form>
+      <p className='py-1 ml-3 pl-1'>
+        Press &quot;Disconnect with Slack&quot; to disconnect at any time. If
+        you have any concerns or requests, please feel free to ask us through
+        the &quot;Contact Us&quot; link in the side menu.
+      </p>
     </div>
   );
 };

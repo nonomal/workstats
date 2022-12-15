@@ -11,8 +11,9 @@ const SearchSlack = async (req: NextApiRequest, res: NextApiResponse) => {
   const page = req.body.page;
 
   // To know more query, see https://slack.com/help/articles/202528808-Search-in-Slack
+  // -is:thread means that the search result includes only the new single messages and parent messages with replies. In other words, the search result does not include the messages in threads.
   const url = `https://slack.com/api/search.messages?
-    query=${memberId}+after:${since}+before:${until}&
+    query=from:@${memberId}+after:${since}+before:${until}+-is:thread&
     count=${count || 1}&
     sort=timestamp&
     sort_dir=asc&

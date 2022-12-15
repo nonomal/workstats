@@ -168,7 +168,16 @@ const SettingsForAtlassian = ({
           />
         )}
       </div>
-      <div className='h-3 md:h-3'></div>
+      <p className='py-1 ml-3 pl-1'>
+        Follow the steps below to tally your numbers.
+      </p>
+      <ol className='py-1 ml-3 pl-1 list-decimal list-inside' role='list'>
+        <li key={1}>Press the &quot;Connect with Atlassian&quot; button.</li>
+        <li key={2}>
+          According to the dialog, login to Atlassian, check the scopes and
+          authenticate them.
+        </li>
+      </ol>
       <div className='flex flex-wrap items-center'>
         <div className='md:ml-6 md:w-32'></div>
         <InputBox
@@ -245,6 +254,11 @@ const SettingsForAtlassian = ({
         />
         <div className='ml-2 md:ml-1 pl-1 md:pl-3'></div>
       </div>
+      <p className='py-1 ml-3 pl-1'>
+        Press &quot;Disconnect with Atlassian&quot; to disconnect at any time.
+        If you have any concerns or requests, please feel free to ask us through
+        the &quot;Contact Us&quot; link in the side menu.
+      </p>
     </div>
   );
 };

@@ -1,6 +1,11 @@
 import { doc, FieldValue, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseClient';
-import { NumbersType, UserType } from '../config/firebaseTypes';
+import {
+  NumbersType,
+  PullRequestsType,
+  SlackSearchResultsType,
+  UserType
+} from '../config/firebaseTypes';
 import { getWorkspaces } from './asanaServices.client';
 import { getUserInfo } from './getDocFromFirestore';
 import { GetTheRepository } from './githubServices.client';
@@ -696,6 +701,75 @@ const UpdInsGoogleCalendarNumbers = async ({
   return;
 };
 
+interface UpdInsGitHubPullRequestsProps {
+  docId: string;
+  pullRequests: PullRequestsType[];
+}
+const UpdInsGitHubPullRequests = async ({
+  docId,
+  pullRequests
+}: UpdInsGitHubPullRequestsProps) => {
+  const docRef = doc(db, 'github-pull-requests', docId);
+  const docData = {
+    pullRequests,
+    // createdAt: serverTimestamp(), // CreatedAt is recorded only for the first time
+    updatedAt: serverTimestamp()
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+// Update or Insert Slack Search Results for mentioned to firestore
+interface UpdInsSlackSearchResultProps {
+  docId: string;
+  messages: SlackSearchResultsType[];
+}
+const UpdInsSlackMentionedMessages = async ({
+  docId,
+  messages
+}: UpdInsSlackSearchResultProps) => {
+  const docRef = doc(db, 'slack-mentioned-messages', docId);
+  const docData = {
+    messages,
+    // createdAt: serverTimestamp(), // CreatedAt is recorded only for the first time
+    updatedAt: serverTimestamp()
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+const UpdInsSlackRepliesMessages = async ({
+  docId,
+  messages
+}: UpdInsSlackSearchResultProps) => {
+  const docRef = doc(db, 'slack-replies-messages', docId);
+  const docData = {
+    messages,
+    // createdAt: serverTimestamp(), // CreatedAt is recorded only for the first time
+    updatedAt: serverTimestamp()
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
+const UpdInsSlackNewSentMessages = async ({
+  docId,
+  messages
+}: UpdInsSlackSearchResultProps) => {
+  const docRef = doc(db, 'slack-new-sent-messages', docId);
+  const docData = {
+    messages,
+    // createdAt: serverTimestamp(), // CreatedAt is recorded only for the first time
+    updatedAt: serverTimestamp()
+  };
+  const option = { merge: true };
+  await setDoc(docRef, docData, option);
+  return;
+};
+
 export {
   createNumbersDoc,
   createUserDoc,
@@ -718,7 +792,11 @@ export {
   updateAtlassianTokens,
   UpdInsAsanaNumbers,
   UpdInsGithubNumbers,
+  UpdInsGitHubPullRequests,
   UpdInsGoogleCalendarNumbers,
   UpdInsJiraNumbers,
-  UpdInsSlackNumbers
+  UpdInsSlackNumbers,
+  UpdInsSlackMentionedMessages,
+  UpdInsSlackNewSentMessages,
+  UpdInsSlackRepliesMessages
 };

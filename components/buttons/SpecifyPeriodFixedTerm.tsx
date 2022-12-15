@@ -54,6 +54,20 @@ const SpecifyPeriodFixedTerm = ({
           until: moment().subtract(1, 'year').endOf('year')
         });
         break;
+      case 'Last 6 Months':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: moment().subtract(6, 'month').startOf('month'),
+          until: moment().subtract(1, 'month').endOf('month')
+        });
+        break;
+      case 'Last 3 Months':
+        currentTimeframe?.setTimeFrame({
+          label: label,
+          since: moment().subtract(3, 'month').startOf('month'),
+          until: moment().subtract(1, 'month').endOf('month')
+        });
+        break;
       case 'This Month':
         currentTimeframe?.setTimeFrame({
           label: label,
@@ -71,15 +85,15 @@ const SpecifyPeriodFixedTerm = ({
       case 'This Week':
         currentTimeframe?.setTimeFrame({
           label: label,
-          since: moment().startOf('week'),
+          since: moment().startOf('isoWeek'), // isoWeek is Monday to Sunday
           until: moment()
         });
         break;
       case 'Last Week':
         currentTimeframe?.setTimeFrame({
           label: label,
-          since: moment().subtract(1, 'week').startOf('week'),
-          until: moment().subtract(1, 'week').endOf('week')
+          since: moment().subtract(1, 'week').startOf('isoWeek'), // isoWeek is Monday to Sunday
+          until: moment().subtract(1, 'week').endOf('isoWeek') // isoWeek is Monday to Sunday
         });
         break;
       default:
@@ -91,7 +105,7 @@ const SpecifyPeriodFixedTerm = ({
     <button
       onClick={handleOnClick}
       disabled={disabled}
-      className={`rounded-lg ${bgColor} shadow text-${textColor} text-sm md:text-base px-2 md:px-3 py-1 mx-1 md:mx-2 my-1`}
+      className={`rounded-lg ${bgColor} shadow text-${textColor} text-sm md:text-base px-2 md:px-3 py-1 mx-1 md:mr-4 md:ml-0 my-1`}
     >
       {label}
     </button>

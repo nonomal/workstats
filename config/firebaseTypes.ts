@@ -144,4 +144,36 @@ interface NumbersType extends Record<string, unknown> {
   };
 }
 
-export type { UserType, NumbersType, NumbersByPeriodType, StringsByPeriodType };
+interface PullRequestsType extends Record<string, unknown> {
+  id?: number; // Pull Request ID
+  number?: number; // Pull Request Number
+  title?: string;
+  state?: string; // open or closed
+  createdAt: string; // ISO 8601. Removed ? because it is required by the following code
+  updatedAt?: string; // ISO 8601
+  closedAt?: string; // ISO 8601
+  mergedAt?: string; // ISO 8601
+  leadTimeSinceLastPR?: number; // Lead time since last PR in milliseconds
+  movingAverageLeadTimeSinceLastPR?: number; // Moving average lead time since last PR in milliseconds
+  user?: string; // User Name
+  repositoryUrl?: string;
+}
+
+interface SlackSearchResultsType extends Record<string, unknown> {
+  ts: number; // Timestamp like 1659341178 in seconds
+  // postedById?: string; // User ID like U02DK80DN9H
+  postName?: string; // User Name like yamada.taro
+  // channelId?: string; // Channel ID like C03PMQR3FSL
+  // channelName?: string; // Channel Name like #general
+  // interval?: number; // Duration between the timestamp and the previous timestamp in seconds
+  aveIntvl: number; // Moving average duration between the timestamp and the previous timestamp in hours like 12.3 hours
+}
+
+export type {
+  UserType,
+  NumbersType,
+  NumbersByPeriodType,
+  PullRequestsType,
+  SlackSearchResultsType,
+  StringsByPeriodType
+};

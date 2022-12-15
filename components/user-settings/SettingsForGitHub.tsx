@@ -105,6 +105,7 @@ const SettingsForGitHub = ({
         (res) => {
           const ownerList: string[] = [];
           const repoList: string[] = [];
+          if (res?.message?.includes('API rate limit exceeded')) return;
           // @ts-ignore
           res.map((repo) => {
             if (!ownerList.includes(repo.owner.login)) {
@@ -142,12 +143,21 @@ const SettingsForGitHub = ({
           />
         )}
       </div>
-      <p className='py-1 ml-3 pl-1'>Follow the steps below to register.</p>
+      <p className='py-1 ml-3 pl-1'>
+        Follow the steps below to tally your numbers.
+      </p>
       <ol className='py-1 ml-3 pl-1 list-decimal list-inside' role='list'>
         <li key={1}>Press the &quot;Connect with GitHub&quot; button.</li>
         <li key={2}>
           According to the dialog, login to GitHub, check the scopes and
           authenticate them.
+          <ul className='ml-3 pl-1 list-disc list-inside' role='list'>
+            <li key={3}>
+              Due to scopes that GitHub provides, we request to read/write
+              access to the repository, but never actually write anything.
+            </li>
+            <li>We also never read the code itself.</li>
+          </ul>
         </li>
         <li key={3}>Register a repository you want to aggregate below.</li>
       </ol>

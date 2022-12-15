@@ -15,7 +15,7 @@ interface InputBoxType {
 }
 
 const InputBox = ({
-  bgColor = 'bg-white',
+  bgColor = '',
   disabled = false,
   inputType = 'text',
   label = 'a label here',
@@ -50,7 +50,13 @@ const InputBox = ({
         max={max}
         min={min}
         name={name}
-        className={`${bgColor} text-gray-700 border border-gray-300 rounded-lg block w-36 md:w-auto px-2 py-1 md:pl-3 mt-1`}
+        className={`${
+          bgColor
+            ? bgColor
+            : inputValue
+            ? 'bg-white'
+            : 'bg-yellow-100 animate-pulse'
+        } text-gray-700 border border-gray-300 rounded-lg block h-9 w-36 md:w-auto px-2 py-1 md:pl-3 mt-1`}
         placeholder={placeholder} // Placeholder is NOT recommended, see https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/number#placeholder
         value={inputValue}
         disabled={disabled}

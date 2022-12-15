@@ -6,13 +6,13 @@ interface PropTypes {
 
 const NumberOfOpenTasks = ({ label, unit, number }: PropTypes) => {
   return (
-    <div className='bg-white shadow rounded-lg px-3 py-3 md:px-4 md:py-4 hover:bg-slate-200'>
-      <div className='flex space-x-2 md:space-x-4 items-center'>
+    <div className='bg-white shadow rounded-lg px-3 py-3 md:px-3 md:py-4 hover:bg-slate-200'>
+      <div className='flex space-x-2 md:space-x-3 items-center'>
         <div>
-          <div className='bg-lime-50 rounded-full w-5 h-5 md:w-12 md:h-12 text-lime-400 flex justify-center items-center'>
+          <div className='bg-lime-50 rounded-full w-5 h-5 md:w-10 md:h-10 text-lime-400 flex justify-center items-center'>
             <svg
-              width='32'
-              height='32'
+              width='28'
+              height='28'
               viewBox='0 0 32 32'
               fill='none'
               xmlns='http://www.w3.org/2000/svg'
@@ -28,8 +28,8 @@ const NumberOfOpenTasks = ({ label, unit, number }: PropTypes) => {
           </div>
         </div>
         <div>
-          <div className='text-gray-400 text-sm md:text-base'>{label}</div>
-          <div className='hidden md:contents md:text-2xl md:font-bold md:text-gray-900'>
+          <div className='text-gray-400 text-sm md:text-sm'>{label}</div>
+          <div className='hidden md:contents md:text-xl md:font-bold md:text-gray-900'>
             {number ? number.toLocaleString() : 0} {unit}
           </div>
         </div>

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import NumberOfMentioned from './NumberOfMentioned';
 import NumberOfNewSent from './NumberOfNewSent';
 import NumberOfReplies from './NumberOfReplies';
+import ChartIconLink from '../common/ChartIcon';
 
 // import configs and contexts
 import { NumbersType } from '../../config/firebaseTypes';
@@ -53,9 +54,14 @@ const CardListForSlack = ({
   // Set time period from global state
   const since =
     currentTimeframe?.timeframe.since?.format('YYYY-MM-DD') || '2000-01-01';
-  const until =
+  const preUntil =
     currentTimeframe?.timeframe.until?.format('YYYY-MM-DD') ||
     moment().format('YYYY-MM-DD');
+  // If it is Sunday, this week set a same date to since and until, then it does not work properly in Slack API due to its specification.
+  const until =
+    preUntil === since
+      ? moment(preUntil).add(1, 'days').format('YYYY-MM-DD')
+      : preUntil;
 
   // Aggregate numbers from slack
   const numberOfTotalSentCalc = useSlackSearch({
@@ -82,10 +88,12 @@ const CardListForSlack = ({
 
   // Update numbers in local state
   useEffect(() => {
-    setNumberOfMentioned(numberOfMentionedCalc);
-    setNumberOfTotalSent(numberOfTotalSentCalc);
-    setNumberOfReplies(numberOfRepliesCalc);
-    setNumberOfNewSent(numberOfTotalSentCalc - numberOfRepliesCalc);
+    if (numberOfMentionedCalc > 0) setNumberOfMentioned(numberOfMentionedCalc);
+    if (numberOfTotalSentCalc > 0) setNumberOfTotalSent(numberOfTotalSentCalc);
+    if (numberOfRepliesCalc > 0) setNumberOfReplies(numberOfRepliesCalc);
+    const numberOfNewSentCalc = numberOfTotalSentCalc - numberOfRepliesCalc;
+    if (numberOfNewSentCalc > 0)
+      setNumberOfNewSent(numberOfTotalSentCalc - numberOfRepliesCalc);
   }, [numberOfMentionedCalc, numberOfRepliesCalc, numberOfTotalSentCalc]);
 
   // Update numbers in Firestore
@@ -112,11 +120,18 @@ const CardListForSlack = ({
         <GearIconLink
           mt={5}
           mb={2}
-          href='/user-settings'
+          href='/user-settings#slack'
           alt='Gear icon links to user settings'
         />
+        <ChartIconLink
+          mt={5}
+          mb={2}
+          href='/charts/slack'
+          alt='Chart icon links to Slack charts page'
+          id='chart-icon'
+        />
       </div>
-      <div className='grid gap-3 md:gap-5 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
+      <div className='grid gap-3 md:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 md:mr-5'>
         <NumberOfMentioned data={numberOfMentioned} />
         <NumberOfReplies data={numberOfReplies} />
         <NumberOfNewSent data={numberOfNewSent} />
